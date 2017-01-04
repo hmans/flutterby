@@ -1,6 +1,7 @@
 module Flutterby
   class Entity
     attr_reader :path
+    attr_reader :name
 
     def initialize(name, parent:)
       @name = name
