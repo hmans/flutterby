@@ -18,6 +18,10 @@ module Flutterby
       end
     end
 
+    def process_erb
+      @contents = ERB.new(@contents).result
+    end
+
     def process_md
       @contents = Slodown::Formatter.new(@contents).complete.to_s
     end
