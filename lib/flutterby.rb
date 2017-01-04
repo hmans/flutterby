@@ -27,7 +27,9 @@ module Flutterby
     end
 
     def export(path_base)
-      puts "* #{@name}: #{full_path(path_base)}"
+      out_path = full_path(path_base)
+      puts "* #{@name}: #{out_path}"
+      write(out_path)
     end
 
     private
@@ -38,6 +40,9 @@ module Flutterby
 
     def read
     end
+
+    def write(path)
+    end
   end
 
   class Folder < Entity
@@ -45,11 +50,10 @@ module Flutterby
       @children = read_children
     end
 
-    def export(path_base)
-      super
-
+    def write(path)
+      # TODO: make sure directory exists
       @children.each do |child|
-        child.export(full_path(path_base))
+        child.export(path)
       end
     end
 
@@ -63,6 +67,13 @@ module Flutterby
   end
 
   class File < Entity
+    def read
+      @contents = ::File.read(@path)
+    end
+
+    def write(path)
+      ::File.write(path, @contents)
+    end
   end
 end
 
