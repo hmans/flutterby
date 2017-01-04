@@ -61,7 +61,7 @@ module Flutterby
           if layout = parent.find("_layout")
             @contents = begin
               tilt = Tilt[layout.ext].new { layout.contents }
-              tilt.render { @contents }
+              tilt.render(self) { @contents }
             end
           end
         end
