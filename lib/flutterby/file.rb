@@ -52,21 +52,23 @@ module Flutterby
       @contents = engine.render
     end
 
+    def apply_layout!
+      @content_with_layout = @content
+
+      if ext == "html"
+        if parent && layout = parent.find("_layout")
+          tilt = Tilt[layout.ext].new { layout.contents }
+          @content_with_layout = tilt.render(self) { @content }
+        end
+      end
+    end
+
     def write(path)
       if should_publish?
         process!
+        apply_layout!
 
-        # Apply layout
-        if ext == "html"
-          if layout = parent.find("_layout")
-            @contents = begin
-              tilt = Tilt[layout.ext].new { layout.contents }
-              tilt.render(self) { @contents }
-            end
-          end
-        end
-
-        ::File.write(path, @contents)
+        ::File.write(path, @content_with_layout)
       end
     end
   end

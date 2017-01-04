@@ -25,6 +25,10 @@ module Flutterby
 
     private
 
+    def sibling(name)
+      parent && parent.find(name)
+    end
+
     def full_name
       @full_name ||= [name, ext].compact.join(".")
     end
