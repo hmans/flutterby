@@ -39,8 +39,13 @@ module Flutterby
       end
     end
 
+    def page?
+      ext == "html"
+    end
+
     def process_erb
-      @contents = ERB.new(@contents).result
+      tilt = Tilt["erb"].new { @contents }
+      @contents = tilt.render(self)
     end
 
     def process_md
@@ -74,7 +79,7 @@ module Flutterby
     end
 
     def apply_layout?
-      ext == "html"
+      page?
     end
 
     def write(path)

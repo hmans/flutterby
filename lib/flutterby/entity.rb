@@ -24,6 +24,10 @@ module Flutterby
     def process
     end
 
+    def url
+      @url ||= ::File.join(parent ? parent.url : "/", full_name)
+    end
+
     def full_path(base = nil)
       base ||= parent ? parent.full_path : @prefix
       ::File.expand_path(::File.join(base, full_name))
@@ -31,6 +35,10 @@ module Flutterby
 
     def call(env)
       ['200', {"Content-Type" => "text/html"}, [name]]
+    end
+
+    def root
+      parent ? parent.root : self
     end
 
     private
@@ -51,6 +59,10 @@ module Flutterby
 
     def should_publish?
       !name.start_with?("_")
+    end
+
+    def page?
+      false
     end
   end
 end

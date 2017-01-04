@@ -1,5 +1,7 @@
 module Flutterby
   class Folder < Entity
+    attr_reader :children
+
     def read
       puts "Reading directory: #{path}"
 
@@ -12,7 +14,6 @@ module Flutterby
           Flutterby::File.new(name, parent: self)
         end
       end.compact
-
     end
 
     def write(path)
@@ -25,6 +26,12 @@ module Flutterby
 
     def find(name)
       @children.find { |c| c.name == name }
+    end
+
+    # Returns all children that will compile to a HTML page.
+    #
+    def pages
+      children.select { |c| c.ext == "html" }
     end
   end
 end
