@@ -8,7 +8,7 @@ module Flutterby
     attr_reader :contents, :data
 
     def read
-      @contents = ::File.read(@path)
+      @contents = ::File.read(path)
       @data = parse_frontmatter
     end
 
@@ -55,11 +55,19 @@ module Flutterby
     def apply_layout!
       @content_with_layout = @content
 
-      if ext == "html"
-        if parent && layout = parent.find("_layout")
-          tilt = Tilt[layout.ext].new { layout.contents }
-          @content_with_layout = tilt.render(self) { @content }
+      # collect layouts to apply
+      layouts = []
+      current = self
+      while current = current.parent
+        if layout = current.find("_layout")
+          layouts << layout
         end
+      end
+
+      # Apply all layouts in order
+      layouts.each do |layout|
+        tilt = Tilt[layout.ext].new { layout.contents }
+        @content_with_layout = tilt.render(self) { @content_with_layout }
       end
     end
 

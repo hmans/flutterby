@@ -1,5 +1,4 @@
 require_relative "../lib/flutterby"
 
-Flutterby::Runner
-  .new("./in/")
-  .export("./out/")
+root = Flutterby::Folder.new("/", prefix: "./in")
+root.export("./out")

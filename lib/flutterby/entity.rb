@@ -2,13 +2,14 @@ module Flutterby
   class Entity
     attr_reader :name, :ext, :extensions, :parent, :path
 
-    def initialize(name, parent:)
+    def initialize(name, parent: nil, prefix: nil)
       parts = name.split(".")
       @name = parts.shift
       @ext  = parts.shift
       @extensions = parts
       @parent = parent
-      @path = ::File.join(parent.path, name)
+      @prefix = prefix
+      @path = ::File.expand_path(::File.join(parent ? parent.full_path : @prefix, name))
       read
     end
 
@@ -23,6 +24,11 @@ module Flutterby
     def process
     end
 
+    def full_path(base = nil)
+      base ||= parent ? parent.full_path : @prefix
+      ::File.expand_path(::File.join(base, full_name))
+    end
+
     private
 
     def sibling(name)
@@ -31,10 +37,6 @@ module Flutterby
 
     def full_name
       @full_name ||= [name, ext].compact.join(".")
-    end
-
-    def full_path(base)
-      ::File.expand_path(::File.join(base, full_name))
     end
 
     def read
