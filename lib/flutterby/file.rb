@@ -43,9 +43,13 @@ module Flutterby
       ext == "html"
     end
 
+    def view
+      @view ||= View.new(self)
+    end
+
     def process_erb
       tilt = Tilt["erb"].new { @contents }
-      @contents = tilt.render(self)
+      @contents = tilt.render(view)
     end
 
     def process_md
