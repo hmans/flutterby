@@ -7,4 +7,5 @@ group :development, :test do
   gem 'sass'
   gem 'tilt'
   gem 'toml-rb'
+  gem 'awesome_print'
 end

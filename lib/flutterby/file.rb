@@ -52,8 +52,8 @@ module Flutterby
       @contents = engine.render
     end
 
-    def apply_layout!
-      @content_with_layout = @content
+    def apply_layout
+      output = @contents
 
       # collect layouts to apply
       layouts = []
@@ -67,16 +67,22 @@ module Flutterby
       # Apply all layouts in order
       layouts.each do |layout|
         tilt = Tilt[layout.ext].new { layout.contents }
-        @content_with_layout = tilt.render(self) { @content_with_layout }
+        output = tilt.render(self) { output }
       end
+
+      output
+    end
+
+    def apply_layout?
+      ext == "html"
     end
 
     def write(path)
       if should_publish?
         process!
-        apply_layout!
+        output = apply_layout? ? apply_layout : @contents
 
-        ::File.write(path, @content_with_layout)
+        ::File.write(path, output)
       end
     end
   end
