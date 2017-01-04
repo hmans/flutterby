@@ -11,6 +11,7 @@ GEM
       mini_portile2 (~> 2.1.0)
     nokogumbo (1.4.10)
       nokogiri
+    rack (2.0.1)
     rinku (2.0.2)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
@@ -45,6 +46,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  rack
   rspec
   sass
   slodown

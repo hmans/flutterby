@@ -29,6 +29,10 @@ module Flutterby
       ::File.expand_path(::File.join(base, full_name))
     end
 
+    def call(env)
+      ['200', {"Content-Type" => "text/html"}, [name]]
+    end
+
     private
 
     def sibling(name)

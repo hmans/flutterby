@@ -1,0 +1,5 @@
+require_relative "../lib/flutterby"
+
+root = Flutterby::Folder.new("/", prefix: "./in")
+server = Flutterby::Server.new(root)
+server.run!

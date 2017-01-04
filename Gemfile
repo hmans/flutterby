@@ -8,4 +8,5 @@ group :development, :test do
   gem 'tilt'
   gem 'toml-rb'
   gem 'awesome_print'
+  gem 'rack'
 end
