@@ -76,7 +76,7 @@ module Flutterby
       # Apply all layouts in order
       layouts.each do |layout|
         tilt = Tilt[layout.ext].new { layout.contents }
-        output = tilt.render(self) { output }
+        output = tilt.render(view) { output }
       end
 
       output

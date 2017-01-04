@@ -1,9 +1,9 @@
 <article class="post">
   <div class="meta">
-    <%= data["date"].strftime("%B %e, %Y") %>
+    <%= date_format entity.data["date"], "%B %e, %Y" %>
   </div>
 
-  <h2><%= data["title"] %></h2>
+  <h2><%= entity.data["title"] %></h2>
 
-  <%= contents %>
+  <%= entity.contents %>
 </article>
