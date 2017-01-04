@@ -1,6 +1,7 @@
 require 'slodown'
 require 'sass'
 require 'tilt'
+require 'slim'
 require 'toml'
 
 module Flutterby
@@ -49,6 +50,11 @@ module Flutterby
 
     def process_erb
       tilt = Tilt["erb"].new { @contents }
+      @contents = tilt.render(view)
+    end
+
+    def process_slim
+      tilt = Tilt["slim"].new { @contents }
       @contents = tilt.render(view)
     end
 

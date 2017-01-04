@@ -1,0 +1,7 @@
+article.post
+  .meta
+    = date_format entity.data["date"], "%B %e, %Y"
+
+  h2 = entity.data["title"]
+
+  == entity.contents
