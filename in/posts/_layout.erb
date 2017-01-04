@@ -1,9 +1,9 @@
 <article class="post">
-  <h1><%= data["title"] %></h1>
+  <div class="meta">
+    <%= data["date"].strftime("%B %e, %Y") %>
+  </div>
 
-  <p>
-    Published on: <%= data["date"].to_date %>
-  </p>
+  <h2><%= data["title"] %></h2>
 
   <%= contents %>
 </article>
