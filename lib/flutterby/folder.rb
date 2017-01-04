@@ -5,7 +5,8 @@ module Flutterby
     end
 
     def write(path)
-      # TODO: make sure directory exists
+      Dir.mkdir(path) unless ::File.exists?(path)
+
       @children.each do |child|
         child.export(path)
       end
@@ -14,8 +15,13 @@ module Flutterby
     private
 
     def read_children
-      Dir[@path + "*"].map do |item|
-        Flutterby::File.new(::File.basename(item), parent: self)
+      Dir[@path + "/*"].map do |item|
+        name = ::File.basename(item)
+        if ::File.directory?(item)
+          Flutterby::Folder.new(name, parent: self)
+        else
+          Flutterby::File.new(name, parent: self)
+        end
       end.compact
     end
   end
