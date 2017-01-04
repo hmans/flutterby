@@ -32,7 +32,9 @@ module Flutterby
     end
 
     def write(path)
-      ::File.write(path, @contents)
+      if should_publish?
+        ::File.write(path, @contents)
+      end
     end
   end
 end

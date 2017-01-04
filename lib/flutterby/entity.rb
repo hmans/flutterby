@@ -15,9 +15,11 @@ module Flutterby
     end
 
     def export(path_base)
-      out_path = full_path(path_base)
-      puts "* #{@name}: #{out_path}"
-      write(out_path)
+      if should_publish?
+        out_path = full_path(path_base)
+        puts "* #{@name}: #{out_path}"
+        write(out_path)
+      end
     end
 
     private
@@ -33,6 +35,10 @@ module Flutterby
     end
 
     def write(path)
+    end
+
+    def should_publish?
+      !name.start_with?("_")
     end
   end
 end
