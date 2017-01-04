@@ -13,13 +13,18 @@ module Flutterby
     end
 
     def parse_frontmatter
-      if @contents =~ /\A\-\-\-\n(.+)\n\-\-\-\n/
-        YAML.load($1)
-      elsif @contents =~ /\A\+\+\+\n(.+)\n\+\+\+\n/
-        TOML.parse($1)
-      else
-        {}
+      data = {}
+      @contents.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/) do
+        data.merge! YAML.load($1)
+        ""
       end
+
+      @contents.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/) do
+        data.merge! TOML.parse($1)
+        ""
+      end
+
+      data
     end
 
     def process!
