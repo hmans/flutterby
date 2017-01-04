@@ -1,13 +1,25 @@
 require 'slodown'
 require 'sass'
 require 'tilt'
+require 'toml'
 
 module Flutterby
   class File < Entity
-    attr_reader :contents
+    attr_reader :contents, :data
 
     def read
       @contents = ::File.read(@path)
+      @data = parse_frontmatter
+    end
+
+    def parse_frontmatter
+      if @contents =~ /\A\-\-\-\n(.+)\n\-\-\-\n/
+        YAML.load($1)
+      elsif @contents =~ /\A\+\+\+\n(.+)\n\+\+\+\n/
+        TOML.parse($1)
+      else
+        {}
+      end
     end
 
     def process!

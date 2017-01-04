@@ -6,4 +6,5 @@ group :development, :test do
   gem 'slodown'
   gem 'sass'
   gem 'tilt'
+  gem 'toml-rb'
 end

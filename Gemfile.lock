@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    citrus (3.0.2)
     crass (1.0.2)
     diff-lcs (1.2.5)
     kramdown (1.13.1)
@@ -35,6 +36,8 @@ GEM
       ruby-oembed (>= 0.9.0)
       sanitize (>= 2.0.0)
     tilt (2.0.5)
+    toml-rb (0.3.15)
+      citrus (~> 3.0, > 3.0)
 
 PLATFORMS
   ruby
@@ -44,6 +47,7 @@ DEPENDENCIES
   sass
   slodown
   tilt
+  toml-rb
 
 BUNDLED WITH
    1.13.6

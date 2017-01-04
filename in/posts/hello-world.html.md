@@ -1,3 +1,5 @@
-# A post
++++
+title = "A Post"
++++
 
 Yay!
