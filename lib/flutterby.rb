@@ -12,37 +12,57 @@ module Flutterby
     def export(path)
       out_path = ::File.expand_path(path)
       puts "Exporting to #{out_path}"
+      @root.export(path)
     end
   end
 
-  class Folder
+  class Entity
     attr_reader :path
 
     def initialize(name, parent:)
       @name = name
       @parent = parent
       @path = ::File.join(parent.path, name)
+      read
+    end
+
+    def export(path_base)
+      puts "* #{@name}: #{full_path(path_base)}"
+    end
+
+    private
+
+    def full_path(base)
+      ::File.expand_path(::File.join(base, @name))
+    end
+
+    def read
+    end
+  end
+
+  class Folder < Entity
+    def read
       @children = read_children
     end
 
-    def export(path)
-      puts @children.inspect
+    def export(path_base)
+      super
+
+      @children.each do |child|
+        child.export(full_path(path_base))
+      end
     end
 
     private
 
     def read_children
       Dir[@path + "*"].map do |item|
-        Flutterby::File.new(item, parent: self)
+        Flutterby::File.new(::File.basename(item), parent: self)
       end.compact
     end
   end
 
-  class File
-    def initialize(name, parent:)
-      @full_path = ::File.join(parent.path, name)
-      puts @full_path
-    end
+  class File < Entity
   end
 end
 
