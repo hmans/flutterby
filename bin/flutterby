@@ -2,5 +2,4 @@ require_relative "../lib/flutterby"
 
 Flutterby::Runner
   .new("./in/")
-  .process
   .export("./out/")

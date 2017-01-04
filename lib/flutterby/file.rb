@@ -10,7 +10,7 @@ module Flutterby
       @contents = ::File.read(@path)
     end
 
-    def process
+    def process!
       # Apply processors
       while ext = extensions.pop do
         meth = "process_#{ext}"
@@ -37,6 +37,8 @@ module Flutterby
 
     def write(path)
       if should_publish?
+        process!
+
         # Apply layout
         if ext == "html"
           if layout = parent.find("_layout")

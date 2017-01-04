@@ -9,11 +9,6 @@ module Flutterby
       @root = Folder.new("/", parent: self)
     end
 
-    def process
-      @root.process
-      self
-    end
-
     def export(path)
       out_path = ::File.expand_path(path)
       puts "Exporting to #{out_path}"
