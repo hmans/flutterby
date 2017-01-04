@@ -3,7 +3,7 @@
 <h3>Latest Posts</h3>
 
 <ul>
-  <% root.find('posts').pages.each do |post| %>
+  <% root.find('posts').pages.sort_by {|p| p.data['date'] }.reverse.each do |post| %>
     <li>
       <a href="<%= post.url %>"><%= post.data["title"] %></a>
     </li>
