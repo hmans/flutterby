@@ -2,9 +2,12 @@ module Flutterby
   class Entity
     attr_reader :path
     attr_reader :name
+    attr_reader :extensions
 
     def initialize(name, parent:)
-      @name = name
+      parts = name.split(".")
+      @name = parts.first(2).join(".")
+      @extensions = parts[2..-1]
       @parent = parent
       @path = ::File.join(parent.path, name)
       read
