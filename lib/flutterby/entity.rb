@@ -7,10 +7,11 @@ module Flutterby
     def initialize(name, parent:)
       parts = name.split(".")
       @name = parts.first(2).join(".")
-      @extensions = parts[2..-1]
+      @extensions = Array(parts[2..-1])
       @parent = parent
       @path = ::File.join(parent.path, name)
       read
+      process
     end
 
     def export(path_base)
@@ -26,6 +27,19 @@ module Flutterby
     end
 
     def read
+    end
+
+    def process
+      while ext = extensions.pop do
+        klass = case ext
+        when "md" then SlodownProcessor
+        end
+
+        if klass
+          processor = klass.new(@contents)
+          @contents = processor.process
+        end
+      end
     end
 
     def write(path)
