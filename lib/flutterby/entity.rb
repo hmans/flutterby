@@ -1,17 +1,15 @@
 module Flutterby
   class Entity
-    attr_reader :path
-    attr_reader :name
-    attr_reader :extensions
+    attr_reader :name, :ext, :extensions, :parent, :path
 
     def initialize(name, parent:)
       parts = name.split(".")
-      @name = parts.first(2).join(".")
-      @extensions = Array(parts[2..-1])
+      @name = parts.shift
+      @ext  = parts.shift
+      @extensions = parts
       @parent = parent
       @path = ::File.join(parent.path, name)
       read
-      process
     end
 
     def export(path_base)
@@ -22,16 +20,20 @@ module Flutterby
       end
     end
 
+    def process
+    end
+
     private
 
+    def full_name
+      @full_name ||= [name, ext].compact.join(".")
+    end
+
     def full_path(base)
-      ::File.expand_path(::File.join(base, @name))
+      ::File.expand_path(::File.join(base, full_name))
     end
 
     def read
-    end
-
-    def process
     end
 
     def write(path)

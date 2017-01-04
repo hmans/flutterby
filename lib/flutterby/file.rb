@@ -1,13 +1,17 @@
 require 'slodown'
 require 'sass'
+require 'tilt'
 
 module Flutterby
   class File < Entity
+    attr_reader :contents
+
     def read
       @contents = ::File.read(@path)
     end
 
     def process
+      # Apply processors
       while ext = extensions.pop do
         meth = "process_#{ext}"
         if respond_to?(meth)
@@ -33,6 +37,16 @@ module Flutterby
 
     def write(path)
       if should_publish?
+        # Apply layout
+        if ext == "html"
+          if layout = parent.find("_layout")
+            @contents = begin
+              tilt = Tilt[layout.ext].new { layout.contents }
+              tilt.render { @contents }
+            end
+          end
+        end
+
         ::File.write(path, @contents)
       end
     end

@@ -5,4 +5,5 @@ group :development, :test do
   gem 'rspec'
   gem 'slodown'
   gem 'sass'
+  gem 'tilt'
 end

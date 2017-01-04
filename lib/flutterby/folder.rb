@@ -12,6 +12,14 @@ module Flutterby
       end
     end
 
+    def process
+      @children.each(&:process)
+    end
+
+    def find(name)
+      @children.find { |c| c.name == name }
+    end
+
     private
 
     def read_children
