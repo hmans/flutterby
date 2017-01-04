@@ -28,6 +28,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4.1)
+    sass (3.4.22)
     slodown (0.3.0)
       kramdown (>= 1.5.0)
       rinku (>= 1.7.0)
@@ -39,6 +40,7 @@ PLATFORMS
 
 DEPENDENCIES
   rspec
+  sass
   slodown
 
 BUNDLED WITH
