@@ -103,24 +103,22 @@ module Flutterby
       page?
     end
 
-    def write_static(path)
+    def render
       rendered = process_filters(@contents)
-      output = apply_layout? ? apply_layout(rendered) : rendered
+      apply_layout? ? apply_layout(rendered) : rendered
+    end
 
-      ::File.write(path, output)
+    def write_static(path)
+      ::File.write(path, render)
     end
 
     def serve(parts, req, res)
-      # TODO: DRY this up
-      rendered = process_filters(@contents)
-      output = apply_layout? ? apply_layout(rendered) : rendered
-
       # Determine MIME type
       mime_type = MIME::Types.type_for(ext) || "text/plain"
 
       # Build response
       res.headers["Content-Type"] = mime_type
-      res.body = [output]
+      res.body = [render]
     end
   end
 end
