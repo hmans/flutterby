@@ -15,8 +15,9 @@ Commander.configure do
 
     c.action do |args, options|
       options.default in: "./site/", out: "./_build/"
-      say "Yo."
-      puts options.inspect
+
+      root = Flutterby.from(options.in, name: "/")
+      root.export(options.out)
     end
   end
 
