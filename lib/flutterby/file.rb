@@ -105,9 +105,9 @@ module Flutterby
       page?
     end
 
-    def render
+    def render(layout: true)
       rendered = filter_contents
-      apply_layout? ? apply_layout(rendered) : rendered
+      (layout && apply_layout?) ? apply_layout(rendered) : rendered
     end
 
     def write_static(path)
