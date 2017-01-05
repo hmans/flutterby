@@ -6,12 +6,6 @@ module Flutterby
       @parent  = parent
       @data    = {}
 
-      # Extract date from name
-      name.gsub! %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-} do
-        @data['date'] = Date.parse($1)
-        ""
-      end
-
       # Extract name, extension, and filters from given name
       parts = name.split(".")
       @name = parts.shift

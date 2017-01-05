@@ -10,6 +10,15 @@ module Flutterby
 
     def read
       @contents = ::File.read(fs_path)
+
+      # Extract date from name
+      name.gsub! %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-} do
+        @data['date'] = Date.parse($1)
+        ""
+      end
+
+      # Read remaining data from frontmatter. Data in frontmatter
+      # will always have precedence!
       @data.merge! parse_frontmatter
     end
 
