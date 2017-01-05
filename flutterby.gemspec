@@ -33,4 +33,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'slim'
   spec.add_dependency 'toml-rb'
   spec.add_dependency 'rack'
+  spec.add_dependency 'listen'
+  spec.add_dependency 'mime-types'
 end

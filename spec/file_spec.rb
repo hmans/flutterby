@@ -22,9 +22,5 @@ describe Flutterby::File do
     it "extracts the date" do
       expect(subject.data["date"]).to eq(Time.parse("2017-01-04"))
     end
-
-    it "removed the date from the filename" do
-      expect(subject.name).to eq("hello-world")
-    end
   end
 end

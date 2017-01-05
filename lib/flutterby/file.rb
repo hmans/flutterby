@@ -3,6 +3,7 @@ require 'sass'
 require 'tilt'
 require 'slim'
 require 'toml'
+require 'mime-types'
 
 module Flutterby
   class File < Entity
@@ -12,9 +13,8 @@ module Flutterby
       @contents = ::File.read(fs_path)
 
       # Extract date from name
-      name.gsub! %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-} do
+      if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
         @data['date'] = Time.parse($1)
-        ""
       end
 
       # Read remaining data from frontmatter. Data in frontmatter
@@ -37,16 +37,18 @@ module Flutterby
       data
     end
 
-    def process!
-      # Apply processors
-      while filter = filters.pop do
+    def process_filters(input)
+      # Apply all filters
+      filters.each do |filter|
         meth = "process_#{filter}"
         if respond_to?(meth)
-          send(meth)
+          input = send(meth, input)
         else
           puts "Woops, no #{meth} available :("
         end
       end
+
+      input
     end
 
     def page?
@@ -57,27 +59,27 @@ module Flutterby
       @view ||= View.new(self)
     end
 
-    def process_erb
-      tilt = Tilt["erb"].new { @contents }
-      @contents = tilt.render(view)
+    def process_erb(input)
+      tilt = Tilt["erb"].new { input }
+      tilt.render(view)
     end
 
-    def process_slim
-      tilt = Tilt["slim"].new { @contents }
-      @contents = tilt.render(view)
+    def process_slim(input)
+      tilt = Tilt["slim"].new { input }
+      tilt.render(view)
     end
 
-    def process_md
-      @contents = Slodown::Formatter.new(@contents).complete.to_s
+    def process_md(input)
+      Slodown::Formatter.new(input).complete.to_s
     end
 
-    def process_scss
-      engine = Sass::Engine.new(@contents, syntax: :scss)
-      @contents = engine.render
+    def process_scss(input)
+      engine = Sass::Engine.new(input, syntax: :scss)
+      engine.render
     end
 
-    def apply_layout
-      output = @contents
+    def apply_layout(input)
+      output = input
 
       # collect layouts to apply
       layouts = []
@@ -102,10 +104,23 @@ module Flutterby
     end
 
     def write_static(path)
-      process!
-      output = apply_layout? ? apply_layout : @contents
+      rendered = process_filters(@contents)
+      output = apply_layout? ? apply_layout(rendered) : rendered
 
       ::File.write(path, output)
+    end
+
+    def serve(parts, req, res)
+      # TODO: DRY this up
+      rendered = process_filters(@contents)
+      output = apply_layout? ? apply_layout(rendered) : rendered
+
+      # Determine MIME type
+      mime_type = MIME::Types.type_for(ext) || "text/plain"
+
+      # Build response
+      res.headers["Content-Type"] = mime_type
+      res.body = [output]
     end
   end
 end

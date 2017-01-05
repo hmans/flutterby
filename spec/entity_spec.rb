@@ -16,7 +16,7 @@ describe Flutterby::Entity do
     end
 
     it "stores the remaining extensions for processing" do
-      expect(subject.filters).to eq(["slim", "erb"])
+      expect(subject.filters).to eq(["erb", "slim"])
     end
   end
 end

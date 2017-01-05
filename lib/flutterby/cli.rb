@@ -21,6 +21,22 @@ Commander.configure do
     end
   end
 
+  command :serve do |c|
+    c.syntax = 'flutterby serve [options]'
+    c.description = "Serve your website for development."
+
+    c.option '--in DIR', String, "Directory containing your source files"
+
+    c.action do |args, options|
+      options.default in: "./site/"
+
+      root = Flutterby.from(options.in, name: "/")
+      server = Flutterby::Server.new(root)
+      server.run!
+    end
+  end
+
+
   command :test do |c|
     c.syntax = 'flutterby test'
     c.description = 'TEST. Yo.'

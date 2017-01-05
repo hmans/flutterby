@@ -10,7 +10,7 @@ module Flutterby
       parts = name.split(".")
       @name = parts.shift
       @ext  = parts.shift
-      @filters = parts
+      @filters = parts.reverse
 
       # Calculate full path
       @path = parent ? ::File.join(parent.path, full_name) : full_name
@@ -20,6 +20,10 @@ module Flutterby
         @fs_path = ::File.expand_path(fs_path)
         read
       end
+    end
+
+    def reload!
+      read
     end
 
     def list(indent: 0)
@@ -34,7 +38,8 @@ module Flutterby
       end
     end
 
-    def process
+    def process_filters(input)
+      input
     end
 
     def url
@@ -45,15 +50,27 @@ module Flutterby
       ::File.expand_path(::File.join(base, full_name))
     end
 
-    def call(env)
-      ['200', {"Content-Type" => "text/html"}, [name]]
-    end
-
     def root
       parent ? parent.root : self
     end
 
-    private
+
+    #
+    #  Serving
+    #
+
+    def call(env)
+      env['rack.request']  ||= Rack::Request.new(env)
+      env['rack.response'] ||= Rack::Response.new([], 200, {})
+      parts = env['rack.request'].path.split("/").reject(&:empty?)
+
+      serve(parts, env['rack.request'], env['rack.response'])
+
+      env['rack.response']
+    end
+
+    def serve(parts, req, res)
+    end
 
     def sibling(name)
       parent && parent.find(name)
