@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency 'awesome_print'
 
+  spec.add_dependency 'commander'
   spec.add_dependency 'slodown'
   spec.add_dependency 'sass'
   spec.add_dependency 'tilt'
