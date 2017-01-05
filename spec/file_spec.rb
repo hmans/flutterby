@@ -20,7 +20,7 @@ describe Flutterby::File do
     subject { Flutterby.from ::File.join(site_path, "posts/2017-01-04-hello-world.html.md") }
 
     it "extracts the date" do
-      expect(subject.data["date"]).to eq(Date.parse("2017-01-04"))
+      expect(subject.data["date"]).to eq(Time.parse("2017-01-04"))
     end
 
     it "removed the date from the filename" do

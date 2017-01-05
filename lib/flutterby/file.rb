@@ -13,7 +13,7 @@ module Flutterby
 
       # Extract date from name
       name.gsub! %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-} do
-        @data['date'] = Date.parse($1)
+        @data['date'] = Time.parse($1)
         ""
       end
 
