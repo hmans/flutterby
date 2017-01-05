@@ -9,7 +9,7 @@ module Flutterby
     attr_reader :contents, :data
 
     def read
-      @contents = ::File.read(path)
+      @contents = ::File.read(fs_path)
       @data = parse_frontmatter
     end
 
@@ -30,8 +30,8 @@ module Flutterby
 
     def process!
       # Apply processors
-      while ext = extensions.pop do
-        meth = "process_#{ext}"
+      while filter = filters.pop do
+        meth = "process_#{filter}"
         if respond_to?(meth)
           send(meth)
         else
@@ -92,13 +92,11 @@ module Flutterby
       page?
     end
 
-    def write(path)
-      if should_publish?
-        process!
-        output = apply_layout? ? apply_layout : @contents
+    def write_static(path)
+      process!
+      output = apply_layout? ? apply_layout : @contents
 
-        ::File.write(path, output)
-      end
+      ::File.write(path, output)
     end
   end
 end

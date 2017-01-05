@@ -2,21 +2,18 @@ module Flutterby
   class Folder < Entity
     attr_reader :children
 
-    def read
-      puts "Reading directory: #{path}"
+    def list(indent: 0)
+      super
+      children.each { |c| c.list(indent: indent + 1) }
+    end
 
-      @children = Dir[::File.join(path, "*")].map do |item|
-        name = ::File.basename(item)
-        puts item
-        if ::File.directory?(item)
-          Flutterby::Folder.new(name, parent: self)
-        else
-          Flutterby::File.new(name, parent: self)
-        end
+    def read
+      @children = Dir[::File.join(fs_path, "*")].map do |entry|
+        Flutterby.from(entry, parent: self)
       end.compact
     end
 
-    def write(path)
+    def write_static(path)
       Dir.mkdir(path) unless ::File.exists?(path)
 
       @children.each do |child|

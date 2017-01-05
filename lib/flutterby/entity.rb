@@ -1,23 +1,35 @@
 module Flutterby
   class Entity
-    attr_reader :name, :ext, :extensions, :parent, :path
+    attr_reader :name, :ext, :filters, :parent, :fs_path, :path
 
-    def initialize(name, parent: nil, prefix: nil)
+    def initialize(name, parent: nil, fs_path: nil)
+      @parent  = parent
+
+      # Extract name, extension, and filters from given name
       parts = name.split(".")
       @name = parts.shift
       @ext  = parts.shift
-      @extensions = parts
-      @parent = parent
-      @prefix = prefix
-      @path = ::File.expand_path(::File.join(parent ? parent.full_path : @prefix, name))
-      read
+      @filters = parts
+
+      # Calculate full path
+      @path = parent ? ::File.join(parent.path, full_name) : full_name
+
+      # If a filesystem path was given, read the entity from disk
+      if fs_path
+        @fs_path = ::File.expand_path(fs_path)
+        read
+      end
     end
 
-    def export(path_base)
+    def list(indent: 0)
+      puts "#{"   " * indent}[#{self.class}] #{path}"
+    end
+
+    def export(out_path)
       if should_publish?
-        out_path = full_path(path_base)
+        out_path = full_path(out_path)
         puts "* #{@name}: #{out_path}"
-        write(out_path)
+        write_static(out_path)
       end
     end
 
@@ -28,8 +40,7 @@ module Flutterby
       @url ||= ::File.join(parent ? parent.url : "/", full_name)
     end
 
-    def full_path(base = nil)
-      base ||= parent ? parent.full_path : @prefix
+    def full_path(base)
       ::File.expand_path(::File.join(base, full_name))
     end
 
@@ -54,7 +65,7 @@ module Flutterby
     def read
     end
 
-    def write(path)
+    def write_static(path)
     end
 
     def should_publish?
