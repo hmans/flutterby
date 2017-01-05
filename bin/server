@@ -1,4 +1,6 @@
-require_relative "../lib/flutterby"
+#!/usr/bin/env ruby
+require "bundler/setup"
+require "flutterby"
 
 root = Flutterby::Folder.new("/", prefix: "./in")
 server = Flutterby::Server.new(root)
