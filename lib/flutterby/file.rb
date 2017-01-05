@@ -9,6 +9,11 @@ module Flutterby
   class File < Entity
     attr_reader :contents
 
+    def reload!
+      @filtered_contents = nil
+      super
+    end
+
     def read
       @contents = ::File.read(fs_path)
 
@@ -37,20 +42,22 @@ module Flutterby
       data
     end
 
-    def filter_contents
-      result = @contents
+    def filtered_contents
+      @filtered_contents ||= begin
+        result = @contents
 
-      # Apply all filters
-      filters.each do |filter|
-        meth = "process_#{filter}"
-        if respond_to?(meth)
-          result = send(meth, result)
-        else
-          puts "Woops, no #{meth} available :("
+        # Apply all filters
+        filters.each do |filter|
+          meth = "process_#{filter}"
+          if respond_to?(meth)
+            result = send(meth, result)
+          else
+            puts "Woops, no #{meth} available :("
+          end
         end
-      end
 
-      result
+        result
+      end
     end
 
     def page?
@@ -106,7 +113,7 @@ module Flutterby
     end
 
     def render(layout: true)
-      rendered = filter_contents
+      rendered = filtered_contents
       (layout && apply_layout?) ? apply_layout(rendered) : rendered
     end
 
