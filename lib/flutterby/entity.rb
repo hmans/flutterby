@@ -38,10 +38,6 @@ module Flutterby
       end
     end
 
-    def process_filters(input)
-      input
-    end
-
     def url
       @url ||= ::File.join(parent ? parent.url : "/", full_name)
     end

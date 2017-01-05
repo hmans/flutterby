@@ -37,18 +37,20 @@ module Flutterby
       data
     end
 
-    def process_filters(input)
+    def filter_contents
+      result = @contents
+
       # Apply all filters
       filters.each do |filter|
         meth = "process_#{filter}"
         if respond_to?(meth)
-          input = send(meth, input)
+          result = send(meth, result)
         else
           puts "Woops, no #{meth} available :("
         end
       end
 
-      input
+      result
     end
 
     def page?
@@ -104,7 +106,7 @@ module Flutterby
     end
 
     def render
-      rendered = process_filters(@contents)
+      rendered = filter_contents
       apply_layout? ? apply_layout(rendered) : rendered
     end
 

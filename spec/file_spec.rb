@@ -23,4 +23,10 @@ describe Flutterby::File do
       expect(subject.data["date"]).to eq(Time.parse("2017-01-04"))
     end
   end
+
+  describe "#filter_contents" do
+    it "applies all filters to the contents of this file" do
+      expect(subject.filter_contents).to eq("\n<h1 id=\"this-is-markdown\">This is Markdown</h1>\n\n<p>It’s great!</p>\n")
+    end
+  end
 end
