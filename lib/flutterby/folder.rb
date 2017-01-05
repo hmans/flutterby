@@ -21,9 +21,12 @@ module Flutterby
       end
     end
 
-    def find(name)
+    def find(path)
+      (name, slash, rest) = path.partition("/")
+
       name = name.split('.').first
-      @children.find { |c| c.name == name }
+      child = @children.find { |c| c.name == name }
+      rest.empty? ? child : child.find(rest)
     end
 
     # Returns all children that will compile to a HTML page.
