@@ -6,11 +6,11 @@ require 'toml'
 
 module Flutterby
   class File < Entity
-    attr_reader :contents, :data
+    attr_reader :contents
 
     def read
       @contents = ::File.read(fs_path)
-      @data = parse_frontmatter
+      @data.merge! parse_frontmatter
     end
 
     def parse_frontmatter

@@ -15,4 +15,16 @@ describe Flutterby::File do
   it "extracts data from frontmatter" do
     expect(subject.data["title"]).to eq("A file that tests Markdown.")
   end
+
+  context "when the filename contains a date" do
+    subject { Flutterby.from ::File.join(site_path, "posts/2017-01-04-hello-world.html.md") }
+
+    it "extracts the date" do
+      expect(subject.data["date"]).to eq(Date.parse("2017-01-04"))
+    end
+
+    it "removed the date from the filename" do
+      expect(subject.name).to eq("hello-world")
+    end
+  end
 end

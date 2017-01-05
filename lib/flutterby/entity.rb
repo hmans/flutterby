@@ -1,9 +1,16 @@
 module Flutterby
   class Entity
-    attr_reader :name, :ext, :filters, :parent, :fs_path, :path
+    attr_reader :name, :ext, :filters, :parent, :fs_path, :path, :data
 
     def initialize(name, parent: nil, fs_path: nil)
       @parent  = parent
+      @data    = {}
+
+      # Extract date from name
+      name.gsub! %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-} do
+        @data['date'] = Date.parse($1)
+        ""
+      end
 
       # Extract name, extension, and filters from given name
       parts = name.split(".")
