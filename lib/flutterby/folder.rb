@@ -6,15 +6,15 @@ module Flutterby
     end
 
     def read
-      @children = Dir[::File.join(fs_path, "*")].map do |entry|
-        Flutterby.from(entry, parent: self)
-      end.compact
+      Dir[::File.join(fs_path, "*")].each do |entry|
+        children << Flutterby.from(entry)
+      end
     end
 
     def write_static(path)
       Dir.mkdir(path) unless ::File.exists?(path)
 
-      @children.each do |child|
+      children.each do |child|
         child.export(path)
       end
     end

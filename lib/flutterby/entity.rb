@@ -1,10 +1,11 @@
 module Flutterby
   class Entity
-    attr_reader :name, :ext, :filters, :parent, :fs_path, :data, :children
+    attr_accessor :parent
+    attr_reader :name, :ext, :filters, :fs_path, :data, :children
 
     def initialize(name, parent: nil, fs_path: nil)
       @data    = {}
-      @children = []
+      reset_children!
 
       # Extract name, extension, and filters from given name
       parts = name.split(".")
@@ -21,14 +22,24 @@ module Flutterby
       end
     end
 
-    def path
-      parent ? ::File.join(parent.path, full_name) : full_name
+    def reset_children!
+      @children = []
+      me = self
+
+      # Inject some extra methods into this array because this is dirty old Ruby
+      @children.define_singleton_method(:<<) do |c|
+        c.parent = me
+        super(c)
+      end
+
+      @children.define_singleton_method(:find_by_name) do |name|
+        name = name.split('.').first
+        find { |c| c.name == name }
+      end
     end
 
-    def add_child(entity)
-      entity.parent = self
-      children << entity
-      entity
+    def path
+      parent ? ::File.join(parent.path, full_name) : full_name
     end
 
     # Returns all children that will compile to a HTML page.
@@ -37,12 +48,8 @@ module Flutterby
       children.select { |c| c.ext == "html" }
     end
 
-    def parent=(entity)
-      @parent = entity
-    end
-
     def reload!
-      @children = []
+      reset_children!
       read
     end
 
@@ -88,9 +95,7 @@ module Flutterby
       when %r{^/} then
         root.find($')
       when %r{^([^/]+)/?} then
-        name = $1.split('.').first
-        child = @children.find { |c| c.name == name }
-
+        child = @children.find_by_name($1)
         $'.empty? ? child : child.find($')
       end
     end
