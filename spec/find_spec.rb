@@ -15,7 +15,7 @@ describe "#find" do
   end
 
   let(:foo) { Flutterby::File.new("foo") }
-  let(:baz) { Flutterby::File.new("baz") }
+  let(:baz) { Flutterby::File.new("baz.html") }
 
   let(:bar) do
     Flutterby::File.new("bar").tap do |e|
@@ -64,5 +64,11 @@ describe "#find" do
 
   specify "faulty expressions" do
     expect(root.find(" haha lol zomg ")).to eq(nil)
+  end
+
+  specify "with or without extensions" do
+    expect(bar.find("baz")).to eq(baz)
+    expect(bar.find("baz.html")).to eq(baz)
+    expect(bar.find("baz.txt")).to eq(nil)
   end
 end

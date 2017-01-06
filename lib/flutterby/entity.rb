@@ -37,8 +37,12 @@ module Flutterby
       end
 
       @children.define_singleton_method(:find_by_name) do |name|
-        name = name.split('.').first
-        find { |c| c.name == name }
+        # Look for a fully qualified name (index.html), or a simple name (index)?
+        if name.include?(".")
+          find { |c| c.full_name == name }
+        else
+          find { |c| c.name == name }
+        end
       end
     end
 
