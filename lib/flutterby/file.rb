@@ -66,7 +66,19 @@ module Flutterby
     end
 
     def view
-      @view ||= View.new(self)
+      @view ||= begin
+        View.new(self).tap do |view|
+          # load additional view code
+          if view_entity = sibling("_view.rb")
+            case view_entity.ext
+            when "rb" then
+              view.instance_eval(view_entity.contents)
+            else
+              raise "Unknown view extension #{view_entity.full_name}"
+            end
+          end
+        end
+      end
     end
 
     def process_erb(input)
