@@ -57,8 +57,6 @@ module Flutterby
           meth = "process_#{filter}"
           if respond_to?(meth)
             result = send(meth, result)
-          else
-            puts "Woops, no #{meth} available :("
           end
         end
 
