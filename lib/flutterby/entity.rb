@@ -22,6 +22,10 @@ module Flutterby
       end
     end
 
+    #
+    # Children
+    #
+
     def reset_children!
       @children = []
       me = self
@@ -38,47 +42,39 @@ module Flutterby
       end
     end
 
-    def path
-      parent ? ::File.join(parent.path, full_name) : full_name
-    end
-
     # Returns all children that will compile to a HTML page.
     #
     def pages
       children.select { |c| c.ext == "html" }
     end
 
-    def reload!
-      reset_children!
-      read
-    end
+    #
+    # Path Algebra
+    #
 
-    def list(indent: 0)
-      puts "#{"   " * indent}[#{self.class}] #{path}"
-    end
-
-    def export(out_path)
-      if should_publish?
-        out_path = full_path(out_path)
-        puts "* #{@name}: #{out_path}"
-        write_static(out_path)
-      end
+    def path
+      parent ? ::File.join(parent.path, full_name) : full_name
     end
 
     def url
       @url ||= ::File.join(parent ? parent.url : "/", full_name)
     end
 
-    def full_path(base)
+    def full_fs_path(base:)
       ::File.expand_path(::File.join(base, full_name))
     end
+
+
+    #
+    # Tree Walking
+    #
 
     def root
       parent ? parent.root : self
     end
 
-    def to_s
-      "<#{self.class} #{self.path}>"
+    def sibling(name)
+      parent && parent.find(name)
     end
 
     def find(path)
@@ -100,15 +96,30 @@ module Flutterby
       end
     end
 
-    def sibling(name)
-      parent && parent.find(name)
-    end
 
-    def full_name
-      @full_name ||= [name, ext].compact.join(".")
+    #
+    # Reading from filesystem
+    #
+
+    def reload!
+      reset_children!
+      read
     end
 
     def read
+    end
+
+
+    #
+    # Exporting
+    #
+
+    def export(out_path)
+      if should_publish?
+        out_path = full_fs_path(base: out_path)
+        puts "* #{@name}: #{out_path}"
+        write_static(out_path)
+      end
     end
 
     def write_static(path)
@@ -116,6 +127,24 @@ module Flutterby
 
     def should_publish?
       !name.start_with?("_")
+    end
+
+
+
+    #
+    # Misc
+    #
+
+    def list(indent: 0)
+      puts "#{"   " * indent}[#{self.class}] #{path}"
+    end
+
+    def to_s
+      "<#{self.class} #{self.path}>"
+    end
+
+    def full_name
+      @full_name ||= [name, ext].compact.join(".")
     end
 
     def page?

@@ -7,7 +7,9 @@ module Flutterby
 
     def read
       Dir[::File.join(fs_path, "*")].each do |entry|
-        children << Flutterby.from(entry)
+        if entity = Flutterby.from(entry)
+          children << entity
+        end
       end
     end
 
