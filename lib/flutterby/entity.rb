@@ -50,24 +50,6 @@ module Flutterby
       parent ? parent.root : self
     end
 
-
-    #
-    #  Serving
-    #
-
-    def call(env)
-      env['rack.request']  ||= Rack::Request.new(env)
-      env['rack.response'] ||= Rack::Response.new([], 200, {})
-      parts = env['rack.request'].path.split("/").reject(&:empty?)
-
-      serve(parts, env['rack.request'], env['rack.response'])
-
-      env['rack.response']
-    end
-
-    def serve(parts, req, res)
-    end
-
     def sibling(name)
       parent && parent.find(name)
     end

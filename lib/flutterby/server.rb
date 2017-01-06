@@ -29,7 +29,41 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run @root
+      server.run self
+    end
+
+    def call(env)
+      req  = Rack::Request.new(env)
+      res = Rack::Response.new([], 200, {})
+
+      parts = req.path.split("/").reject(&:empty?)
+
+      current = @root
+
+      loop do
+        case current
+        when Flutterby::Folder then
+          # If no further parts are requested, let's look for an index
+          # document and serve that instead.
+          if child = current.find(parts.empty? ? "index" : parts.shift)
+            current = child
+          else
+            res.headers["Content-Type"] = "text/html"
+            res.body = ["404"]
+            break
+          end
+        when Flutterby::File then
+          # Determine MIME type
+          mime_type = MIME::Types.type_for(current.ext) || "text/plain"
+
+          # Build response
+          res.headers["Content-Type"] = mime_type
+          res.body = [current.render]
+          break
+        end
+      end
+
+      res
     end
   end
 end

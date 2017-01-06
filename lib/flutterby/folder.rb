@@ -34,18 +34,5 @@ module Flutterby
     def pages
       children.select { |c| c.ext == "html" }
     end
-
-
-
-    def serve(parts, req, res)
-      # If no further parts are requested, let's look for an index
-      # document and serve that instead.
-      if child = find(parts.empty? ? "index" : parts.shift)
-        child.serve(parts, req, res)
-      else
-        res.headers["Content-Type"] = "text/html"
-        res.body = ["404"]
-      end
-    end
   end
 end

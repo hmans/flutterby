@@ -120,14 +120,5 @@ module Flutterby
     def write_static(path)
       ::File.write(path, render)
     end
-
-    def serve(parts, req, res)
-      # Determine MIME type
-      mime_type = MIME::Types.type_for(ext) || "text/plain"
-
-      # Build response
-      res.headers["Content-Type"] = mime_type
-      res.body = [render]
-    end
   end
 end
