@@ -1,10 +1,5 @@
 module Flutterby
   class Folder < Entity
-    def list(indent: 0)
-      super
-      children.each { |c| c.list(indent: indent + 1) }
-    end
-
     def read
       Dir[::File.join(fs_path, "*")].each do |entry|
         if entity = Flutterby.from(entry)

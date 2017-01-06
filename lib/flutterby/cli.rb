@@ -35,15 +35,4 @@ Commander.configure do
       server.run!
     end
   end
-
-
-  command :test do |c|
-    c.syntax = 'flutterby test'
-    c.description = 'TEST. Yo.'
-    c.action do |args, options|
-      root = Flutterby.from("./in", name: "/")
-      root.list
-      root.export("./out/")
-    end
-  end
 end

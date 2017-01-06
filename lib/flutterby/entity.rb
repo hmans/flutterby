@@ -135,10 +135,6 @@ module Flutterby
     # Misc
     #
 
-    def list(indent: 0)
-      puts "#{"   " * indent}[#{self.class}] #{path}"
-    end
-
     def to_s
       "<#{self.class} #{self.path}>"
     end
