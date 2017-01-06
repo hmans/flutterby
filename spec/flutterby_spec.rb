@@ -6,10 +6,8 @@ describe Flutterby do
   end
 
   describe ".from" do
-    let(:site_path) { ::File.expand_path("../site/", __FILE__) }
-
     context "when a directory is passed as an argument" do
-      subject { Flutterby.from site_path }
+      subject { read "" }
 
       it "returns a Folder instance" do
         expect(subject).to be_a(Flutterby::Folder)
@@ -21,7 +19,7 @@ describe Flutterby do
     end
 
     context "when a file is passed as an argument" do
-      subject { Flutterby.from ::File.join(site_path, "markdown.html.md") }
+      subject { read "markdown.html.md" }
 
       it "returns a File instance" do
         expect(subject).to be_a(Flutterby::File)
@@ -29,7 +27,7 @@ describe Flutterby do
     end
 
     context "when an invalid path is passed as an argument" do
-      subject { Flutterby.from "whahahaahah_nil" }
+      subject { read "whahahaahah_nil" }
 
       it "raises an exception" do
         expect { subject }.to raise_error(RuntimeError)

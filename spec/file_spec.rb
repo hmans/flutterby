@@ -1,7 +1,5 @@
 describe Flutterby::File do
-  let(:site_path) { ::File.expand_path("../site/", __FILE__) }
-
-  subject { Flutterby.from ::File.join(site_path, "markdown.html.md") }
+  subject { read "markdown.html.md" }
 
   it "correctly extracts its name and extension" do
     expect(subject.name).to eq("markdown")
@@ -17,7 +15,7 @@ describe Flutterby::File do
   end
 
   context "when the filename contains a date" do
-    subject { Flutterby.from ::File.join(site_path, "posts/2017-01-04-hello-world.html.md") }
+    subject { read "posts/2017-01-04-hello-world.html.md" }
 
     it "extracts the date" do
       expect(subject.data["date"]).to eq(Time.parse("2017-01-04"))
@@ -31,7 +29,7 @@ describe Flutterby::File do
   end
 
   describe "JSON files" do
-    subject { Flutterby.from ::File.join(site_path, "json_data.json") }
+    subject { read "json_data.json" }
 
     it "imports the JSON object into #data" do
       expect(subject.data["name"]).to eq("Hendrik Mans")
@@ -40,7 +38,7 @@ describe Flutterby::File do
   end
 
   describe "YAML files" do
-    subject { Flutterby.from ::File.join(site_path, "yaml_data.yaml") }
+    subject { read "yaml_data.yaml" }
 
     it "imports the YAML into #data" do
       expect(subject.data["name"]).to eq("Hendrik Mans")
