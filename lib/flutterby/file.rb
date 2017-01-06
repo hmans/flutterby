@@ -4,6 +4,7 @@ require 'tilt'
 require 'slim'
 require 'toml'
 require 'mime-types'
+require 'json'
 
 module Flutterby
   class File < Entity
@@ -25,6 +26,10 @@ module Flutterby
       # Read remaining data from frontmatter. Data in frontmatter
       # will always have precedence!
       @data.merge! parse_frontmatter
+
+      # Do some extra processing depending on extension
+      meth = "read_#{ext}"
+      send(meth) if respond_to?(meth)
     end
 
     def parse_frontmatter
@@ -98,6 +103,10 @@ module Flutterby
     def process_scss(input)
       engine = Sass::Engine.new(input, syntax: :scss)
       engine.render
+    end
+
+    def read_json
+      data.merge!(JSON.parse(contents))
     end
 
     def apply_layout(input)

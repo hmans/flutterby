@@ -29,4 +29,13 @@ describe Flutterby::File do
       expect(subject.filtered_contents).to eq("\n<h1 id=\"this-is-markdown\">This is Markdown</h1>\n\n<p>It’s great!</p>\n")
     end
   end
+
+  describe "JSON files" do
+    subject { Flutterby.from ::File.join(site_path, "data.json") }
+
+    it "imports the JSON object into #data" do
+      expect(subject.data["name"]).to eq("Hendrik Mans")
+      expect(subject.data["info"]["favoriteFood"]).to eq("Schnitzel")
+    end
+  end
 end
