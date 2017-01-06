@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency 'awesome_print', '~> 0'
   spec.add_development_dependency 'gem-release', '~> 0'
+  spec.add_development_dependency 'pry', '~> 0.10'
 
   spec.add_dependency 'commander', '~> 4.4'
   spec.add_dependency 'slodown', '~> 0.3'
