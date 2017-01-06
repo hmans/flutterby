@@ -5,6 +5,7 @@ require "flutterby/folder"
 require "flutterby/view"
 require "flutterby/server"
 
+
 module Flutterby
   def Flutterby.from(fs_path, name: nil, parent: nil)
     name ||= ::File.basename(fs_path)

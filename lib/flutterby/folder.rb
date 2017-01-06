@@ -1,7 +1,5 @@
 module Flutterby
   class Folder < Entity
-    attr_reader :children
-
     def list(indent: 0)
       super
       children.each { |c| c.list(indent: indent + 1) }
@@ -19,20 +17,6 @@ module Flutterby
       @children.each do |child|
         child.export(path)
       end
-    end
-
-    def find(path)
-      (name, slash, rest) = path.partition("/")
-
-      name = name.split('.').first
-      child = @children.find { |c| c.name == name }
-      rest.empty? ? child : child.find(rest)
-    end
-
-    # Returns all children that will compile to a HTML page.
-    #
-    def pages
-      children.select { |c| c.ext == "html" }
     end
   end
 end

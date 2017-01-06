@@ -1,10 +1,10 @@
 module Flutterby
   class Entity
-    attr_reader :name, :ext, :filters, :parent, :fs_path, :path, :data
+    attr_reader :name, :ext, :filters, :parent, :fs_path, :data, :children
 
     def initialize(name, parent: nil, fs_path: nil)
-      @parent  = parent
       @data    = {}
+      @children = []
 
       # Extract name, extension, and filters from given name
       parts = name.split(".")
@@ -12,8 +12,7 @@ module Flutterby
       @ext  = parts.shift
       @filters = parts.reverse
 
-      # Calculate full path
-      @path = parent ? ::File.join(parent.path, full_name) : full_name
+      self.parent = parent
 
       # If a filesystem path was given, read the entity from disk
       if fs_path
@@ -22,7 +21,28 @@ module Flutterby
       end
     end
 
+    def path
+      parent ? ::File.join(parent.path, full_name) : full_name
+    end
+
+    def add_child(entity)
+      entity.parent = self
+      children << entity
+      entity
+    end
+
+    # Returns all children that will compile to a HTML page.
+    #
+    def pages
+      children.select { |c| c.ext == "html" }
+    end
+
+    def parent=(entity)
+      @parent = entity
+    end
+
     def reload!
+      @children = []
       read
     end
 
@@ -48,6 +68,31 @@ module Flutterby
 
     def root
       parent ? parent.root : self
+    end
+
+    def to_s
+      "<#{self.class} #{self.path}>"
+    end
+
+    def find(path)
+      return self if path.nil? || path.empty?
+
+      # remove duplicate slashes
+      path.gsub!(%r{//}, "/")
+
+      case path
+      when %r{^\.\./?} then
+        parent ? parent.find($') : nil
+      when %r{^\.} then
+        self
+      when %r{^/} then
+        root.find($')
+      when %r{^([^/]+)/?} then
+        name = $1.split('.').first
+        child = @children.find { |c| c.name == name }
+
+        $'.empty? ? child : child.find($')
+      end
     end
 
     def sibling(name)

@@ -29,14 +29,15 @@ module Flutterby
 
     def parse_frontmatter
       data = {}
-      @contents.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m) do
+
+      # YAML Front Matter
+      if @contents.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
         data.merge! YAML.load($1)
-        ""
       end
 
-      @contents.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m) do
+      # TOML Front Matter
+      if @contents.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
         data.merge! TOML.parse($1)
-        ""
       end
 
       data
