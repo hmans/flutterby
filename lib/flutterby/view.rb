@@ -11,8 +11,12 @@ module Flutterby
       date.strftime(fmt)
     end
 
-    def find(*args)
-      entity.find(*args)
+    def render(expr, *args)
+      find(expr).render(*args)
+    end
+
+    def find(expr)
+      entity.find(expr) or raise "No entity found for #{expr}"
     end
   end
 end
