@@ -20,6 +20,7 @@ Commander.configure do
       root.export(options.out)
     end
   end
+  alias_command :b, :build
 
   command :serve do |c|
     c.syntax = 'flutterby serve [options]'
@@ -35,4 +36,6 @@ Commander.configure do
       server.run!
     end
   end
+  alias_command :server, :serve
+  alias_command :s, :serve
 end
