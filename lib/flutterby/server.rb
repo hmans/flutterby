@@ -40,27 +40,36 @@ module Flutterby
 
       current = @root
 
-      loop do
-        case current
-        when Flutterby::Folder then
-          # If no further parts are requested, let's look for an index
-          # document and serve that instead.
-          if child = current.find(parts.empty? ? "index" : parts.shift)
-            current = child
-          else
-            res.headers["Content-Type"] = "text/html"
-            res.body = ["404"]
-            break
-          end
-        when Flutterby::File then
-          # Determine MIME type
-          mime_type = MIME::Types.type_for(current.ext) || "text/plain"
+      result = catch :halt do
+        loop do
+          # halt if we're not supposed to serve current entity
+          throw :halt, :error_404 unless current.should_publish?
 
-          # Build response
-          res.headers["Content-Type"] = mime_type
-          res.body = [current.render]
-          break
+          case current
+          when Flutterby::Folder then
+            # If no further parts are requested, let's look for an index
+            # document and serve that instead.
+            if child = current.find(parts.empty? ? "index" : parts.shift)
+              current = child
+            else
+              throw :halt, :error_404
+            end
+          when Flutterby::File then
+            # Determine MIME type
+            mime_type = MIME::Types.type_for(current.ext) || "text/plain"
+
+            # Build response
+            res.headers["Content-Type"] = mime_type
+            res.body = [current.render]
+            throw :halt
+          end
         end
+      end
+
+      case result
+      when :error_404 then
+        res.headers["Content-Type"] = "text/html"
+        res.body = ["404"]
       end
 
       res
