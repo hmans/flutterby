@@ -68,6 +68,7 @@ module Flutterby
 
       case result
       when :error_404 then
+        res.status = 404
         res.headers["Content-Type"] = "text/html"
         res.body = ["404"]
       end
