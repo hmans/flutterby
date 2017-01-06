@@ -107,6 +107,10 @@ module Flutterby
       data.merge!(JSON.parse(contents))
     end
 
+    def read_yaml
+      data.merge!(YAML.load(contents))
+    end
+
     def apply_layout(input)
       output = input
 

@@ -31,9 +31,18 @@ describe Flutterby::File do
   end
 
   describe "JSON files" do
-    subject { Flutterby.from ::File.join(site_path, "data.json") }
+    subject { Flutterby.from ::File.join(site_path, "json_data.json") }
 
     it "imports the JSON object into #data" do
+      expect(subject.data["name"]).to eq("Hendrik Mans")
+      expect(subject.data["info"]["favoriteFood"]).to eq("Schnitzel")
+    end
+  end
+
+  describe "YAML files" do
+    subject { Flutterby.from ::File.join(site_path, "yaml_data.yaml") }
+
+    it "imports the YAML into #data" do
       expect(subject.data["name"]).to eq("Hendrik Mans")
       expect(subject.data["info"]["favoriteFood"]).to eq("Schnitzel")
     end
