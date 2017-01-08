@@ -25,7 +25,7 @@ module Flutterby
         view = new(file)
 
         # walk the tree up to dynamically extend the view
-        file.folder.walk_up do |e|
+        file.folder.walk_down do |e|
           e.extend_view!(view)
         end
 

@@ -108,6 +108,14 @@ module Flutterby
       parent ? parent.walk_up(val, &blk) : val
     end
 
+    # Walk the graph from the root to this entity. Just like walk_up,
+    # except the block will be called on higher level entities first.
+    #
+    def walk_down(val = nil, &blk)
+      val = parent ? parent.walk_up(val, &blk) : val
+      blk.call(self, val)
+    end
+
 
     #
     # Reading from filesystem
