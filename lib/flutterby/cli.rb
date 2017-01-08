@@ -27,12 +27,13 @@ Commander.configure do
     c.description = "Serve your website for development."
 
     c.option '--in DIR', String, "Directory containing your source files"
+    c.option '--port NUM', String, "Port to serve on (default: 4004)"
 
     c.action do |args, options|
-      options.default in: "./site/"
+      options.default in: "./site/", port: 4004
 
       root = Flutterby.from(options.in, name: "/")
-      server = Flutterby::Server.new(root)
+      server = Flutterby::Server.new(root, port: options.port)
       server.run!
     end
   end

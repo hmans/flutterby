@@ -3,8 +3,9 @@ require 'listen'
 
 module Flutterby
   class Server
-    def initialize(root)
+    def initialize(root, port: 4004)
       @root = root
+      @port = port
     end
 
     def run!
@@ -29,7 +30,7 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run self
+      server.run self, Port: @port
     end
 
     def call(env)
