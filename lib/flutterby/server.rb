@@ -39,31 +39,8 @@ module Flutterby
 
       parts = req.path.split("/").reject(&:empty?)
 
-      current = @root
-
       result = catch :halt do
-        loop do
-          # halt if we're not supposed to serve current entity
-          throw :halt, :error_404 unless current.should_publish?
-
-          if current.folder? then
-            # If no further parts are requested, let's look for an index
-            # document and serve that instead.
-            if child = current.find(parts.empty? ? "index" : parts.shift)
-              current = child
-            else
-              throw :halt, :error_404
-            end
-          else
-            # Determine MIME type
-            mime_type = MIME::Types.type_for(current.ext) || "text/plain"
-
-            # Build response
-            res.headers["Content-Type"] = mime_type
-            res.body = [current.render]
-            throw :halt
-          end
-        end
+        serve(@root, parts, req, res)
       end
 
       case result
@@ -74,6 +51,32 @@ module Flutterby
       end
 
       res
+    end
+
+    def serve(node, parts, req, res)
+      # halt if we're not supposed to serve current entity
+      throw :halt, :error_404 unless node.should_publish?
+
+      # If there are parts left, find them and delegate to the next
+      # node in the chain; otherwise, render this specific node.
+      #
+      if parts.any?
+        if child = node.find(parts.shift)
+          serve(child, parts, req, res)
+        else
+          throw :halt, :error_404
+        end
+      elsif child = node.find("index")
+        serve(child, parts, req, res)
+      else
+        # Determine MIME type
+        mime_type = MIME::Types.type_for(node.ext) || "text/plain"
+
+        # Build response
+        res.headers["Content-Type"] = mime_type
+        res.body = [node.render]
+        throw :halt
+      end
     end
   end
 end
