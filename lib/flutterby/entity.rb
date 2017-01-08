@@ -103,9 +103,9 @@ module Flutterby
     # Walk the tree up, invoking the passed block for every entity
     # found on the way, passing the entity as its only argument.
     #
-    def walk_up(&blk)
-      blk.call(self)
-      parent.walk_up(&blk) if parent
+    def walk_up(val = nil, &blk)
+      val = blk.call(self, val)
+      parent ? parent.walk_up(val, &blk) : val
     end
 
 

@@ -70,24 +70,14 @@ module Flutterby
     end
 
     def apply_layout(input)
-      output = input
-
-      # collect layouts to apply
-      layouts = []
-      current = self
-      while current = current.parent
-        if layout = current.find("_layout")
-          layouts << layout
+      walk_up(input) do |e, current|
+        if layout = e.sibling("_layout")
+          tilt = Tilt[layout.ext].new { layout.source }
+          tilt.render(view) { current }
+        else
+          current
         end
       end
-
-      # Apply all layouts in order
-      layouts.each do |layout|
-        tilt = Tilt[layout.ext].new { layout.source }
-        output = tilt.render(view) { output }
-      end
-
-      output
     end
 
     def apply_layout?
