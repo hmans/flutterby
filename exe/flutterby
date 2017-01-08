@@ -1,3 +1,9 @@
 #!/usr/bin/env ruby
-require 'rubygems'
+if File.file?("Gemfile")
+  require "bundler"
+  Bundler.require
+else
+  require 'rubygems'
+end
+
 require 'flutterby/cli'
