@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/flutterby.svg)](https://badge.fury.io/rb/flutterby) [![Build Status](https://travis-ci.org/hmans/flutterby.svg?branch=master)](https://travis-ci.org/hmans/flutterby) ![Status](https://img.shields.io/badge/status-active-green.svg)
+[![Gem Version](https://badge.fury.io/rb/flutterby.svg)](https://badge.fury.io/rb/flutterby) [![Build Status](https://travis-ci.org/hmans/flutterby.svg?branch=master)](https://travis-ci.org/hmans/flutterby) ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
 
 # Flutterby
 
