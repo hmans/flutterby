@@ -27,10 +27,6 @@ module Flutterby
           raise "Unknown view extension #{view_entity.full_name}"
         end
       end
-
-      # Then pass the whole thing up the stack.
-      #
-      parent ? parent.extend_view!(view) : view
     end
   end
 end
