@@ -99,6 +99,14 @@ module Flutterby
       end
     end
 
+    # Walk the tree up, invoking the passed block for every entity
+    # found on the way, passing the entity as its only argument.
+    #
+    def walk_up(&blk)
+      blk.call(self)
+      parent.walk_up(&blk) if parent
+    end
+
 
     #
     # Reading from filesystem

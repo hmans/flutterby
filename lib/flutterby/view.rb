@@ -18,5 +18,20 @@ module Flutterby
     def find(expr)
       entity.find(expr) or raise "No entity found for #{expr}"
     end
+
+    class << self
+      def for(entity)
+        # create a new view instance
+        view = new(entity)
+
+        # walk the tree up to dynamically extend the view
+        entity.parent.walk_up do |e|
+          e.extend_view!(view)
+        end
+
+        # return the finished view object
+        view
+      end
+    end
   end
 end

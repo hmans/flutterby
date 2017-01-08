@@ -58,11 +58,7 @@ module Flutterby
     end
 
     def view
-      @view ||= begin
-        View.new(self).tap do |view|
-          parent.extend_view!(view) if parent
-        end
-      end
+      @view ||= View.for(self)
     end
 
     def read_json
