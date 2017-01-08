@@ -1,6 +1,6 @@
 describe "Filters" do
   context "with an explicit HTML extension" do
-    subject { Flutterby::File.new("test.html.md") }
+    subject { Flutterby::Node.new("test.html.md") }
 
     it "is exported with an HTML extension" do
       expect(subject.full_name).to eq("test.html")
@@ -8,7 +8,7 @@ describe "Filters" do
   end
 
   context "with no explicit HTML extension, but a filter that produces HTML" do
-    subject { Flutterby::File.new("test.md") }
+    subject { Flutterby::Node.new("test.md") }
 
     it "is exported with an HTML extension" do
       Flutterby::Filters.apply!(subject)
@@ -17,7 +17,7 @@ describe "Filters" do
   end
 
   context "with an image extension" do
-    subject { Flutterby::File.new("test.gif") }
+    subject { Flutterby::Node.new("test.gif") }
 
     it "is exported with its original extension" do
       Flutterby::Filters.apply!(subject)

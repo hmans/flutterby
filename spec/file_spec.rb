@@ -1,4 +1,4 @@
-describe Flutterby::File do
+describe Flutterby::Node do
   subject { read "markdown.html.md" }
 
   it "correctly extracts its name and extension" do

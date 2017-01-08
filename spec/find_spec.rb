@@ -8,17 +8,17 @@ describe "#find" do
   #
 
   let!(:root) do
-    Flutterby::Folder.new("/").tap do |e|
+    Flutterby::Node.new("/").tap do |e|
       e.children << foo
       e.children << bar
     end
   end
 
-  let(:foo) { Flutterby::File.new("foo") }
-  let(:baz) { Flutterby::File.new("baz.html") }
+  let(:foo) { Flutterby::Node.new("foo") }
+  let(:baz) { Flutterby::Node.new("baz.html") }
 
   let(:bar) do
-    Flutterby::File.new("bar").tap do |e|
+    Flutterby::Node.new("bar").tap do |e|
       e.children << baz
     end
   end

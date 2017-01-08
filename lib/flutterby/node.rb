@@ -1,13 +1,11 @@
 module Flutterby
-  class Entity
-    attr_accessor :parent, :ext
+  class Node
+    attr_accessor :parent, :ext, :source, :body
     attr_reader :name, :filters, :fs_path, :data, :children
-    alias_method :folder, :parent
 
     def initialize(name, parent: nil, fs_path: nil)
       @parent  = parent
       @data    = {}
-      reset_children!
 
       # Extract name, extension, and filters from given name
       parts    = name.split(".")
@@ -23,8 +21,9 @@ module Flutterby
       # If a filesystem path was given, read the entity from disk
       if fs_path
         @fs_path = ::File.expand_path(fs_path)
-        read
       end
+
+      reload!
     end
 
     #
@@ -127,12 +126,68 @@ module Flutterby
     #
 
     def reload!
+      @body = nil
       reset_children!
-      read
+
+      if @fs_path
+        if ::File.directory?(fs_path)
+          Dir[::File.join(fs_path, "*")].each do |entry|
+            if entity = Flutterby.from(entry)
+              children << entity
+            end
+          end
+        else
+          @source = ::File.read(fs_path)
+
+          # Extract date from name
+          if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
+            @data['date'] = Time.parse($1)
+          end
+
+          # Read remaining data from frontmatter. Data in frontmatter
+          # will always have precedence!
+          @data.merge! parse_frontmatter
+
+          # Do some extra processing depending on extension
+          meth = "read_#{ext}"
+          send(meth) if respond_to?(meth)
+        end
+      end
     end
 
-    def read
+
+    #
+    # Rendering
+    #
+
+    def view
+      @view ||= View.for(self)
     end
+
+    def body
+      Filters.apply!(self) if @body.nil?
+      @body
+    end
+
+    def render(layout: true)
+      (layout && apply_layout?) ? apply_layout(body) : body
+    end
+
+    def apply_layout(input)
+      walk_up(input) do |e, current|
+        if layout = e.sibling("_layout")
+          tilt = Tilt[layout.ext].new { layout.source }
+          tilt.render(view) { current }
+        else
+          current
+        end
+      end
+    end
+
+    def apply_layout?
+      page?
+    end
+
 
 
     #
@@ -147,12 +202,53 @@ module Flutterby
     end
 
     def write_static(into:)
+      if folder?
+        # write children, acting as a directory
+
+        path = full_fs_path(base: into)
+        Dir.mkdir(path) unless ::File.exists?(path)
+
+        children.each do |child|
+          child.export(into: path)
+        end
+      else
+        # write a file
+        ::File.write(full_fs_path(base: into), render)
+      end
     end
 
     def should_publish?
       !name.start_with?("_")
     end
 
+
+    #
+    # Front Matter Parsing
+    #
+
+    def parse_frontmatter
+      data = {}
+
+      # YAML Front Matter
+      if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
+        data.merge! YAML.load($1)
+      end
+
+      # TOML Front Matter
+      if @source.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
+        data.merge! TOML.parse($1)
+      end
+
+      data
+    end
+
+    def read_json
+      data.merge!(JSON.parse(@source))
+    end
+
+    def read_yaml
+      data.merge!(YAML.load(@source))
+    end
 
 
     #
@@ -167,8 +263,12 @@ module Flutterby
       [name, ext].compact.join(".")
     end
 
+    def folder?
+      children.any?
+    end
+
     def page?
-      false
+      !folder? && ext == "html"
     end
   end
 end

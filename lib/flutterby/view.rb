@@ -25,7 +25,7 @@ module Flutterby
         view = new(file)
 
         # walk the tree up to dynamically extend the view
-        file.folder.walk_down do |e|
+        file.parent.walk_down do |e|
           if view_entity = e.find("_view.rb")
             case view_entity.ext
             when "rb" then

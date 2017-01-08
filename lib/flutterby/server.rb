@@ -46,8 +46,7 @@ module Flutterby
           # halt if we're not supposed to serve current entity
           throw :halt, :error_404 unless current.should_publish?
 
-          case current
-          when Flutterby::Folder then
+          if current.folder? then
             # If no further parts are requested, let's look for an index
             # document and serve that instead.
             if child = current.find(parts.empty? ? "index" : parts.shift)
@@ -55,7 +54,7 @@ module Flutterby
             else
               throw :halt, :error_404
             end
-          when Flutterby::File then
+          else
             # Determine MIME type
             mime_type = MIME::Types.type_for(current.ext) || "text/plain"
 
