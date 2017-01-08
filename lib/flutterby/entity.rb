@@ -61,7 +61,7 @@ module Flutterby
     end
 
     def url
-      @url ||= ::File.join(parent ? parent.url : "/", full_name)
+      ::File.join(parent ? parent.url : "/", full_name)
     end
 
     def full_fs_path(base:)
@@ -144,7 +144,7 @@ module Flutterby
     end
 
     def full_name
-      @full_name ||= [name, ext].compact.join(".")
+      [name, ext].compact.join(".")
     end
 
     def page?
