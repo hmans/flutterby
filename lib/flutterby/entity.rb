@@ -8,10 +8,11 @@ module Flutterby
       reset_children!
 
       # Extract name, extension, and filters from given name
-      parts = name.split(".")
-      @name = parts.shift
-      @ext  = parts.shift
+      parts    = name.split(".")
+      @name    = parts.shift
       @filters = parts.reverse
+      @ext     = @filters.last || "html"
+
 
       self.parent = parent
 

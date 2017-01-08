@@ -87,6 +87,7 @@ module Flutterby
     end
 
     def process_md(input)
+      @ext = "html"
       Slodown::Formatter.new(input).complete.to_s
     end
 

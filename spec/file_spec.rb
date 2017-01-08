@@ -7,7 +7,7 @@ describe Flutterby::File do
   end
 
   it "correctly extracts its filters" do
-    expect(subject.filters).to eq(["md"])
+    expect(subject.filters).to eq(["md", "html"])
   end
 
   it "extracts data from frontmatter" do
