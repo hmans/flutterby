@@ -37,8 +37,11 @@ Commander.configure do
     c.action do |args, options|
       options.default in: "./site/", port: 4004
 
-      say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)
+      say color("📚  Importing site...", :bold)
       root = Flutterby.from(options.in, name: "/")
+      say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
+
+      say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)
       server = Flutterby::Server.new(root, port: options.port)
       server.run!
     end
