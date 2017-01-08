@@ -2,6 +2,7 @@ require "flutterby/version"
 require "flutterby/entity"
 require "flutterby/file"
 require "flutterby/folder"
+require "flutterby/filters"
 require "flutterby/view"
 require "flutterby/server"
 

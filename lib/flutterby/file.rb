@@ -8,7 +8,7 @@ require 'json'
 
 module Flutterby
   class File < Entity
-    attr_reader :source
+    attr_accessor :source, :body
 
     def reload!
       @body = nil
@@ -54,7 +54,10 @@ module Flutterby
       # Apply all filters
       filters.each do |filter|
         meth = "process_#{filter}"
-        send(meth) if respond_to?(meth)
+
+        if Filters.respond_to?(meth)
+          @body = Filters.send(meth, @body, self)
+        end
       end
     end
 
@@ -73,26 +76,6 @@ module Flutterby
           parent.extend_view!(view) if parent
         end
       end
-    end
-
-    def process_erb
-      tilt = Tilt["erb"].new { @body }
-      @body = tilt.render(view)
-    end
-
-    def process_slim
-      tilt = Tilt["slim"].new { @body }
-      @body = tilt.render(view)
-    end
-
-    def process_md
-      @ext = "html"
-      @body = Slodown::Formatter.new(@body).complete.to_s
-    end
-
-    def process_scss
-      engine = Sass::Engine.new(@body, syntax: :scss)
-      @body = engine.render
     end
 
     def read_json
