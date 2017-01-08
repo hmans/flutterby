@@ -1,5 +1,5 @@
 describe "#find" do
-  # This is the entity structure we'll be using for testing:
+  # This is the node structure we'll be using for testing:
   #
   # root
   #   +-- foo
@@ -38,7 +38,7 @@ describe "#find" do
     expect(baz.find("/bar/baz")).to eq(baz)
   end
 
-  specify "find(.) returns the same entity" do
+  specify "find(.) returns the same node" do
     expect(foo.find(".")).to eq(foo)
     expect(foo.find("./")).to eq(foo)
   end

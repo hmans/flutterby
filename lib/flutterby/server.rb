@@ -54,7 +54,7 @@ module Flutterby
     end
 
     def serve(node, parts, req, res)
-      # halt if we're not supposed to serve current entity
+      # halt if we're not supposed to serve current node
       throw :halt, :error_404 unless node.should_publish?
 
       # If there are parts left, find them and delegate to the next

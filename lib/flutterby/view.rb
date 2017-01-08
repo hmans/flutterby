@@ -1,10 +1,10 @@
 module Flutterby
   class View
-    attr_reader :entity
-    alias_method :page, :entity
+    attr_reader :node
+    alias_method :page, :node
 
-    def initialize(entity)
-      @entity = entity
+    def initialize(node)
+      @node = node
     end
 
     def date_format(date, fmt)
@@ -16,7 +16,7 @@ module Flutterby
     end
 
     def find(expr)
-      entity.find(expr) or raise "No entity found for #{expr}"
+      node.find(expr) or raise "No node found for #{expr}"
     end
 
     class << self
@@ -26,12 +26,12 @@ module Flutterby
 
         # walk the tree up to dynamically extend the view
         file.parent.walk_down do |e|
-          if view_entity = e.find("_view.rb")
-            case view_entity.ext
+          if view_node = e.find("_view.rb")
+            case view_node.ext
             when "rb" then
-              view.instance_eval(view_entity.source)
+              view.instance_eval(view_node.source)
             else
-              raise "Unknown view extension #{view_entity.full_name}"
+              raise "Unknown view extension #{view_node.full_name}"
             end
           end
         end

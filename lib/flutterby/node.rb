@@ -18,7 +18,7 @@ module Flutterby
       #
       @ext     = @filters.last
 
-      # If a filesystem path was given, read the entity from disk
+      # If a filesystem path was given, read the node from disk
       if fs_path
         @fs_path = ::File.expand_path(fs_path)
       end
@@ -104,16 +104,16 @@ module Flutterby
       end
     end
 
-    # Walk the tree up, invoking the passed block for every entity
-    # found on the way, passing the entity as its only argument.
+    # Walk the tree up, invoking the passed block for every node
+    # found on the way, passing the node as its only argument.
     #
     def walk_up(val = nil, &blk)
       val = blk.call(self, val)
       parent ? parent.walk_up(val, &blk) : val
     end
 
-    # Walk the graph from the root to this entity. Just like walk_up,
-    # except the block will be called on higher level entities first.
+    # Walk the graph from the root to this node. Just like walk_up,
+    # except the block will be called on higher level nodes first.
     #
     def walk_down(val = nil, &blk)
       val = parent ? parent.walk_up(val, &blk) : val
@@ -132,8 +132,8 @@ module Flutterby
       if @fs_path
         if ::File.directory?(fs_path)
           Dir[::File.join(fs_path, "*")].each do |entry|
-            if entity = Flutterby.from(entry)
-              children << entity
+            if node = Flutterby.from(entry)
+              children << node
             end
           end
         else
