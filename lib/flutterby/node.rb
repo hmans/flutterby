@@ -50,6 +50,12 @@ module Flutterby
       end
     end
 
+    def tree_size
+      children.inject(children.length) do |count, child|
+        count + child.tree_size
+      end
+    end
+
     # Returns all children that will compile to a HTML page.
     #
     def pages
@@ -196,7 +202,7 @@ module Flutterby
 
     def export(into:)
       if should_publish?
-        puts "* #{url}"
+        puts " • #{url}"
         write_static(into: into)
       end
     end
