@@ -1,8 +1,8 @@
+[![Build Status](https://travis-ci.org/hmans/flutterby.svg?branch=master)](https://travis-ci.org/hmans/flutterby)
+
 # Flutterby
 
-A currently highly experimental static site generator. Yes, there are many like it;
-but this one is mine. (Actually, there are none like it. Ha! I'm very serious about
-the _experimental_ bit, though. Use with care, if at all!)
+### A currently highly experimental static site generator. Yes, there are many like it; but this one is mine. (Actually, there are none like it. Ha! I'm very serious about the _experimental_ bit, though. Use with care, if at all!)
 
 
 ## Actual Features
