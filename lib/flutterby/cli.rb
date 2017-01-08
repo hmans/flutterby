@@ -17,7 +17,7 @@ Commander.configure do
       options.default in: "./site/", out: "./_build/"
 
       root = Flutterby.from(options.in, name: "/")
-      root.export(options.out)
+      root.export(into: options.out)
     end
   end
   alias_command :b, :build

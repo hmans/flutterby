@@ -139,15 +139,14 @@ module Flutterby
     # Exporting
     #
 
-    def export(out_path)
+    def export(into:)
       if should_publish?
-        out_path = full_fs_path(base: out_path)
-        puts "* #{@name}: #{out_path}"
-        write_static(out_path)
+        puts "* #{url}"
+        write_static(into: into)
       end
     end
 
-    def write_static(path)
+    def write_static(into:)
     end
 
     def should_publish?

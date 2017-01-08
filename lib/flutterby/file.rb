@@ -88,8 +88,8 @@ module Flutterby
       (layout && apply_layout?) ? apply_layout(body) : body
     end
 
-    def write_static(path)
-      ::File.write(path, render)
+    def write_static(into:)
+      ::File.write(full_fs_path(base: into), render)
     end
   end
 end

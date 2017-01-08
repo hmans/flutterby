@@ -8,11 +8,12 @@ module Flutterby
       end
     end
 
-    def write_static(path)
+    def write_static(into:)
+      path = full_fs_path(base: into)
       Dir.mkdir(path) unless ::File.exists?(path)
 
       children.each do |child|
-        child.export(path)
+        child.export(into: path)
       end
     end
   end
