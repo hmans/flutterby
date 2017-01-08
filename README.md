@@ -5,6 +5,11 @@
 ### A currently highly experimental static site generator. Yes, there are many like it; but this one is mine. (Actually, there are none like it. Ha! I'm very serious about the _experimental_ bit, though. Use with care, if at all!)
 
 
+## Example
+
+Even though Flutterby is still very much in flux, I'm already building a bunch of sites with it; one of them is [my blog](http://hmans.io/), the source code for which you can find [here](https://github.com/hmans/hmans_me).
+
+
 ## Actual Features
 
 - Build your site simply as a tree of files and folders. Each file will be converted according to its extension chain (eg. `styles.css.scss` will be rendered as `styles.css`, `about.html.md` as `about.html` and so on.)
