@@ -22,9 +22,9 @@ describe Flutterby::File do
     end
   end
 
-  describe "#filtered_contents" do
-    it "applies all filters to the contents of this file" do
-      expect(subject.filtered_contents).to eq("\n<h1 id=\"this-is-markdown\">This is Markdown</h1>\n\n<p>It’s great!</p>\n")
+  describe "#body" do
+    it "contains the file's contents with all filters applied" do
+      expect(subject.body).to eq("\n<h1 id=\"this-is-markdown\">This is Markdown</h1>\n\n<p>It’s great!</p>\n")
     end
   end
 

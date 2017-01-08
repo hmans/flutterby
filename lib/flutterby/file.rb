@@ -11,7 +11,7 @@ module Flutterby
     attr_reader :contents
 
     def reload!
-      @filtered_contents = nil
+      @body = nil
       super
     end
 
@@ -48,20 +48,19 @@ module Flutterby
       data
     end
 
-    def filtered_contents
-      @filtered_contents ||= begin
-        result = @contents
+    def apply_filters!
+      @body = @contents
 
-        # Apply all filters
-        filters.each do |filter|
-          meth = "process_#{filter}"
-          if respond_to?(meth)
-            result = send(meth, result)
-          end
-        end
-
-        result
+      # Apply all filters
+      filters.each do |filter|
+        meth = "process_#{filter}"
+        send(meth) if respond_to?(meth)
       end
+    end
+
+    def body
+      apply_filters! if @body.nil?
+      @body
     end
 
     def page?
@@ -76,24 +75,24 @@ module Flutterby
       end
     end
 
-    def process_erb(input)
-      tilt = Tilt["erb"].new { input }
-      tilt.render(view)
+    def process_erb
+      tilt = Tilt["erb"].new { @body }
+      @body = tilt.render(view)
     end
 
-    def process_slim(input)
-      tilt = Tilt["slim"].new { input }
-      tilt.render(view)
+    def process_slim
+      tilt = Tilt["slim"].new { @body }
+      @body = tilt.render(view)
     end
 
-    def process_md(input)
+    def process_md
       @ext = "html"
-      Slodown::Formatter.new(input).complete.to_s
+      @body = Slodown::Formatter.new(@body).complete.to_s
     end
 
-    def process_scss(input)
-      engine = Sass::Engine.new(input, syntax: :scss)
-      engine.render
+    def process_scss
+      engine = Sass::Engine.new(@body, syntax: :scss)
+      @body = engine.render
     end
 
     def read_json
@@ -130,8 +129,7 @@ module Flutterby
     end
 
     def render(layout: true)
-      rendered = filtered_contents
-      (layout && apply_layout?) ? apply_layout(rendered) : rendered
+      (layout && apply_layout?) ? apply_layout(body) : body
     end
 
     def write_static(path)

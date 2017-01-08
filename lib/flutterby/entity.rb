@@ -4,6 +4,7 @@ module Flutterby
     attr_reader :name, :ext, :filters, :fs_path, :data, :children
 
     def initialize(name, parent: nil, fs_path: nil)
+      @parent  = parent
       @data    = {}
       reset_children!
 
@@ -12,9 +13,6 @@ module Flutterby
       @name    = parts.shift
       @filters = parts.reverse
       @ext     = @filters.last || "html"
-
-
-      self.parent = parent
 
       # If a filesystem path was given, read the entity from disk
       if fs_path
