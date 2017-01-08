@@ -26,7 +26,14 @@ module Flutterby
 
         # walk the tree up to dynamically extend the view
         file.folder.walk_down do |e|
-          e.extend_view!(view)
+          if view_entity = e.find("_view.rb")
+            case view_entity.ext
+            when "rb" then
+              view.instance_eval(view_entity.source)
+            else
+              raise "Unknown view extension #{view_entity.full_name}"
+            end
+          end
         end
 
         # return the finished view object
