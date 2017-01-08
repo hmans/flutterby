@@ -11,7 +11,7 @@ describe "Filters" do
     subject { Flutterby::File.new("test.md") }
 
     it "is exported with an HTML extension" do
-      subject.apply_filters!
+      Flutterby::Filters.apply!(subject)
       expect(subject.full_name).to eq("test.html")
     end
   end
@@ -20,7 +20,7 @@ describe "Filters" do
     subject { Flutterby::File.new("test.gif") }
 
     it "is exported with its original extension" do
-      subject.apply_filters!
+      Flutterby::Filters.apply!(subject)
       expect(subject.full_name).to eq("test.gif")
     end
   end

@@ -48,21 +48,8 @@ module Flutterby
       data
     end
 
-    def apply_filters!
-      @body = @source
-
-      # Apply all filters
-      filters.each do |filter|
-        meth = "process_#{filter}"
-
-        if Filters.respond_to?(meth)
-          @body = Filters.send(meth, @body, self)
-        end
-      end
-    end
-
     def body
-      apply_filters! if @body.nil?
+      Filters.apply!(self) if @body.nil?
       @body
     end
 

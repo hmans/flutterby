@@ -1,5 +1,20 @@
 module Flutterby
   module Filters
+    def apply!(file)
+      body = file.source
+
+      # Apply all filters
+      file.filters.each do |filter|
+        meth = "process_#{filter}"
+
+        if Filters.respond_to?(meth)
+          body = Filters.send(meth, body, file)
+        end
+      end
+
+      file.body = body
+    end
+
     def process_erb(input, file)
       tilt = Tilt["erb"].new { input }
       tilt.render(file.view)
