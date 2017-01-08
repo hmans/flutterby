@@ -2,6 +2,7 @@ module Flutterby
   class Entity
     attr_accessor :parent, :ext
     attr_reader :name, :filters, :fs_path, :data, :children
+    alias_method :folder, :parent
 
     def initialize(name, parent: nil, fs_path: nil)
       @parent  = parent

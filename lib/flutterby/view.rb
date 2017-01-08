@@ -20,12 +20,12 @@ module Flutterby
     end
 
     class << self
-      def for(entity)
+      def for(file)
         # create a new view instance
-        view = new(entity)
+        view = new(file)
 
         # walk the tree up to dynamically extend the view
-        entity.parent.walk_up do |e|
+        file.folder.walk_up do |e|
           e.extend_view!(view)
         end
 
