@@ -25,12 +25,13 @@ A loose collection of notes on how Flutterby actually generates your site -- mos
 
 - Flutterby reads a _source directory_ and writes a static website into a _target directory_. (It can also serve a live version of your site.)
 - Before it writes (or serves) anything, it reads the entire contents from the source directory into a graph of plain old Ruby objects. Each of these objects represents a file (or folder) from your site.
-- Flutterby then walks this tree to write the resulting static site, optionally _applying filters_ first.
+- Flutterby then walks this tree to write the resulting static site, optionally _applying filters_ first. For example, `index.html.md` will be exported as `index.html` after applying a Markdown filter.
 - These filters can be anything that modifies the Ruby object. Some examples:
   - Rendering Markdown to HTML
   - Parsing and executing ERB, Slim, HAML and other templating engines
   - Processing Sass, CoffeeScript and the likes
   - Leaving the current body intact, but modifying file attributes like the generated file's extension
+- Filters can be chained at any length you require.
 - Ruby code embedded in ERB, Slim etc. templates can interact with this object graph to do funky stuff like:
   - including the rendered contents of another object (ie. partials)
   - query the graph for certain objects (eg. "all objects in `/posts` that have `published_at` set")
