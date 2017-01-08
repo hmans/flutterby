@@ -29,7 +29,9 @@ module Flutterby
           if view_node = e.find("_view.rb")
             case view_node.ext
             when "rb" then
-              view.instance_eval(view_node.source)
+              mod = Module.new
+              mod.class_eval(view_node.source)
+              view.extend mod
             else
               raise "Unknown view extension #{view_node.full_name}"
             end
