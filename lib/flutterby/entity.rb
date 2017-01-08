@@ -13,7 +13,12 @@ module Flutterby
       parts    = name.split(".")
       @name    = parts.shift
       @filters = parts.reverse
-      @ext     = @filters.last || "html"
+
+      # We're assuming the extension is the name of the final filter
+      # that will be applied. This may not be always correct, since filters
+      # can also change a file's extension.
+      #
+      @ext     = @filters.last
 
       # If a filesystem path was given, read the entity from disk
       if fs_path

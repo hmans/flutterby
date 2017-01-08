@@ -7,6 +7,14 @@ module Flutterby
       file.filters.each do |filter|
         meth = "process_#{filter}"
 
+        # Set the file's extension to the requested filter. The filter
+        # itself can, of course, override this (eg. the "md" filter can default
+        # the extension to "html".)
+        #
+        file.ext = filter
+
+        # Now apply the actual filter!
+        #
         if Filters.respond_to?(meth)
           body = Filters.send(meth, body, file)
         end
