@@ -16,13 +16,11 @@ module Flutterby
     end
 
     def process_erb(input, file)
-      tilt = Tilt["erb"].new { input }
-      tilt.render(file.view)
+      tilt("erb", input).render(file.view)
     end
 
     def process_slim(input, file)
-      tilt = Tilt["slim"].new { input }
-      tilt.render(file.view)
+      tilt("slim", input).render(file.view)
     end
 
     def process_md(input, file)
@@ -31,8 +29,11 @@ module Flutterby
     end
 
     def process_scss(input, file)
-      engine = Sass::Engine.new(input, syntax: :scss)
-      engine.render
+      Sass::Engine.new(input, syntax: :scss).render
+    end
+
+    def tilt(format, body)
+      Tilt[format].new { body }
     end
 
     extend self
