@@ -22,7 +22,7 @@ module Flutterby
       if view_entity = find("_view.rb")
         case view_entity.ext
         when "rb" then
-          view.instance_eval(view_entity.contents)
+          view.instance_eval(view_entity.source)
         else
           raise "Unknown view extension #{view_entity.full_name}"
         end

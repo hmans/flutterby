@@ -8,7 +8,7 @@ require 'json'
 
 module Flutterby
   class File < Entity
-    attr_reader :contents
+    attr_reader :source
 
     def reload!
       @body = nil
@@ -16,7 +16,7 @@ module Flutterby
     end
 
     def read
-      @contents = ::File.read(fs_path)
+      @source = ::File.read(fs_path)
 
       # Extract date from name
       if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
@@ -36,12 +36,12 @@ module Flutterby
       data = {}
 
       # YAML Front Matter
-      if @contents.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
+      if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
         data.merge! YAML.load($1)
       end
 
       # TOML Front Matter
-      if @contents.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
+      if @source.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
         data.merge! TOML.parse($1)
       end
 
@@ -49,7 +49,7 @@ module Flutterby
     end
 
     def apply_filters!
-      @body = @contents
+      @body = @source
 
       # Apply all filters
       filters.each do |filter|
@@ -96,11 +96,11 @@ module Flutterby
     end
 
     def read_json
-      data.merge!(JSON.parse(contents))
+      data.merge!(JSON.parse(@source))
     end
 
     def read_yaml
-      data.merge!(YAML.load(contents))
+      data.merge!(YAML.load(@source))
     end
 
     def apply_layout(input)
@@ -117,7 +117,7 @@ module Flutterby
 
       # Apply all layouts in order
       layouts.each do |layout|
-        tilt = Tilt[layout.ext].new { layout.contents }
+        tilt = Tilt[layout.ext].new { layout.source }
         output = tilt.render(view) { output }
       end
 
