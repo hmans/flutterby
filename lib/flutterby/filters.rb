@@ -26,6 +26,7 @@ module Flutterby
     def process_rb(input, node)
       # default the node's extension to "html"
       node.ext = "html"
+      
       # extend the node
       mod = Module.new
       mod.class_eval(input)
