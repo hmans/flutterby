@@ -3,7 +3,7 @@ require 'benchmark'
 module Flutterby
   class Node
     attr_accessor :parent, :ext, :source, :body
-    attr_reader :name, :filters, :fs_path, :data, :children, :paths
+    attr_reader :name, :filters, :fs_path, :children, :paths
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
@@ -139,7 +139,7 @@ module Flutterby
 
     def reload!
       @body     = nil
-      @data     = {}
+      @data     = nil
       @children = []
       @paths    = {}
 
@@ -159,7 +159,6 @@ module Flutterby
       #
       walk_tree do |node|
         node.render_body! if node.should_prerender?
-        node.extract_data!
         node.register! if node.should_publish?
       end
     end
@@ -183,9 +182,11 @@ module Flutterby
     end
 
     def extract_data!
+      @data ||= {}
+
       # Extract date from name
       if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
-        data['date'] = Time.parse($1)
+        @data['date'] = Time.parse($1)
       end
 
       # Read remaining data from frontmatter. Data in frontmatter
@@ -222,8 +223,17 @@ module Flutterby
     end
 
     def body
-      render_body! if @body.nil?
+      if @body.nil?
+        data   # make sure data is lazy-loaded
+        render_body!
+      end
+
       @body
+    end
+
+    def data
+      extract_data! if @data.nil?
+      @data
     end
 
     def render(layout: true)
@@ -253,25 +263,27 @@ module Flutterby
     #
 
     def parse_frontmatter!
+      @data || {}
+
       if @source
         # YAML Front Matter
         if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
-          data.merge! YAML.load($1)
+          @data.merge! YAML.load($1)
         end
 
         # TOML Front Matter
         if @source.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
-          data.merge! TOML.parse($1)
+          @data.merge! TOML.parse($1)
         end
       end
     end
 
     def read_json!
-      data.merge!(JSON.parse(body))
+      @data.merge!(JSON.parse(body))
     end
 
     def read_yaml!
-      data.merge!(YAML.load(body))
+      @data.merge!(YAML.load(body))
     end
 
 
