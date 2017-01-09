@@ -172,7 +172,8 @@ module Flutterby
       if @fs_path
         if ::File.directory?(fs_path)
           Dir[::File.join(fs_path, "*")].each do |entry|
-            Flutterby.from(entry, parent: self)
+            name = ::File.basename(entry)
+            Flutterby::Node.new(name, parent: self, fs_path: entry)
           end
         else
           @source = ::File.read(fs_path)
