@@ -9,8 +9,8 @@ describe "#find" do
 
   let!(:root) do
     Flutterby::Node.new("/").tap do |e|
-      e.children << foo
-      e.children << bar
+      e.add_child foo
+      e.add_child bar
     end
   end
 
@@ -19,7 +19,7 @@ describe "#find" do
 
   let(:bar) do
     Flutterby::Node.new("bar").tap do |e|
-      e.children << baz
+      e.add_child baz
     end
   end
 

@@ -32,21 +32,18 @@ module Flutterby
 
     def reset_children!
       @children = []
-      me = self
+    end
 
-      # Inject some extra methods into this array because this is dirty old Ruby
-      @children.define_singleton_method(:<<) do |c|
-        c.parent = me
-        super(c)
-      end
+    def add_child(node)
+      node.parent = self
+      children << node
+    end
 
-      @children.define_singleton_method(:find_by_name) do |name|
-        # Look for a fully qualified name (index.html), or a simple name (index)?
-        if name.include?(".")
-          find { |c| c.full_name == name }
-        else
-          find { |c| c.name == name }
-        end
+    def find_child(name)
+      if name.include?(".")
+        @children.find { |c| c.full_name == name }
+      else
+        @children.find { |c| c.name == name }
       end
     end
 
@@ -87,6 +84,10 @@ module Flutterby
       parent ? parent.root : self
     end
 
+    def root?
+      root == self
+    end
+
     def sibling(name)
       parent && parent.find(name)
     end
@@ -105,7 +106,7 @@ module Flutterby
       when %r{^/} then
         root.find($')
       when %r{^([^/]+)/?} then
-        child = @children.find_by_name($1)
+        child = find_child($1)
         $'.empty? ? child : child.find($')
       end
     end
@@ -126,6 +127,16 @@ module Flutterby
       blk.call(self, val)
     end
 
+    # Walk the entire tree, top to bottom.
+    #
+    def walk_tree(val = nil, &blk)
+      val = blk.call(self, val)
+      children.each do |child|
+        val = child.walk_tree(val, &blk)
+      end
+
+      val
+    end
 
     #
     # Reading from filesystem
@@ -135,11 +146,13 @@ module Flutterby
       @body = nil
       reset_children!
 
+      # Load contents from filesystem
+      #
       if @fs_path
         if ::File.directory?(fs_path)
           Dir[::File.join(fs_path, "*")].each do |entry|
-            if node = Flutterby.from(entry)
-              children << node
+            if node = Flutterby.from(entry, parent: self)
+              add_child(node)
             end
           end
         else
@@ -159,8 +172,23 @@ module Flutterby
           send(meth) if respond_to?(meth)
         end
       end
+
+      # If this node is the root node, perform some preprocessing
+      if root?
+        preprocess!
+      end
     end
 
+    def preprocess!
+      walk_tree do |node|
+        node.render_body! if node.should_preprocess?
+      end
+    end
+
+    def should_preprocess?
+      should_publish? && !folder? &&
+        (filters.include?("json") || filters.include?("yaml"))
+    end
 
     #
     # Rendering
