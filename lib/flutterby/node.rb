@@ -170,8 +170,12 @@ module Flutterby
       @view ||= View.for(self)
     end
 
+    def render_body!
+      Filters.apply!(self)
+    end
+
     def body
-      Filters.apply!(self) if @body.nil?
+      render_body! if @body.nil?
       @body
     end
 
