@@ -189,7 +189,7 @@ module Flutterby
 
     def should_preprocess?
       should_publish? && !folder? &&
-        (filters.include?("json") || filters.include?("yaml"))
+        (["json", "yaml", "rb"] & filters).any?
     end
 
     #

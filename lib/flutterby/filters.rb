@@ -23,6 +23,17 @@ module Flutterby
       file.body = body
     end
 
+    def process_rb(input, node)
+      # default the node's extension to "html"
+      node.ext = "html"
+      # extend the node
+      mod = Module.new
+      mod.class_eval(input)
+      node.extend(mod)
+
+      ""
+    end
+
     def process_erb(input, file)
       tilt("erb", input).render(file.view)
     end
