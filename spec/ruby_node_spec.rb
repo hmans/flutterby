@@ -7,12 +7,13 @@ describe "Ruby nodes" do
     EOF
   end
 
-  specify "create a new node powered by custom Ruby code" do
-    # node = read "ruby_node.rb"
-    node = Flutterby::Node.new("ruby_node.rb", source: ruby_code)
+  subject do
+    Flutterby::Node.new("ruby_node.rb", source: ruby_code)
+  end
 
-    expect(node).to be_kind_of(Flutterby::Node)
-    expect(node.ext).to eq("html")
-    expect(node.body).to eq("<p>Hi, I'm a node written in Ruby!</p>")
+  specify "create a new node powered by custom Ruby code" do
+    expect(subject).to be_kind_of(Flutterby::Node)
+    expect(subject.ext).to eq("html")
+    expect(subject.body).to eq("<p>Hi, I'm a node written in Ruby!</p>")
   end
 end
