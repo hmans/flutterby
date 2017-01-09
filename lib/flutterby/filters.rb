@@ -1,55 +1,42 @@
 module Flutterby
   module Filters
-    def apply!(file)
-      body = file.source
+    def apply!(node)
+      node.body = node.source
 
       # Apply all filters
-      file.filters.each do |filter|
-        meth = "process_#{filter}"
+      node.filters.each do |filter|
+        meth = "process_#{filter}!"
 
-        # Set the file's extension to the requested filter. The filter
-        # itself can, of course, override this (eg. the "md" filter can default
-        # the extension to "html".)
-        #
-        file.ext = filter
-
-        # Now apply the actual filter!
-        #
         if Filters.respond_to?(meth)
-          body = Filters.send(meth, body, file)
+          Filters.send(meth, node)
         end
       end
-
-      file.body = body
     end
 
-    def process_rb(input, node)
-      # default the node's extension to "html"
-      node.ext = "html"
-      
+    def process_rb!(node)
       # extend the node
       mod = Module.new
-      mod.class_eval(input)
+      mod.class_eval(node.body)
       node.extend(mod)
+      node.filter! if node.respond_to?(:filter!)
 
       ""
     end
 
-    def process_erb(input, file)
-      tilt("erb", input).render(file.view)
+    def process_erb!(node)
+      node.body = tilt("erb", node.body).render(node.view)
     end
 
-    def process_slim(input, file)
-      tilt("slim", input).render(file.view)
+    def process_slim!(node)
+      node.body = tilt("slim", node.body).render(node.view)
     end
 
-    def process_md(input, file)
-      file.ext = "html"
-      Slodown::Formatter.new(input).complete.to_s
+    def process_md!(node)
+      node.body = Slodown::Formatter.new(node.body).complete.to_s
     end
 
-    def process_scss(input, file)
-      Sass::Engine.new(input, syntax: :scss).render
+    def process_scss!(node)
+      node.body = Sass::Engine.new(node.body, syntax: :scss).render
     end
 
     def tilt(format, body)

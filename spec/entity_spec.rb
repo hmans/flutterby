@@ -14,7 +14,7 @@ describe Flutterby::Node do
     end
 
     it "stores the remaining extensions for processing" do
-      expect(subject.filters).to eq(["erb", "slim", "html"])
+      expect(subject.filters).to eq(["erb", "slim"])
     end
   end
 end

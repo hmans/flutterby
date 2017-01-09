@@ -37,14 +37,15 @@ module Flutterby
       req  = Rack::Request.new(env)
       res = Rack::Response.new([], 200, {})
 
-      parts = req.path.split("/").reject(&:empty?)
+      # Look for target node in path registry
+      if node = find_node_for_path(req.path)
+        # Determine MIME type
+        mime_type = MIME::Types.type_for(node.ext) || "text/plain"
 
-      result = catch :halt do
-        serve(@root, parts, req, res)
-      end
-
-      case result
-      when :error_404 then
+        # Build response
+        res.headers["Content-Type"] = mime_type
+        res.body = [node.render]
+      else
         res.status = 404
         res.headers["Content-Type"] = "text/html"
         res.body = ["404"]
@@ -53,30 +54,10 @@ module Flutterby
       res
     end
 
-    def serve(node, parts, req, res)
-      # halt if we're not supposed to serve current node
-      throw :halt, :error_404 unless node.should_publish?
-
-      # If there are parts left, find them and delegate to the next
-      # node in the chain; otherwise, render this specific node.
-      #
-      if parts.any?
-        if child = node.find(parts.shift)
-          serve(child, parts, req, res)
-        else
-          throw :halt, :error_404
-        end
-      elsif child = node.find("index")
-        serve(child, parts, req, res)
-      else
-        # Determine MIME type
-        mime_type = MIME::Types.type_for(node.ext) || "text/plain"
-
-        # Build response
-        res.headers["Content-Type"] = mime_type
-        res.body = [node.render]
-        throw :halt
-      end
+    def find_node_for_path(path)
+      @root.paths[path] ||
+      @root.paths[path + ".html"] ||
+      @root.paths[::File.join(path, "index.html")]
     end
   end
 end

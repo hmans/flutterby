@@ -7,7 +7,7 @@ describe Flutterby::Node do
   end
 
   it "correctly extracts its filters" do
-    expect(subject.filters).to eq(["md", "html"])
+    expect(subject.filters).to eq(["md"])
   end
 
   it "extracts data from frontmatter" do

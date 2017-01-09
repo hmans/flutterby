@@ -10,7 +10,6 @@ require "flutterby/version"
 require "flutterby/node"
 require "flutterby/filters"
 require "flutterby/view"
-require "flutterby/server"
 
 
 module Flutterby

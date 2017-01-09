@@ -8,7 +8,7 @@ describe "Ruby nodes" do
   end
 
   subject do
-    Flutterby::Node.new("ruby_node.rb", source: ruby_code)
+    Flutterby::Node.new("ruby_node.html.rb", source: ruby_code)
   end
 
   specify "create a new node powered by custom Ruby code" do

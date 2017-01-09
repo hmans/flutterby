@@ -3,30 +3,38 @@ require 'benchmark'
 module Flutterby
   class Node
     attr_accessor :parent, :ext, :source, :body
-    attr_reader :name, :filters, :fs_path, :data, :children
+    attr_reader :name, :filters, :fs_path, :data, :children, :paths
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
-      @parent  = parent
       @source  = source
       @data    = {}
+      reset_children!
 
       # Extract name, extension, and filters from given name
       parts    = name.split(".")
       @name    = parts.shift
+      @ext     = parts.shift
       @filters = parts.reverse
-
-      # We're assuming the extension is the name of the final filter
-      # that will be applied. This may not be always correct, since filters
-      # can also change a file's extension.
-      #
-      @ext     = @filters.last
 
       # If a filesystem path was given, read the node from disk
       if fs_path
         @fs_path = ::File.expand_path(fs_path)
       end
 
+      # Register this node with its parent
+      #
+      if parent
+        @parent  = parent
+        parent.children << self
+      end
+
+      # Load node
+      #
       reload!
+
+      # Register path(s) published by this node
+      #
+      register! if should_publish?
     end
 
     #
@@ -35,11 +43,13 @@ module Flutterby
 
     def reset_children!
       @children = []
+      @paths = {}
     end
 
-    def add_child(node)
-      node.parent = self
-      children << node
+    def register!
+      if file?
+        root.paths[url] = self
+      end
     end
 
     def find_child(name)
@@ -154,9 +164,7 @@ module Flutterby
       if @fs_path
         if ::File.directory?(fs_path)
           Dir[::File.join(fs_path, "*")].each do |entry|
-            if node = Flutterby.from(entry, parent: self)
-              add_child(node)
-            end
+            Flutterby.from(entry, parent: self)
           end
         else
           @source = ::File.read(fs_path)
@@ -235,40 +243,6 @@ module Flutterby
 
 
 
-    #
-    # Exporting
-    #
-
-    def export(into:)
-      if should_publish?
-        time = Benchmark.realtime do
-          write_static(into: into)
-        end
-
-        logger.info "Exported #{url}"
-      end
-    end
-
-    def write_static(into:)
-      if folder?
-        # write children, acting as a directory
-
-        path = full_fs_path(base: into)
-        Dir.mkdir(path) unless ::File.exists?(path)
-
-        children.each do |child|
-          child.export(into: path)
-        end
-      else
-        # write a file
-        ::File.write(full_fs_path(base: into), render)
-      end
-    end
-
-    def should_publish?
-      !name.start_with?("_")
-    end
-
 
     #
     # Front Matter Parsing
@@ -315,8 +289,16 @@ module Flutterby
       children.any?
     end
 
+    def file?
+      !folder?
+    end
+
     def page?
       !folder? && ext == "html"
+    end
+
+    def should_publish?
+      !name.start_with?("_")
     end
 
     def logger

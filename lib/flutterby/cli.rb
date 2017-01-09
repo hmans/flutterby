@@ -1,5 +1,8 @@
-require 'commander'
 require 'flutterby'
+require 'flutterby/exporter'
+require "flutterby/server"
+
+require 'commander'
 require 'benchmark'
 
 Flutterby.logger.level = Logger::INFO
@@ -32,7 +35,7 @@ Commander.configure do
 
         # Export site
         say color("💾  Exporting site...", :bold)
-        root.export(into: options.out)
+        Flutterby::Exporter.new(root).export!(into: options.out)
       end
 
       say color("✅  Done. (took #{sprintf "%.2f", time}s)", :green, :bold)
