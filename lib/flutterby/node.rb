@@ -160,7 +160,7 @@ module Flutterby
       # available extensions loaded.
       #
       walk_tree do |node|
-        node.load_extension! if node.should_publish?
+        node.load_extension! unless node.name == "_node"
       end
 
       # Now do another pass, prerendering stuff where necessary,
