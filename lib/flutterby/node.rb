@@ -1,3 +1,5 @@
+require 'benchmark'
+
 module Flutterby
   class Node
     attr_accessor :parent, :ext, :source, :body
@@ -199,7 +201,11 @@ module Flutterby
     end
 
     def render_body!
-      Filters.apply!(self)
+      time = Benchmark.realtime do
+        Filters.apply!(self)
+      end
+
+      logger.info "Rendered #{url} in #{sprintf "%.1f", time * 1000}ms"
     end
 
     def body
@@ -234,8 +240,11 @@ module Flutterby
 
     def export(into:)
       if should_publish?
-        puts " • #{url}"
-        write_static(into: into)
+        time = Benchmark.realtime do
+          write_static(into: into)
+        end
+
+        logger.info "Exported #{url}"
       end
     end
 
@@ -307,6 +316,10 @@ module Flutterby
 
     def page?
       !folder? && ext == "html"
+    end
+
+    def logger
+      Flutterby.logger
     end
   end
 end

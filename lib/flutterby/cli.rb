@@ -1,6 +1,8 @@
 require 'commander'
 require 'flutterby'
 
+Flutterby.logger.level = Logger::INFO
+
 Commander.configure do
   program :name, 'Flutterby'
   program :version, Flutterby::VERSION
@@ -16,10 +18,17 @@ Commander.configure do
     c.action do |args, options|
       options.default in: "./site/", out: "./_build/"
 
+      # Simplify logger output
+      Flutterby.logger.formatter = proc do |severity, datetime, progname, msg|
+        " • #{msg}\n"
+      end
+
+      # Import site
       say color("📚  Importing site...", :bold)
       root = Flutterby.from(options.in, name: "/")
       say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
+      # Export site
       say color("💾  Writing site...", :bold)
       root.export(into: options.out)
       say color("✅  Done.", :green, :bold)

@@ -15,7 +15,7 @@ module Flutterby
         # puts "added absolute path: #{added}"
         # puts "removed absolute path: #{removed}"
 
-        puts "Change detected, reloading everything!"
+        Flutterby.logger.info "Change detected, reloading everything!"
         @root.reload!
       end
 
@@ -30,7 +30,7 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run self, Port: @port
+      server.run self, Port: @port, Logger: Flutterby.logger
     end
 
     def call(env)

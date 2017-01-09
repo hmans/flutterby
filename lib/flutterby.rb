@@ -14,7 +14,11 @@ require "flutterby/server"
 
 
 module Flutterby
-  def Flutterby.from(fs_path, name: nil, parent: nil)
+  extend self
+
+  attr_writer :logger
+
+  def from(fs_path, name: nil, parent: nil)
     name ||= ::File.basename(fs_path)
 
     if ::File.exist?(fs_path)
@@ -22,5 +26,9 @@ module Flutterby
     else
       raise "Path #{fs_path} could not be found."
     end
+  end
+
+  def logger
+    @logger ||= Logger.new(STDOUT)
   end
 end
