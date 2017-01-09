@@ -249,11 +249,11 @@ module Flutterby
     end
 
     def read_json
-      data.merge!(JSON.parse(@source))
+      data.merge!(JSON.parse(body))
     end
 
     def read_yaml
-      data.merge!(YAML.load(@source))
+      data.merge!(YAML.load(body))
     end
 
 

@@ -45,4 +45,9 @@ describe Flutterby::Node do
       expect(subject.data["info"]["favoriteFood"]).to eq("Schnitzel")
     end
   end
+
+  specify "data files with extensions have their extra processing performed" do
+    node = read "json_with_erb.json.erb"
+    expect(node.data["foo"]).to eq("bar")
+  end
 end
