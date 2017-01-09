@@ -173,7 +173,7 @@ module Flutterby
     end
 
     def should_prerender?
-      should_publish? && !folder? &&
+      !folder? &&
         (["json", "yaml", "rb"] & filters).any?
     end
 
