@@ -2,8 +2,8 @@ require 'benchmark'
 
 module Flutterby
   class Node
-    attr_accessor :parent, :ext, :source, :body
-    attr_reader :name, :filters, :fs_path, :children, :paths
+    attr_accessor :name, :ext, :source, :body
+    attr_reader :filters, :parent, :fs_path, :children, :paths
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
@@ -17,8 +17,7 @@ module Flutterby
 
       # Register this node with its parent
       if parent
-        @parent = parent
-        parent.children << self
+        self.parent = parent
       end
 
       reload!
@@ -46,6 +45,16 @@ module Flutterby
       children.inject(children.length) do |count, child|
         count + child.tree_size
       end
+    end
+
+    def parent=(new_parent)
+      if @parent
+        @parent.children.delete(self)
+      end
+
+      @parent = new_parent
+
+      @parent.children << self
     end
 
     # Returns all children that will compile to a HTML page.
@@ -317,6 +326,13 @@ module Flutterby
 
     def logger
       Flutterby.logger
+    end
+
+    def copy(new_name)
+      dup.tap do |c|
+        c.name = new_name
+        parent.children << c
+      end
     end
   end
 end
