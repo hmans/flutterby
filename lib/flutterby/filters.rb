@@ -19,8 +19,6 @@ module Flutterby
       mod.class_eval(node.body)
       node.extend(mod)
       node.filter! if node.respond_to?(:filter!)
-
-      ""
     end
 
     def process_erb!(node)
