@@ -60,7 +60,7 @@ module Flutterby
     # Returns all children that will compile to a HTML page.
     #
     def pages
-      children.select { |c| c.ext == "html" }
+      children.select { |c| c.ext == "html" && c.should_publish? }
     end
 
     #
