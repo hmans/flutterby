@@ -144,9 +144,28 @@ module Flutterby
       @paths    = {}
 
       load_from_filesystem! if @fs_path
+    end
+
+    def preprocess!
+      # If this is the root node, do some extra processing
+      if root?
+        walk_tree do |node|
+          node.load_extension! if node.should_publish?
+        end
+
+        walk_tree do |node|
+          node.render_body! if node.should_prerender?
+        end
+      end
+
       extract_data!
-      prerender! if root?
+
       register! if should_publish?
+    end
+
+    def should_prerender?
+      should_publish? && !folder? &&
+        (["json", "yaml", "rb"] & filters).any?
     end
 
     def load_from_filesystem!
@@ -176,15 +195,12 @@ module Flutterby
       send(meth) if respond_to?(meth)
     end
 
-    def prerender!
-      walk_tree do |node|
-        node.render_body! if node.should_prerender?
+    def load_extension!
+      if extension = sibling("_node.rb")
+        mod = Module.new
+        mod.class_eval(extension.body)
+        self.extend mod
       end
-    end
-
-    def should_prerender?
-      should_publish? && !folder? &&
-        (["json", "yaml", "rb"] & filters).any?
     end
 
     #

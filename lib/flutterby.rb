@@ -21,7 +21,9 @@ module Flutterby
     name ||= ::File.basename(fs_path)
 
     if ::File.exist?(fs_path)
-      Node.new(name, fs_path: fs_path, parent: parent)
+      Node.new(name, fs_path: fs_path, parent: parent).tap do |node|
+        node.preprocess!
+      end
     else
       raise "Path #{fs_path} could not be found."
     end

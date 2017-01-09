@@ -12,6 +12,7 @@ describe "Ruby nodes" do
   end
 
   specify "create a new node powered by custom Ruby code" do
+    subject.preprocess!
     expect(subject).to be_kind_of(Flutterby::Node)
     expect(subject.ext).to eq("html")
     expect(subject.body).to eq("<p>Hi, I'm a node written in Ruby!</p>")
