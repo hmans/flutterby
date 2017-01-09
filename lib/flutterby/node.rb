@@ -5,8 +5,9 @@ module Flutterby
     attr_accessor :parent, :ext, :source, :body
     attr_reader :name, :filters, :fs_path, :data, :children
 
-    def initialize(name, parent: nil, fs_path: nil)
+    def initialize(name, parent: nil, fs_path: nil, source: nil)
       @parent  = parent
+      @source  = source
       @data    = {}
 
       # Extract name, extension, and filters from given name
