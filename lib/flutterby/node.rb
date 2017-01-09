@@ -6,9 +6,8 @@ module Flutterby
     attr_reader :name, :filters, :fs_path, :data, :children, :paths
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
+      @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
       @source  = source
-      @data    = {}
-      reset_children!
 
       # Extract name, extension, and filters from given name
       parts    = name.split(".")
@@ -16,35 +15,18 @@ module Flutterby
       @ext     = parts.shift
       @filters = parts.reverse
 
-      # If a filesystem path was given, read the node from disk
-      if fs_path
-        @fs_path = ::File.expand_path(fs_path)
-      end
-
       # Register this node with its parent
-      #
       if parent
-        @parent  = parent
+        @parent = parent
         parent.children << self
       end
 
-      # Load node
-      #
       reload!
-
-      # Register path(s) published by this node
-      #
-      register! if should_publish?
     end
 
     #
     # Children
     #
-
-    def reset_children!
-      @children = []
-      @paths = {}
-    end
 
     def register!
       if file?
@@ -156,11 +138,18 @@ module Flutterby
     #
 
     def reload!
-      @body = nil
-      reset_children!
+      @body     = nil
+      @data     = {}
+      @children = []
+      @paths    = {}
 
-      # Load contents from filesystem
-      #
+      load_from_filesystem! if @fs_path
+      extract_data!
+      prerender! if root?
+      register! if should_publish?
+    end
+
+    def load_from_filesystem!
       if @fs_path
         if ::File.directory?(fs_path)
           Dir[::File.join(fs_path, "*")].each do |entry|
@@ -168,35 +157,32 @@ module Flutterby
           end
         else
           @source = ::File.read(fs_path)
-
-          # Extract date from name
-          if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
-            @data['date'] = Time.parse($1)
-          end
-
-          # Read remaining data from frontmatter. Data in frontmatter
-          # will always have precedence!
-          @data.merge! parse_frontmatter
-
-          # Do some extra processing depending on extension
-          meth = "read_#{ext}"
-          send(meth) if respond_to?(meth)
         end
       end
-
-      # If this node is the root node, perform some preprocessing
-      if root?
-        preprocess!
-      end
     end
 
-    def preprocess!
+    def extract_data!
+      # Extract date from name
+      if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
+        data['date'] = Time.parse($1)
+      end
+
+      # Read remaining data from frontmatter. Data in frontmatter
+      # will always have precedence!
+      parse_frontmatter!
+
+      # Do some extra processing depending on extension
+      meth = "read_#{ext}!"
+      send(meth) if respond_to?(meth)
+    end
+
+    def prerender!
       walk_tree do |node|
-        node.render_body! if node.should_preprocess?
+        node.render_body! if node.should_prerender?
       end
     end
 
-    def should_preprocess?
+    def should_prerender?
       should_publish? && !folder? &&
         (["json", "yaml", "rb"] & filters).any?
     end
@@ -248,27 +234,25 @@ module Flutterby
     # Front Matter Parsing
     #
 
-    def parse_frontmatter
-      data = {}
+    def parse_frontmatter!
+      if @source
+        # YAML Front Matter
+        if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
+          data.merge! YAML.load($1)
+        end
 
-      # YAML Front Matter
-      if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
-        data.merge! YAML.load($1)
+        # TOML Front Matter
+        if @source.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
+          data.merge! TOML.parse($1)
+        end
       end
-
-      # TOML Front Matter
-      if @source.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
-        data.merge! TOML.parse($1)
-      end
-
-      data
     end
 
-    def read_json
+    def read_json!
       data.merge!(JSON.parse(body))
     end
 
-    def read_yaml
+    def read_yaml!
       data.merge!(YAML.load(body))
     end
 
