@@ -1,5 +1,6 @@
 require 'commander'
 require 'flutterby'
+require 'benchmark'
 
 Flutterby.logger.level = Logger::INFO
 
@@ -23,15 +24,18 @@ Commander.configure do
         " • #{msg}\n"
       end
 
-      # Import site
-      say color("📚  Importing site...", :bold)
-      root = Flutterby.from(options.in, name: "/")
-      say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
+      time = Benchmark.realtime do
+        # Import site
+        say color("📚  Importing site...", :bold)
+        root = Flutterby.from(options.in, name: "/")
+        say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
-      # Export site
-      say color("💾  Writing site...", :bold)
-      root.export(into: options.out)
-      say color("✅  Done.", :green, :bold)
+        # Export site
+        say color("💾  Exporting site...", :bold)
+        root.export(into: options.out)
+      end
+
+      say color("✅  Done. (took #{sprintf "%.2f", time}s)", :green, :bold)
     end
   end
   alias_command :b, :build
