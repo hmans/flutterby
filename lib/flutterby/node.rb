@@ -147,20 +147,21 @@ module Flutterby
     end
 
     def preprocess!
-      # If this is the root node, do some extra processing
-      if root?
-        walk_tree do |node|
-          node.load_extension! if node.should_publish?
-        end
-
-        walk_tree do |node|
-          node.render_body! if node.should_prerender?
-        end
+      # First of all, we want to make sure all nodes have their
+      # available extensions loaded.
+      #
+      walk_tree do |node|
+        node.load_extension! if node.should_publish?
       end
 
-      extract_data!
-
-      register! if should_publish?
+      # Now do another pass, prerendering stuff where necessary,
+      # extracting data, registering URLs to be exported, etc.
+      #
+      walk_tree do |node|
+        node.render_body! if node.should_prerender?
+        node.extract_data!
+        node.register! if node.should_publish?
+      end
     end
 
     def should_prerender?
@@ -200,7 +201,7 @@ module Flutterby
       if extension = sibling("_node.rb")
         mod = Module.new
         mod.class_eval(extension.body)
-        self.extend mod
+        extend mod
       end
     end
 
