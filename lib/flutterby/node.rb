@@ -195,7 +195,7 @@ module Flutterby
 
       # Extract date from name
       if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
-        @data['date'] = Time.parse($1)
+        @data['date'] = Date.parse($1)
       end
 
       # Read remaining data from frontmatter. Data in frontmatter

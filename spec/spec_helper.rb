@@ -9,8 +9,11 @@ module Helpers
     ::File.expand_path("../site/", __FILE__)
   end
 
-  def read(name)
-    Flutterby.from ::File.join(site_path, name), name: name
+  def read(name = "/")
+    fs_path = ::File.join(site_path, name)
+    name    = ::File.basename(name)
+
+    Flutterby::Node.new(name, fs_path: fs_path)
   end
 end
 
@@ -24,7 +27,9 @@ module ExportHelpers
   end
 
   def build!
-    root = read "/"
+    root = read
+    root.preprocess!
+
     Flutterby::Exporter.new(root)
       .export!(into: export_path)
   end

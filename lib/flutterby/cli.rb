@@ -30,7 +30,8 @@ Commander.configure do
       time = Benchmark.realtime do
         # Import site
         say color("📚  Importing site...", :bold)
-        root = Flutterby.from(options.in, name: "/")
+        root = Flutterby::Node.new("/", fs_path: options.in)
+        root.preprocess!
         say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
         # Export site
@@ -54,7 +55,8 @@ Commander.configure do
       options.default in: "./site/", port: 4004
 
       say color("📚  Importing site...", :bold)
-      root = Flutterby.from(options.in, name: "/")
+      root = Flutterby::Node.new("/", fs_path: options.in)
+      root.preprocess!
       say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
       say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)
