@@ -1,6 +1,6 @@
 module Flutterby
   module Filters
-    def apply!(node)
+    def self.apply!(node)
       node.body = node.source
 
       # Apply all filters
@@ -13,30 +13,34 @@ module Flutterby
       end
     end
 
-    def process_rb!(node)
-      node.instance_eval(node.body)
+    def self.add(fmts, &blk)
+      Array(fmts).each do |fmt|
+        define_singleton_method("process_#{fmt}!", &blk)
+      end
     end
 
-    def process_erb!(node)
-      node.body = tilt("erb", node.body).render(node.view)
-    end
-
-    def process_slim!(node)
-      node.body = tilt("slim", node.body).render(node.view)
-    end
-
-    def process_md!(node)
-      node.body = Slodown::Formatter.new(node.body).complete.to_s
-    end
-
-    def process_scss!(node)
-      node.body = Sass::Engine.new(node.body, syntax: :scss).render
-    end
-
-    def tilt(format, body)
+    def self.tilt(format, body)
       Tilt[format].new { body }
     end
-
-    extend self
   end
+end
+
+Flutterby::Filters.add("rb") do |node|
+  node.instance_eval(node.body)
+end
+
+Flutterby::Filters.add("erb") do |node|
+  node.body = tilt("erb", node.body).render(node.view)
+end
+
+Flutterby::Filters.add("slim") do |node|
+  node.body = tilt("slim", node.body).render(node.view)
+end
+
+Flutterby::Filters.add(["md", "markdown"]) do |node|
+  node.body = Slodown::Formatter.new(node.body).complete.to_s
+end
+
+Flutterby::Filters.add("scss") do |node|
+  node.body = Sass::Engine.new(node.body, syntax: :scss).render
 end
