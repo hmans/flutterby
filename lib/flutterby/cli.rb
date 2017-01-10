@@ -31,7 +31,7 @@ Commander.configure do
         # Import site
         say color("📚  Importing site...", :bold)
         root = Flutterby::Node.new("/", fs_path: options.in)
-        root.preprocess!
+        root.stage!
         say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
         # Export site
@@ -56,7 +56,7 @@ Commander.configure do
 
       say color("📚  Importing site...", :bold)
       root = Flutterby::Node.new("/", fs_path: options.in)
-      root.preprocess!
+      root.stage!
       say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
       say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)

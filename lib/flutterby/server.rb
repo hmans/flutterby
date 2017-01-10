@@ -17,7 +17,7 @@ module Flutterby
 
         Flutterby.logger.info "Change detected, reloading everything!"
         @root.reload!
-        @root.preprocess!
+        @root.stage!
       end
 
       # Set up server

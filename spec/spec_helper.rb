@@ -28,7 +28,7 @@ module ExportHelpers
 
   def build!
     root = read
-    root.preprocess!
+    root.stage!
 
     Flutterby::Exporter.new(root)
       .export!(into: export_path)

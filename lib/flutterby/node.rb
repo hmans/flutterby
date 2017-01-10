@@ -155,7 +155,7 @@ module Flutterby
       load_from_filesystem! if @fs_path
     end
 
-    def preprocess!
+    def stage!
       # First of all, we want to make sure all nodes have their
       # available extensions loaded.
       #
