@@ -27,7 +27,7 @@ module Flutterby
     # Children
     #
 
-    def register!
+    def register_url!
       if file?
         root.paths[url] = self
       end
@@ -168,7 +168,7 @@ module Flutterby
       #
       walk_tree do |node|
         node.render_body! if node.should_prerender?
-        node.register! if node.should_publish?
+        node.register_url! if node.should_publish?
       end
     end
 
