@@ -14,11 +14,7 @@ module Flutterby
     end
 
     def process_rb!(node)
-      # extend the node
-      mod = Module.new
-      mod.class_eval(node.body)
-      node.extend(mod)
-      node.filter! if node.respond_to?(:filter!)
+      node.instance_eval(node.body)
     end
 
     def process_erb!(node)
