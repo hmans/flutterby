@@ -209,9 +209,7 @@ module Flutterby
 
     def load_extension!
       if extension = sibling("_node.rb")
-        mod = Module.new
-        mod.class_eval(extension.body)
-        extend mod
+        instance_eval(extension.body)
       end
     end
 
