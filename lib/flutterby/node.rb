@@ -28,7 +28,7 @@ module Flutterby
     #
 
     def register_url!
-      if file?
+      if file? && should_publish?
         root.paths[url] = self
       end
     end
