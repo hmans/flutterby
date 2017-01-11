@@ -43,13 +43,14 @@ Please refer to the [Sites built with Flutterby](https://github.com/hmans/flutte
 
 ## Roadmap
 
-Flutterby is young, but already quite functional. Here's a list of changes I'm intending to make in the near future -- if you want to work on one of these, let me know!
+Flutterby is young, but already quite functional. Here's a list of changes I'm intending to make in the near future -- if you want to work on any of these, let me know!
 
-- Improve the template site (`flutterby new`)
-- Change `flutterby server` so it doesn't always regenerate the _entire_ site graph when a file is modified
-- Extract filters (like Slim, Sass etc.) to separate gems, to make the core gem more light-weight
+- Performance! Right now, the source file for every node is read into RAM as a whole. Not a big problem when you're building a small site, but add some larger images, and you'll have one.
+- Change `flutterby server` so it doesn't always regenerate the _entire_ site graph when a file is modified.
+- Extract filters (like Slim, Sass etc.) to separate gems, to make the core gem more light-weight.
+- Improve the template site (`flutterby new`).
 - Produce a fun screencast to explain what the heck is going on here!
-- Write even more tests
+- Write even more tests!
 
 
 ## Notes
