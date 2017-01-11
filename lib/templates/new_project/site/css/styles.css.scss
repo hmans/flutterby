@@ -10,12 +10,23 @@ div.container {
   padding: 30px;
 }
 
+footer[role="main"] {
+  margin-top: 80px;
+  border-top: 3px solid lightgrey;
+  padding-top: 20px;
+  font-size: 82.5%;
+  color: grey;
+  a { color: inherit }
+}
+
 h1 {
   font-family: "Arial Black";
+  color: #666;
+  border-bottom: 10px solid #ddd;
 }
 
 a {
-  color: blue;
+  color: rgb(74, 109, 242);
 }
 
 .post-meta {
