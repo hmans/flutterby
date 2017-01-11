@@ -1,7 +1,7 @@
 article.post
   .post-meta
-    = date_format page.data["date"], "%B %e, %Y"
+    = date_format page.date, "%B %e, %Y"
 
-  h1 = page.data["title"]
+  h1 = page.title
 
   == page.body
