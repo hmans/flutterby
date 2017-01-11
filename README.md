@@ -7,8 +7,9 @@
 ### A currently highly experimental static site generator. Yes, there are many like it; but this one is mine. (Actually, there are none like it. Ha! I'm very serious about the _experimental_ bit, though. Use with care, if at all!)
 
 
-## Key Features
+### Key Features
 
+- Generate a static website from a source directory!
 - Apply any number of transformations on files!
 - Built-in support for Markdown, Sass, Erb, Slim and more!
 - Extremely easy to extend with new transformation filters!
@@ -40,7 +41,9 @@ Flutterby is young, but already quite functional. Here's a list of changes I'm i
 - Write even more tests
 
 
-## How does Flutterby work?
+## Notes
+
+### How does Flutterby work?
 
 A loose collection of notes on how Flutterby actually generates your site.
 
@@ -61,6 +64,6 @@ A loose collection of notes on how Flutterby actually generates your site.
 - When a `_view.rb` object is available in the same folder as the rendered object, it will be evaluated against the current view, allowing you to define your own view helpers. Like layouts, these will stack.
 - Files and folders starting with underscores (eg. `_header.html`) will never be exported.
 
-## License
+### License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
