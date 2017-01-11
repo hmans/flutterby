@@ -1,4 +1,8 @@
+require 'sass'
+require 'tilt'
+require 'slim'
 require 'builder'
+require 'slodown'
 
 module Flutterby
   module Filters

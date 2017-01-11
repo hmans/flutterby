@@ -1,7 +1,3 @@
-require 'slodown'
-require 'sass'
-require 'tilt'
-require 'slim'
 require 'toml'
 require 'mime-types'
 require 'json'

@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'gem-release', '~> 0'
   spec.add_development_dependency 'pry', '~> 0.10'
 
+  spec.add_dependency 'json', '~> 2.0'
   spec.add_dependency 'thor', '~> 0.19'
   spec.add_dependency 'highline', '~> 1.7'
   spec.add_dependency 'slodown', '~> 0.3'
@@ -40,5 +41,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rack', '~> 2.0'
   spec.add_dependency 'listen', '~> 3.1'
   spec.add_dependency 'mime-types', '~> 3.1'
-  spec.add_dependency 'json', '~> 2.0'
 end
