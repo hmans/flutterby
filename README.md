@@ -2,9 +2,7 @@
 
 # Flutterby
 
-
-
-### A currently highly experimental static site generator. Yes, there are many like it; but this one is mine. (Actually, there are none like it. Ha! I'm very serious about the _experimental_ bit, though. Use with care, if at all!)
+#### A very good static site generator.
 
 
 ### Key Features
