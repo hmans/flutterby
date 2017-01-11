@@ -28,7 +28,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'gem-release', '~> 0'
   spec.add_development_dependency 'pry', '~> 0.10'
 
-  spec.add_dependency 'commander', '~> 4.4'
+  spec.add_dependency 'thor', '~> 0.19'
+  spec.add_dependency 'highline', '~> 1.7'
   spec.add_dependency 'slodown', '~> 0.3'
   spec.add_dependency 'builder', '~> 3.2'
   spec.add_dependency 'sass', '~> 3.4'

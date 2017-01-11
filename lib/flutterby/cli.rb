@@ -2,26 +2,20 @@ require 'flutterby'
 require 'flutterby/exporter'
 require "flutterby/server"
 
-require 'commander'
+require 'thor'
+require 'highline/import'
 require 'benchmark'
 
 Flutterby.logger.level = Logger::INFO
 
-Commander.configure do
-  program :name, 'Flutterby'
-  program :version, Flutterby::VERSION
-  program :description, 'There are many static site generators. This one is mine.'
+module Flutterby
+  class CLI < Thor
+    desc "build", "Build your static site"
+    method_option "build", aliases: %w{b}
+    option :in, default: "./site/", aliases: [:i]
+    option :out, default: "./_build/", aliases: [:o]
 
-  command :build do |c|
-    c.syntax = 'flutterby build [options]'
-    c.description = "Build your website."
-
-    c.option '--in DIR', String, "Directory containing your source files"
-    c.option '--out DIR', String, "Target directory"
-
-    c.action do |args, options|
-      options.default in: "./site/", out: "./_build/"
-
+    def build
       # Simplify logger output
       Flutterby.logger.formatter = proc do |severity, datetime, progname, msg|
         " • #{msg}\n"
@@ -41,19 +35,14 @@ Commander.configure do
 
       say color("✅  Done. (took #{sprintf "%.2f", time}s)", :green, :bold)
     end
-  end
-  alias_command :b, :build
 
-  command :serve do |c|
-    c.syntax = 'flutterby serve [options]'
-    c.description = "Serve your website for development."
 
-    c.option '--in DIR', String, "Directory containing your source files"
-    c.option '--port NUM', String, "Port to serve on (default: 4004)"
+    desc "serve", "Serve your site locally"
+    method_option "serve", aliases: %w{server s}
+    option :in, default: "./site/", aliases: [:i]
+    option :port, default: 4004, aliases: [:p], type: :numeric
 
-    c.action do |args, options|
-      options.default in: "./site/", port: 4004
-
+    def serve
       say color("📚  Importing site...", :bold)
       root = Flutterby::Node.new("/", fs_path: options.in)
       root.stage!
@@ -63,7 +52,44 @@ Commander.configure do
       server = Flutterby::Server.new(root, port: options.port)
       server.run!
     end
+
+
+    private
+
+    def color(*args)
+      $terminal.color(*args)
+    end
   end
-  alias_command :server, :serve
-  alias_command :s, :serve
 end
+
+Flutterby::CLI.start(ARGV)
+
+# Commander.configure do
+#   program :name, 'Flutterby'
+#   program :version, Flutterby::VERSION
+#   program :description, 'There are many static site generators. This one is mine.'
+#
+#
+#   command :serve do |c|
+    # c.syntax = 'flutterby serve [options]'
+    # c.description = "Serve your website for development."
+    #
+    # c.option '--in DIR', String, "Directory containing your source files"
+    # c.option '--port NUM', String, "Port to serve on (default: 4004)"
+    #
+    # c.action do |args, options|
+    #   options.default in: "./site/", port: 4004
+    #
+    #   say color("📚  Importing site...", :bold)
+    #   root = Flutterby::Node.new("/", fs_path: options.in)
+    #   root.stage!
+    #   say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
+    #
+    #   say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)
+    #   server = Flutterby::Server.new(root, port: options.port)
+    #   server.run!
+    # end
+#   end
+#   alias_command :server, :serve
+#   alias_command :s, :serve
+# end
