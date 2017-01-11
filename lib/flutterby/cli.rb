@@ -3,6 +3,7 @@ require 'flutterby/exporter'
 require "flutterby/server"
 
 require 'thor'
+require 'thor/group'
 require 'highline/import'
 require 'benchmark'
 
@@ -10,6 +11,8 @@ Flutterby.logger.level = Logger::INFO
 
 module Flutterby
   class CLI < Thor
+    include Thor::Actions
+
     desc "build", "Build your static site"
     option :in, default: "./site/", aliases: [:i]
     option :out, default: "./_build/", aliases: [:o]
@@ -52,42 +55,30 @@ module Flutterby
     end
 
 
+    desc "new PATH", "Create a new Flutterby project"
+    def new(path)
+      path = File.expand_path(path)
+      self.destination_root = path
+
+      say color("🦋  Creating a new Flutterby project in #{path}...", :bold)
+      directory("new_project", path)
+      in_root do
+        Bundler.with_clean_env do
+          run "bundle install"
+        end
+      end
+    end
+
     private
 
     def color(*args)
       $terminal.color(*args)
     end
+
+    def self.source_root
+      File.expand_path("../templates/", File.dirname(__FILE__))
+    end
   end
 end
 
 Flutterby::CLI.start(ARGV)
-
-# Commander.configure do
-#   program :name, 'Flutterby'
-#   program :version, Flutterby::VERSION
-#   program :description, 'There are many static site generators. This one is mine.'
-#
-#
-#   command :serve do |c|
-    # c.syntax = 'flutterby serve [options]'
-    # c.description = "Serve your website for development."
-    #
-    # c.option '--in DIR', String, "Directory containing your source files"
-    # c.option '--port NUM', String, "Port to serve on (default: 4004)"
-    #
-    # c.action do |args, options|
-    #   options.default in: "./site/", port: 4004
-    #
-    #   say color("📚  Importing site...", :bold)
-    #   root = Flutterby::Node.new("/", fs_path: options.in)
-    #   root.stage!
-    #   say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
-    #
-    #   say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)
-    #   server = Flutterby::Server.new(root, port: options.port)
-    #   server.run!
-    # end
-#   end
-#   alias_command :server, :serve
-#   alias_command :s, :serve
-# end
