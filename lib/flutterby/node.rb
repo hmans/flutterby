@@ -174,7 +174,7 @@ module Flutterby
 
     def should_prerender?
       !folder? &&
-        (["json", "yaml", "rb"] & filters).any?
+        (["json", "yml", "yaml", "rb"] & filters).any?
     end
 
     def load_from_filesystem!
@@ -291,6 +291,10 @@ module Flutterby
 
     def read_yaml!
       @data.merge!(YAML.load(body))
+    end
+
+    def read_yml!
+      read_yaml!
     end
 
 
