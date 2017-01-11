@@ -16,6 +16,29 @@ describe "YAML files" do
   end
 end
 
+describe "TOML files" do
+  subject { node "data.toml", source: source }
+
+  let :source do
+    <<~EOF
+    [site]
+    title = "Site Title"
+    url = "http://site.com"
+    EOF
+  end
+
+  let :expected_data do
+    {
+      "site" => {
+        "title" => "Site Title",
+        "url"=>"http://site.com"
+      }
+    }
+  end
+
+  its(:data) { is_expected.to eq(expected_data) }
+end
+
 describe "data files with extra extensions" do
   specify "have their extra processing performed" do
     node = read "json_with_erb.json.erb"

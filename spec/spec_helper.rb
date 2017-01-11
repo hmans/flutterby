@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "flutterby"
 require "pry"
+require "rspec/its"
 
 Flutterby.logger.level = Logger::FATAL
 
