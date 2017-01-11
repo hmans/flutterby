@@ -13,7 +13,11 @@ module Helpers
     fs_path = ::File.join(site_path, name)
     name    = ::File.basename(name)
 
-    Flutterby::Node.new(name, fs_path: fs_path)
+    node(name, fs_path: fs_path)
+  end
+
+  def node(*args)
+    Flutterby::Node.new(*args)
   end
 end
 
