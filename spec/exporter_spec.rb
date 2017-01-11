@@ -19,7 +19,7 @@ describe Flutterby::Exporter do
 
   specify "renders Scss to CSS" do
     expect(generated_file("css/styles.css"))
-      .to eq(%{body {\n  color: red; }\n})
+      .to eq("strong {\n  color: green; }\n\nbody {\n  color: red; }\n")
   end
 
   specify "creates subdirectories" do

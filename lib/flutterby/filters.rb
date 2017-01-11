@@ -44,7 +44,16 @@ Flutterby::Filters.add(["md", "markdown"]) do |node|
 end
 
 Flutterby::Filters.add("scss") do |node|
-  node.body = Sass::Engine.new(node.body, syntax: :scss).render
+  sass_options = {
+    syntax: :scss,
+    load_paths: []
+  }
+
+  if node.fs_path
+    sass_options[:load_paths] << File.dirname(node.fs_path)
+  end
+
+  node.body = Sass::Engine.new(node.body, sass_options).render
 end
 
 Flutterby::Filters.add("builder") do |node|
