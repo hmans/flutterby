@@ -62,14 +62,20 @@ module Flutterby
 
       say color("🦋  Creating a new Flutterby project in #{path}...", :bold)
       directory("new_project", path)
-      in_root do
-        Bundler.with_clean_env do
-          run "bundle install"
-        end
-      end
+      in_root { bundle_install }
     end
 
     private
+
+    def bundle_install
+      if defined?(Bundler)
+        Bundler.with_clean_env do
+          run "bundle install"
+        end
+      else
+        run "bundle install"
+      end
+    end
 
     def color(*args)
       $terminal.color(*args)
@@ -80,5 +86,3 @@ module Flutterby
     end
   end
 end
-
-Flutterby::CLI.start(ARGV)
