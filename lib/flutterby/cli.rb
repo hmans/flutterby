@@ -11,7 +11,6 @@ Flutterby.logger.level = Logger::INFO
 module Flutterby
   class CLI < Thor
     desc "build", "Build your static site"
-    method_option "build", aliases: %w{b}
     option :in, default: "./site/", aliases: [:i]
     option :out, default: "./_build/", aliases: [:o]
 
@@ -38,7 +37,6 @@ module Flutterby
 
 
     desc "serve", "Serve your site locally"
-    method_option "serve", aliases: %w{server s}
     option :in, default: "./site/", aliases: [:i]
     option :port, default: 4004, aliases: [:p], type: :numeric
 
