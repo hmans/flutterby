@@ -1,1 +1,28 @@
-/* add your SCSS here */
+body {
+  background-color: #fff;
+  color: #444;
+  font: 18px/1.5 Arial,Helvetica,sans-serif;
+}
+
+div.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+}
+
+h1 {
+  font-family: "Arial Black";
+}
+
+a {
+  color: blue;
+}
+
+.post-meta {
+  color: grey;
+}
+
+ul.post-list {
+  list-style: none;
+  padding-left: 0;
+}
