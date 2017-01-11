@@ -2,31 +2,47 @@
 
 # Flutterby
 
+
+
 ### A currently highly experimental static site generator. Yes, there are many like it; but this one is mine. (Actually, there are none like it. Ha! I'm very serious about the _experimental_ bit, though. Use with care, if at all!)
 
 
-## Example
+## Key Features
 
-Even though Flutterby is still very much in flux, I'm already building a bunch of sites with it; one of them is [my blog](http://hmans.io/), the source code for which you can find [here](https://github.com/hmans/hmans_me).
-
-
-## Actual Features
-
-- Build your site simply as a tree of files and folders. Each file will be converted according to its extension chain (eg. `styles.css.scss` will be rendered as `styles.css`, `about.html.md` as `about.html` and so on.)
-- Built-in support for Markdown (by way of [Slodown](https://github.com/hmans/slodown)), [Sass](https://github.com/sass/sass), [ERB](http://ruby-doc.org/stdlib-2.4.0/libdoc/erb/rdoc/ERB.html) and [Slim](http://slim-lang.com/).
-- A (slow) HTTP server to serve your site dynamically (for development.)
-- Dynamically enhance your site's functionality with Ruby code.
+- Apply any number of transformations on files!
+- Built-in support for Markdown, Sass, Erb, Slim and more!
+- Extremely easy to extend with new transformation filters!
+- Sprinkle your site with Ruby code that can interact with your site's pages and data!
 
 
-## Missing (but Planned) Features
+## Installation & Basic Usage
 
-- Extract filters (like Slim, Sass etc.) to separate gems
+~~~ bash
+gem install flutterby
+flutterby new mysite
+cd mysite
+flutterby build
+~~~
+
+
+## Examples
+
+Please refer to the [Sites built with Flutterby](https://github.com/hmans/flutterby/wiki/Sites-built-with-Flutterby) page on the Flutterby Wiki for some examples.
+
+
+## Roadmap
+
+Flutterby is young, but already quite functional. Here's a list of changes I'm intending to make in the near future -- if you want to work on one of these, let me know!
+
+- Change `flutterby server` so it doesn't always regenerate the _entire_ site graph when a file is modified
+- Extract filters (like Slim, Sass etc.) to separate gems, to make the core gem more light-weight
 - Produce a fun screencast to explain what the heck is going on here!
-- More tests, of course!
+- Write even more tests
+
 
 ## How does Flutterby work?
 
-A loose collection of notes on how Flutterby actually generates your site -- mostly intended as rubberducking with myself.
+A loose collection of notes on how Flutterby actually generates your site.
 
 - Flutterby reads a _source directory_ and writes a static website into a _target directory_. (It can also serve a live version of your site.)
 - Before it writes (or serves) anything, it reads the entire contents from the source directory into a graph of plain old Ruby objects. Each of these objects represents a file (or folder) from your site.
