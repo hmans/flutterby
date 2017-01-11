@@ -40,4 +40,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rack', '~> 2.0'
   spec.add_dependency 'listen', '~> 3.1'
   spec.add_dependency 'mime-types', '~> 3.1'
+  spec.add_dependency 'json', '~> 2.0'
 end
