@@ -18,12 +18,24 @@
 
 ## Installation & Basic Usage
 
-~~~ bash
-gem install flutterby
-flutterby new mysite
-cd mysite
-flutterby build
-~~~
+Flutterby is distributed as a RubyGem, so let's install it first:
+
+    gem install flutterby
+
+Now let's create a new project:
+
+    flutterby new mysite
+    cd mysite
+
+Now let's generate that static site:
+
+    flutterby build
+
+Or run a local development server for faster development:
+
+    flutterby server
+
+**Note**: by default, both the `build` and `server` commands assume `./site/` to be the source directory and `./_build/` to be the export directory. Please refer to `flutterby help` to see how you can override these.
 
 
 ## Examples
