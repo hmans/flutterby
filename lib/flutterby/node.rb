@@ -96,6 +96,10 @@ module Flutterby
       parent && parent.find(name)
     end
 
+    def siblings
+      parent && parent.children
+    end
+
     def find(path)
       return self if path.nil? || path.empty?
 

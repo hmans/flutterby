@@ -15,8 +15,12 @@ module Flutterby
       find(expr).render(*args)
     end
 
-    def find(expr)
-      node.find(expr) or raise "No node found for #{expr}"
+    def find(*args)
+      node.find(*args) or raise "No node found for #{args}"
+    end
+
+    def siblings(*args)
+      node.siblings(*args)
     end
 
     class << self
