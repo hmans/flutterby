@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'commander', '~> 4.4'
   spec.add_dependency 'slodown', '~> 0.3'
+  spec.add_dependency 'builder', '~> 3.2'
   spec.add_dependency 'sass', '~> 3.4'
   spec.add_dependency 'tilt', '~> 2.0'
   spec.add_dependency 'slim', '~> 3.0'
