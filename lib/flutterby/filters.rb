@@ -15,6 +15,10 @@ module Flutterby
 
         if Filters.respond_to?(meth)
           Filters.send(meth, node)
+        elsif template = tilt(filter, node.body)
+          node.body = template.render
+        else
+          Flutterby.logger.warn "Unsupported filter '#{filter}' for #{node.url}"
         end
       end
     end
@@ -26,7 +30,7 @@ module Flutterby
     end
 
     def self.tilt(format, body)
-      Tilt[format].new { body }
+      t = Tilt[format] and t.new { body }
     end
   end
 end
