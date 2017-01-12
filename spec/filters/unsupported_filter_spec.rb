@@ -1,7 +1,7 @@
 describe "Unsupported filters" do
   subject { node "index.html.poop", source: source }
 
-  let :source { "poop!" }
+  let(:source) { "poop!" }
 
   its(:full_name) { is_expected.to eq("index.html") }
   its(:body) { is_expected.to eq(source) }
