@@ -13,7 +13,7 @@ describe "XMLBuilder filter" do
   end
 
   let :output do
-    %{<?xml version=\"1.0\" encoding=\"UTF-8\"?><test><name>feed</name><bar>baz</bar></test>}
+    %{<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<test>\n  <name>feed</name>\n  <bar>baz</bar>\n</test>\n}
   end
 
   subject do
