@@ -20,16 +20,16 @@ Flutterby is distributed as a RubyGem, so let's install it first:
 
     gem install flutterby
 
-Now let's create a new project:
+This will install a `flutterby` executable on your system. Let's use it to create a new project:
 
     flutterby new mysite
     cd mysite
 
-Now let's generate that static site:
+The new project template serves as a simple starting point for new projects. Let's compile it into a static site:
 
     flutterby build
 
-Or run a local development server for faster development:
+Flutterby comes with a local development server that will automatically pick up changes you make to your files:
 
     flutterby server
 
