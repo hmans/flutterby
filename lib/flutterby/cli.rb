@@ -23,6 +23,8 @@ module Flutterby
         " • #{msg}\n"
       end
 
+      say_hi
+
       time = Benchmark.realtime do
         # Import site
         say color("📚  Importing site...", :bold)
@@ -44,6 +46,8 @@ module Flutterby
     option :port, default: 4004, aliases: [:p], type: :numeric
 
     def serve
+      say_hi
+
       say color("📚  Importing site...", :bold)
       root = Flutterby::Node.new("/", fs_path: options.in)
       root.stage!
@@ -57,10 +61,12 @@ module Flutterby
 
     desc "new PATH", "Create a new Flutterby project"
     def new(path)
+      say_hi
+
       path = File.expand_path(path)
       self.destination_root = path
 
-      say color("🦋  Creating a new Flutterby project in #{path}...", :bold)
+      say color("🏗  Creating a new Flutterby project in #{path}...", :bold)
       directory("new_project", path)
       in_root { bundle_install }
     end
@@ -79,6 +85,10 @@ module Flutterby
 
     def color(*args)
       $terminal.color(*args)
+    end
+
+    def say_hi
+      say color("🦋  Flutterby #{Flutterby::VERSION}", :bold, :blue)
     end
 
     def self.source_root
