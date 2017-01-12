@@ -55,9 +55,3 @@ Flutterby::Filters.add("scss") do |node|
 
   node.body = Sass::Engine.new(node.body, sass_options).render
 end
-
-Flutterby::Filters.add("builder") do |node|
-  xml = Builder::XmlMarkup.new
-  node.view.instance_eval(node.body)
-  node.body = xml.target!
-end
