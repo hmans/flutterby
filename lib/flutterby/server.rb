@@ -45,7 +45,7 @@ module Flutterby
 
         # Build response
         res.headers["Content-Type"] = mime_type
-        res.body = [node.render]
+        res.body = [node.render(layout: true)]
       else
         res.status = 404
         res.headers["Content-Type"] = "text/html"

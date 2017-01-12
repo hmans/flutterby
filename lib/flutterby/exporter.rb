@@ -14,7 +14,7 @@ module Flutterby
             FileUtils.mkdir_p(::File.dirname(path))
 
             # Write file
-            ::File.write(path, node.render)
+            ::File.write(path, node.render(layout: true))
             logger.info "Exported #{node.url}"
           end
         end

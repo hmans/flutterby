@@ -247,7 +247,7 @@ module Flutterby
       @data
     end
 
-    def render(layout: true)
+    def render(layout: false)
       (layout && apply_layout?) ? apply_layout(body) : body
     end
 
