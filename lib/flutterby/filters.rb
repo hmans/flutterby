@@ -1,6 +1,7 @@
 require 'sass'
 require 'tilt'
 require 'slim'
+require 'haml'
 require 'builder'
 require 'slodown'
 
@@ -41,6 +42,10 @@ end
 
 Flutterby::Filters.add("slim") do |node|
   node.body = tilt("slim", node.body).render(node.view)
+end
+
+Flutterby::Filters.add("haml") do |node|
+  node.body = tilt("haml", node.body).render(node.view)
 end
 
 Flutterby::Filters.add(["md", "markdown"]) do |node|
