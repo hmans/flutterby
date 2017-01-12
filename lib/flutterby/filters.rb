@@ -39,14 +39,6 @@ Flutterby::Filters.add("rb") do |node|
   node.instance_eval(node.body)
 end
 
-Flutterby::Filters.add("erb") do |node|
-  node.body = tilt("erb", node.body).render(node.view)
-end
-
-Flutterby::Filters.add("slim") do |node|
-  node.body = tilt("slim", node.body).render(node.view)
-end
-
 Flutterby::Filters.add(["md", "markdown"]) do |node|
   node.body = Slodown::Formatter.new(node.body).complete.to_s
 end
