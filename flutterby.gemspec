@@ -34,12 +34,16 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'thor', '~> 0.19'
   spec.add_dependency 'highline', '~> 1.7'
   spec.add_dependency 'slodown', '~> 0.3'
-  spec.add_dependency 'builder', '~> 3.2'
-  spec.add_dependency 'sass', '~> 3.4'
-  spec.add_dependency 'tilt', '~> 2.0'
-  spec.add_dependency 'slim', '~> 3.0'
   spec.add_dependency 'toml-rb', '~> 0.3'
   spec.add_dependency 'rack', '~> 2.0'
   spec.add_dependency 'listen', '~> 3.1'
   spec.add_dependency 'mime-types', '~> 3.1'
+
+  # We support some template engines out of the box.
+  # There's a chance these will be extracted/made optional
+  # at some point in the future.
+  spec.add_dependency 'sass', '~> 3.4'
+  spec.add_dependency 'builder', '~> 3.2'
+  spec.add_dependency 'slim', '~> 3.0'
+  spec.add_dependency 'tilt', '~> 2.0'
 end
