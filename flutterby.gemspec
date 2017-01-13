@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'json', '~> 2.0'
   spec.add_dependency 'thor', '~> 0.19'
   spec.add_dependency 'highline', '~> 1.7'
-  spec.add_dependency 'slodown', '~> 0.3'
+  spec.add_dependency 'slodown', '~> 0.4'
   spec.add_dependency 'toml-rb', '~> 0.3'
   spec.add_dependency 'rack', '~> 2.0'
   spec.add_dependency 'listen', '~> 3.1'
