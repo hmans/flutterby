@@ -5,7 +5,7 @@
 [![Gem Version](https://badge.fury.io/rb/flutterby.svg)](https://badge.fury.io/rb/flutterby) [![Build Status](https://travis-ci.org/hmans/flutterby.svg?branch=master)](https://travis-ci.org/hmans/flutterby) [![license](https://img.shields.io/github/license/hmans/flutterby.svg)](https://github.com/hmans/flutterby/blob/master/LICENSE.txt) ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
 
 
-### Key Features
+#### Key Features
 
 - Generate a static website from a source directory!
 - Apply any number of transformations on files!
@@ -13,6 +13,10 @@
 - Extremely easy to extend with new transformation filters!
 - Sprinkle your site with Ruby code that can interact with your site's pages and data!
 
+#### Recommended Reading
+
+- [Blog post introducing Flutterby](http://hmans.io/posts/2017/01/11/flutterby.html)
+- [New project template](https://github.com/hmans/flutterby/tree/master/lib/templates/new_project) (example code)
 
 ## Installation & Basic Usage
 
