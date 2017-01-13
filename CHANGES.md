@@ -8,6 +8,8 @@
 - **NEW:** You can now pass options to rendered partials. For example, when you invoke `<%= render("_foo.html.erb", name: "bar") %>`, `_foo.html.erb` can use `opts[:name]`.
 - **NEW:** `flutterby serve` now properly catches and displays exceptions via the [better_errors](https://github.com/charliesome/better_errors) gem.
 - **NEW:** For filters not natively supported by Flutterby, it will now fall back to [Tilt]. This means you can just add any gem supported by Tilt to your project to use it as a template language, with no Flutterby-specific plugin required. Hooray!
+- **NEW:** the `flutterby` CLI now has a `version` command that will print the version of Flutterby you're using.
+
 
 ### 0.1.0 (2017-01-11)
 

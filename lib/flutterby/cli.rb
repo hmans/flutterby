@@ -13,6 +13,13 @@ module Flutterby
   class CLI < Thor
     include Thor::Actions
 
+    desc "version", "Displays Flutterby's version"
+    map "-v" => :version
+    map "--version" => :version
+    def version
+      say_hi
+    end
+
     desc "build", "Build your static site"
     option :in, default: "./site/", aliases: [:i]
     option :out, default: "./_build/", aliases: [:o]
