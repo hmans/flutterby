@@ -10,7 +10,7 @@ This sample project is set up as a simple blog, but of course you can do so much
 | `/_config.toml` | Your site configuration. |
 | `/css/styles.css.scss` | Your stylesheet. [Sass]-powered, of course! |
 | `/_layout.erb` | Your global site layout. |
-| `/posts/_layout.erb` | Your post-specific layout. |
+| `/posts/_layout.slim` | Your post-specific layout. |
 
 #### Recommended Reading
 
