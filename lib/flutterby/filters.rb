@@ -40,7 +40,7 @@ Flutterby::Filters.add("rb") do |node|
 end
 
 Flutterby::Filters.add(["md", "markdown"]) do |node|
-  node.body = Flutterby::MarkdownFormatter.new(node.body).complete.to_s
+  node.body = Flutterby::MarkdownFormatter.new(node.body).complete.to_s.html_safe
 end
 
 Flutterby::Filters.add("scss") do |node|
