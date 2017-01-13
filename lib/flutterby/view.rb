@@ -1,10 +1,11 @@
 module Flutterby
   class View
-    attr_reader :node
+    attr_reader :node, :opts
     alias_method :page, :node
 
     def initialize(node)
       @node = node
+      @opts = {}
     end
 
     def date_format(date, fmt)

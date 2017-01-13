@@ -245,7 +245,9 @@ module Flutterby
       @data
     end
 
-    def render(layout: false)
+    def render(opts = {})
+      layout = opts[:layout]
+      view.opts.merge!(opts)
       (layout && apply_layout?) ? apply_layout(body) : body
     end
 
