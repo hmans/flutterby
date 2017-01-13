@@ -104,13 +104,11 @@ module Flutterby
       return self if path.nil? || path.empty?
 
       # remove duplicate slashes
-      path.gsub!(%r{//}, "/")
+      path.gsub!(%r{/+}, "/")
 
       case path
-      when %r{^\.\./?} then
-        parent ? parent.find($') : nil
-      when %r{^\.} then
-        self
+      when %r{^\./?} then
+        parent ? parent.find($') : root.find($')
       when %r{^/} then
         root.find($')
       when %r{^([^/]+)/?} then

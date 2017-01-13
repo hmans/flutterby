@@ -27,24 +27,23 @@ describe "#find" do
     expect(baz.find("/bar/baz")).to eq(baz)
   end
 
-  specify "find(.) returns the same node" do
-    expect(foo.find(".")).to eq(foo)
-    expect(foo.find("./")).to eq(foo)
+  specify "find(.) returns the parent" do
+    expect(baz.find(".")).to eq(bar)
+    expect(baz.find("./")).to eq(bar)
   end
 
-  specify "find(..) returns the parent" do
-    expect(baz.find("..")).to eq(bar)
-    expect(baz.find("../")).to eq(bar)
+  specify "find(..) returns the parent's parent" do
+    expect(baz.find("..")).to eq(root)
+    expect(baz.find("../")).to eq(root)
   end
 
   specify "crazy mixed expressions" do
-    expect(baz.find("../..")).to eq(root)
-    expect(bar.find("../foo")).to eq(foo)
-    expect(bar.find("../foo/../bar/baz")).to eq(baz)
+    expect(baz.find("../foo")).to eq(foo)
+    expect(baz.find("../foo/../bar/baz")).to eq(baz)
   end
 
   specify "reduce duplicate slashes" do
-    expect(baz.find("..//baz")).to eq(baz)
+    expect(baz.find("..//bar")).to eq(bar)
   end
 
   specify "not found" do
