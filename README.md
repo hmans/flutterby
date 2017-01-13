@@ -31,9 +31,9 @@ The new project template serves as a simple starting point for new projects. Let
 
 Flutterby comes with a local development server that will automatically pick up changes you make to your files:
 
-    flutterby server
+    flutterby serve
 
-**Note**: by default, both the `build` and `server` commands assume `./site/` to be the source directory and `./_build/` to be the export directory. Please refer to `flutterby help` to see how you can override these.
+**Note**: by default, both the `build` and `serve` commands assume `./site/` to be the source directory and `./_build/` to be the export directory. Please refer to `flutterby help` to see how you can override these.
 
 
 ## Examples
@@ -46,7 +46,7 @@ Please refer to the [Sites built with Flutterby](https://github.com/hmans/flutte
 Flutterby is young, but already quite functional. Here's a list of changes I'm intending to make in the near future -- if you want to work on any of these, let me know!
 
 - Performance! Right now, the source file for every node is read into RAM as a whole. Not a big problem when you're building a small site, but add some larger images, and you'll have one.
-- Change `flutterby server` so it doesn't always regenerate the _entire_ site graph when a file is modified.
+- Change `flutterby serve` so it doesn't always regenerate the _entire_ site graph when a file is modified.
 - Extract filters (like Slim, Sass etc.) to separate gems, to make the core gem more light-weight.
 - Improve the template site (`flutterby new`).
 - Produce a fun screencast to explain what the heck is going on here!
