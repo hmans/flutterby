@@ -1,6 +1,6 @@
 # Flutterby
 
-#### A very, very good static site generator.
+### A very, very good static site generator.
 
 [![Gem Version](https://badge.fury.io/rb/flutterby.svg)](https://badge.fury.io/rb/flutterby) [![Build Status](https://travis-ci.org/hmans/flutterby.svg?branch=master)](https://travis-ci.org/hmans/flutterby) [![license](https://img.shields.io/github/license/hmans/flutterby.svg)](https://github.com/hmans/flutterby/blob/master/LICENSE.txt) ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
 
