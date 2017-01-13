@@ -255,7 +255,7 @@ module Flutterby
       walk_up(input) do |e, current|
         if layout = e.sibling("_layout")
           tilt = Tilt[layout.ext].new { layout.source }
-          tilt.render(view) { current }
+          tilt.render(view) { current }.html_safe
         else
           current
         end
