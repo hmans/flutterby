@@ -2,7 +2,7 @@
 
 # Flutterby
 
-#### A very good static site generator.
+#### A very, very good static site generator.
 
 
 ### Key Features
