@@ -1,5 +1,8 @@
 # Version History
 
+### 0.3.0 (in development)
+
+
 ### 0.2.0 (2017-01-13)
 
 - **BREAKING CHANGE:** The default for `Node#render` is now to _not_ render a layout. Pass `layout: true` if you do want the node to be rendered within a layout.
