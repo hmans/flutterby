@@ -35,6 +35,11 @@ module Flutterby
   end
 end
 
+Flutterby::Filters.add("erb") do |node|
+  template = Tilt::ErubisTemplate.new(escape: true) { node.body }
+  node.body = template.render(node.view)
+end
+
 Flutterby::Filters.add("rb") do |node|
   node.instance_eval(node.body)
 end
