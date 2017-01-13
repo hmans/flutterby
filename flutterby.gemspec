@@ -40,6 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'listen', '~> 3.1'
   spec.add_dependency 'mime-types', '~> 3.1'
   spec.add_dependency 'better_errors', '~> 2.1'
+  spec.add_dependency 'activesupport', '~> 5.0'
 
   # We support some template engines out of the box.
   # There's a chance these will be extracted/made optional
