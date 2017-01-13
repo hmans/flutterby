@@ -10,7 +10,7 @@ describe "html escaping" do
       EOF
     end
 
-    its(:body) { is_expected.to eq("Moo") }
+    its(:body) { is_expected.to include("Hi! &lt;g&gt;") }
   end
 
   context "with Slim" do
@@ -24,6 +24,6 @@ describe "html escaping" do
       EOF
     end
 
-    its(:body) { is_expected.to eq("Hi! &lt;g&gt;") }
+    its(:body) { is_expected.to include("Hi! &lt;g&gt;") }
   end
 end

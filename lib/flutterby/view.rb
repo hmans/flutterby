@@ -3,6 +3,17 @@ module Flutterby
     attr_reader :node, :opts
     alias_method :page, :node
 
+    concerning :SafeBuffer do
+      def _safe_buffer=(v)
+        @_safe_buffer ||= ActiveSupport::SafeBuffer.new("")
+        @_safe_buffer << v
+      end
+
+      def _safe_buffer
+        @_safe_buffer
+      end
+    end
+
     def initialize(node)
       @node = node
       @opts = {}
