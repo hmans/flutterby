@@ -2,7 +2,7 @@ require 'sass'
 require 'tilt'
 require 'slim'
 require 'builder'
-require 'slodown'
+require 'flutterby/markdown_formatter'
 
 module Flutterby
   module Filters
@@ -40,7 +40,7 @@ Flutterby::Filters.add("rb") do |node|
 end
 
 Flutterby::Filters.add(["md", "markdown"]) do |node|
-  node.body = Slodown::Formatter.new(node.body).complete.to_s
+  node.body = Flutterby::MarkdownFormatter.new(node.body).complete.to_s
 end
 
 Flutterby::Filters.add("scss") do |node|
