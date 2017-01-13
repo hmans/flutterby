@@ -1,6 +1,6 @@
 # Version History
 
-### 0.2.0 (in development)
+### 0.2.0 (2017-01-13)
 
 - **BREAKING CHANGE:** The default for `Node#render` is now to _not_ render a layout. Pass `layout: true` if you do want the node to be rendered within a layout.
 - **BREAKING CHANGE:** The behavior of `find` has now changed with regard to relative paths. `find(".")` will now return _the node's parent_ (ie. it's folder); before, a single dot would return the node itself. This change was made to make `find` behave more like what you would expect from a file system.
