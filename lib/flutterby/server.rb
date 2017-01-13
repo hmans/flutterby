@@ -1,5 +1,6 @@
 require 'rack'
 require 'listen'
+require 'better_errors'
 
 module Flutterby
   class Server
@@ -20,6 +21,14 @@ module Flutterby
         @root.stage!
       end
 
+      # Set up Rack app
+      BetterErrors.application_root = __dir__
+      this = self
+      app = Rack::Builder.app do |app|
+        app.use BetterErrors::Middleware
+        app.run this
+      end
+
       # Set up server
       server = Rack::Handler::WEBrick
 
@@ -31,7 +40,7 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run self, Port: @port, Logger: Flutterby.logger
+      server.run app, Port: @port, Logger: Flutterby.logger
     end
 
     def call(env)
