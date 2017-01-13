@@ -37,3 +37,27 @@ ul.post-list {
   list-style: none;
   padding-left: 0;
 }
+
+
+/* embedded code */
+code {
+  background-color: #e8e8e8;
+  font: 85% "Office Code Pro",Menlo,Consolas,Monaco,monotype;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+pre>code {
+  padding: 15px !important;
+}
+
+/* tables */
+table {
+}
+
+td {
+  vertical-align: top;
+}
+td+td {
+  padding-left: 10px;
+}
