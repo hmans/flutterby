@@ -9,7 +9,7 @@ require 'flutterby/markdown_formatter'
 module Flutterby
   module Filters
     def self.apply!(node)
-      node.body = node.source
+      node.body = node.source.try(:html_safe)
 
       # Apply all filters
       node.filters.each do |filter|
