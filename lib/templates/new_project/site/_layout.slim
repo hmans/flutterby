@@ -1,0 +1,20 @@
+doctype html
+html 
+  head
+    meta charset="utf-8"
+    title = config["site"]["title"]
+
+    // highlight.js for syntax highlighting 
+    link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css"
+    script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"
+
+    // Our own assets
+    link rel="stylesheet" href="/css/styles.css"
+    script src="/js/app.js"
+  
+  body
+    .container
+      == yield 
+
+      footer role="main"
+        = config["site"]["description"]
