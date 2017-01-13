@@ -30,8 +30,7 @@ module Flutterby
     end
 
     def self.tilt(format, body)
-      t = Tilt[format] and
-        t.new(outvar: "self._safe_buffer") { body }
+      t = Tilt[format] and t.new() { body }
     end
   end
 end

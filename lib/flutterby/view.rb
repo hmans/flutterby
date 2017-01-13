@@ -5,8 +5,7 @@ module Flutterby
 
     concerning :SafeBuffer do
       def _safe_buffer=(v)
-        @_safe_buffer ||= ActiveSupport::SafeBuffer.new("")
-        @_safe_buffer << v
+        @_safe_buffer = v.is_a?(String) ? ActiveSupport::SafeBuffer.new(v) : v
       end
 
       def _safe_buffer
