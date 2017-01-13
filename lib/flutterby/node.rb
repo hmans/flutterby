@@ -252,9 +252,9 @@ module Flutterby
     end
 
     def apply_layout(input)
-      walk_up(input) do |e, current|
-        if layout = e.sibling("_layout")
-          tilt = Tilt[layout.ext].new { layout.source }
+      walk_up(input) do |node, current|
+        if layout = node.sibling("_layout")
+          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
           tilt.render(view) { current }.html_safe
         else
           current

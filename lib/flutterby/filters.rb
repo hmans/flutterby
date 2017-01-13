@@ -1,3 +1,4 @@
+require 'erubis'
 require 'sass'
 require 'tilt'
 require 'slim'
@@ -36,7 +37,7 @@ module Flutterby
 end
 
 Flutterby::Filters.add("erb") do |node|
-  template = Tilt::ErubisTemplate.new(escape: true) { node.body }
+  template = Tilt::ErubisTemplate.new(escape_html: true) { node.body }
   node.body = template.render(node.view)
 end
 
