@@ -1,4 +1,5 @@
 require 'erubis'
+require 'erubis/auto'
 require 'sass'
 require 'tilt'
 require 'slim'
@@ -30,15 +31,16 @@ module Flutterby
       end
     end
 
-    def self.tilt(format, body)
-      t = Tilt[format] and t.new() { body }
+    def self.tilt(format, body, options = {})
+      default_options = {
+        "erb" => { engine_class: Erubis::Auto::EscapedEruby }
+      }
+
+      options = default_options.fetch(format, {}).merge(options)
+
+      t = Tilt[format] and t.new(options) { body }
     end
   end
-end
-
-Flutterby::Filters.add("erb") do |node|
-  template = Tilt::ErubisTemplate.new(escape_html: true) { node.body }
-  node.body = template.render(node.view)
 end
 
 Flutterby::Filters.add("rb") do |node|
