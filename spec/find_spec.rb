@@ -7,10 +7,10 @@ describe "#find" do
   #         +-- baz
   #
 
-  let!(:root) { Flutterby::Node.new("/") }
-  let!(:foo)  { Flutterby::Node.new("foo", parent: root) }
-  let!(:bar)  { Flutterby::Node.new("bar", parent: root) }
-  let!(:baz)  { Flutterby::Node.new("baz.html", parent: bar) }
+  let!(:root) { node "/" }
+  let!(:foo)  { node "foo", parent: root }
+  let!(:bar)  { node "bar", parent: root }
+  let!(:baz)  { node "baz.html", parent: bar }
 
   specify "normal singular expressions" do
     expect(root.find("foo")).to eq(foo)
