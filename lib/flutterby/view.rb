@@ -12,6 +12,10 @@ module Flutterby
       date.strftime(fmt)
     end
 
+    def raw(str)
+      str.html_safe
+    end
+
     def render(expr, *args)
       find(expr).render(*args)
     end
