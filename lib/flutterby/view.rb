@@ -3,6 +3,13 @@ module Flutterby
     attr_reader :node, :opts
     alias_method :page, :node
 
+    # Include ERB::Util from ActiveSupport. This will provide
+    # html_escape, h, and json_escape helpers.
+    #
+    # http://api.rubyonrails.org/classes/ERB/Util.html
+    #
+    include ERB::Util
+
     def initialize(node)
       @node = node
       @opts = {}
@@ -10,6 +17,10 @@ module Flutterby
 
     def date_format(date, fmt)
       date.strftime(fmt)
+    end
+
+    def raw(str)
+      str.html_safe
     end
 
     def render(expr, *args)
@@ -25,6 +36,9 @@ module Flutterby
     end
 
     class << self
+      # Factory method that returns a newly created view for the given node.
+      # It also makes sure all available _view.rb extensions are loaded.
+      #
       def for(file)
         # create a new view instance
         view = new(file)

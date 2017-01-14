@@ -1,3 +1,5 @@
+require 'erubis'
+require 'erubis/auto'
 require 'sass'
 require 'tilt'
 require 'slim'
@@ -7,7 +9,7 @@ require 'flutterby/markdown_formatter'
 module Flutterby
   module Filters
     def self.apply!(node)
-      node.body = node.source
+      node.body = node.source.try(:html_safe)
 
       # Apply all filters
       node.filters.each do |filter|
@@ -16,7 +18,7 @@ module Flutterby
         if Filters.respond_to?(meth)
           Filters.send(meth, node)
         elsif template = tilt(filter, node.body)
-          node.body = template.render(node.view)
+          node.body = template.render(node.view).html_safe
         else
           Flutterby.logger.warn "Unsupported filter '#{filter}' for #{node.url}"
         end
@@ -29,8 +31,14 @@ module Flutterby
       end
     end
 
-    def self.tilt(format, body)
-      t = Tilt[format] and t.new { body }
+    def self.tilt(format, body, options = {})
+      default_options = {
+        "erb" => { engine_class: Erubis::Auto::EscapedEruby }
+      }
+
+      options = default_options.fetch(format, {}).merge(options)
+
+      t = Tilt[format] and t.new(options) { body }
     end
   end
 end
@@ -40,7 +48,7 @@ Flutterby::Filters.add("rb") do |node|
 end
 
 Flutterby::Filters.add(["md", "markdown"]) do |node|
-  node.body = Flutterby::MarkdownFormatter.new(node.body).complete.to_s
+  node.body = Flutterby::MarkdownFormatter.new(node.body).complete.to_s.html_safe
 end
 
 Flutterby::Filters.add("scss") do |node|

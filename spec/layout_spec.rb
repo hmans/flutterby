@@ -3,7 +3,7 @@ describe "layouts" do
 
   let!(:outer_layout) do
     node "_layout.erb", parent: root, source: <<~EOF
-    <h1>Outer Layout</h1>
+    <h1><%= "Outer Layout <g>" %></h1>
     <%= yield %>
     EOF
   end
@@ -26,7 +26,7 @@ describe "layouts" do
   end
 
   let(:expected_output) do
-    %{<h1>Outer Layout</h1>\n<h2>Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n\n}
+    %{<h1>Outer Layout &lt;g&gt;</h1>\n<h2>Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n\n}
   end
 
   specify do

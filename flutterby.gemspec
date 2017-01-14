@@ -31,6 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'gem-release', '~> 0'
   spec.add_development_dependency 'pry', '~> 0.10'
 
+  spec.add_dependency 'erubis', '~> 2.7'
+  spec.add_dependency 'erubis-auto', '~> 1.0.1'
   spec.add_dependency 'json', '~> 2.0'
   spec.add_dependency 'thor', '~> 0.19'
   spec.add_dependency 'highline', '~> 1.7'
@@ -40,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'listen', '~> 3.1'
   spec.add_dependency 'mime-types', '~> 3.1'
   spec.add_dependency 'better_errors', '~> 2.1'
+  spec.add_dependency 'activesupport', '~> 5.0'
 
   # We support some template engines out of the box.
   # There's a chance these will be extracted/made optional
