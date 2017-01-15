@@ -1,6 +1,6 @@
 # Version History
 
-### 0.3.0 (in development)
+### 0.3.0 (2017-01-15)
 
 - **NEW:** Flutterby now uses ActiveSupport. It's a big dependency, but there's just so much useful goodness in there -- let's ride on the shoulders of that giant! This allows you to use all the neat little ActiveSupport toys you may know from Rails in your Flutterby project.
 - **CHANGE:** Thanks to the new inclusion of ActiveSupport, Flutterby now properly deals with HTML escaping (by way of `ActiveSupport::SafeBuffer`). This may not be critically important to static sites, but since Flutterby aspires to also power live sites, better make this change now than later. To sum things up, Flutterby now deals with HTML escaping pretty much like Rails does. Hooray!
