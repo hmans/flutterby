@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.10'
 
   spec.add_dependency 'erubis', '~> 2.7'
-  spec.add_dependency 'erubis-auto', '~> 1.0.1'
+  spec.add_dependency 'erubis-auto', '~> 1.0'
   spec.add_dependency 'json', '~> 2.0'
   spec.add_dependency 'thor', '~> 0.19'
   spec.add_dependency 'highline', '~> 1.7'
