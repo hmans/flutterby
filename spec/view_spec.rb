@@ -38,8 +38,12 @@ describe "tag helpers" do
   end
 
   describe '#link_to' do
-    it "generated a correct a tag" do
+    it "generates links to nodes" do
       expect(view.link_to("Bar", bar)).to eq(%{<a href="/bar">Bar</a>})
+    end
+
+    it "generates links to URL strings" do
+      expect(view.link_to("Bar", "http://bar.com")).to eq(%{<a href="http://bar.com">Bar</a>})
     end
 
     it "can use custom HTML attributes" do

@@ -49,7 +49,12 @@ module Flutterby
     end
 
     def link_to(text, target, attrs = {})
-      tag(:a, attrs.merge(href: target.url)) { text }
+      href = case target
+      when Flutterby::Node then target.url
+      else target.to_s
+      end
+
+      tag(:a, attrs.merge(href: href)) { text }
     end
 
     class << self
