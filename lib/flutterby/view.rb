@@ -37,8 +37,8 @@ module Flutterby
 
     def tag(name, attributes)
       ActiveSupport::SafeBuffer.new.tap do |output|
-        attributes_str = attributes.map do |k, v|
-          %{#{h k}="#{h v}"}
+        attributes_str = attributes.keys.sort.map do |k|
+          %{#{h k}="#{h attributes[k]}"}
         end.join(" ")
 
         opening_tag = "#{h name.downcase} #{attributes_str}".strip
@@ -48,8 +48,8 @@ module Flutterby
       end
     end
 
-    def link_to(text, target)
-      tag(:a, href: target.url) { text }
+    def link_to(text, target, attrs = {})
+      tag(:a, attrs.merge(href: target.url)) { text }
     end
 
     class << self

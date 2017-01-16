@@ -41,5 +41,9 @@ describe "tag helpers" do
     it "generated a correct a tag" do
       expect(view.link_to("Bar", bar)).to eq(%{<a href="/bar">Bar</a>})
     end
+
+    it "can use custom HTML attributes" do
+      expect(view.link_to("Bar", bar, class: "foo")).to eq(%{<a class="foo" href="/bar">Bar</a>})
+    end
   end
 end
