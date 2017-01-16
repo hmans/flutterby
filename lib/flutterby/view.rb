@@ -35,6 +35,26 @@ module Flutterby
       node.siblings(*args)
     end
 
+    def tag(name, attributes)
+      ActiveSupport::SafeBuffer.new.tap do |output|
+        attributes_str = attributes.map do |k, v|
+          %{#{h k}="#{h v}"}
+        end.join(" ")
+
+        opening_tag = "#{name.downcase} #{attributes_str}".strip
+        output << "<#{opening_tag}>".html_safe
+
+        if block_given?
+          output << yield
+          output << "</#{name}>".html_safe
+        end
+      end
+    end
+
+    def link_to(text, target)
+      tag(:a, href: target.url) { text }
+    end
+
     class << self
       # Factory method that returns a newly created view for the given node.
       # It also makes sure all available _view.rb extensions are loaded.
