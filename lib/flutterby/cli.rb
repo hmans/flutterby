@@ -60,7 +60,7 @@ module Flutterby
       root.stage!
       say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
-      say color("🌤  Serving your site on port #{options.port}. Enjoy!", :bold)
+      say color("🌤  Serving your Flutterby site on http://localhost:#{options.port} - enjoy! \\o/", :bold)
       server = Flutterby::Server.new(root, port: options.port)
       server.run!
     end
