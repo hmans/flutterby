@@ -41,13 +41,10 @@ module Flutterby
           %{#{h k}="#{h v}"}
         end.join(" ")
 
-        opening_tag = "#{name.downcase} #{attributes_str}".strip
+        opening_tag = "#{h name.downcase} #{attributes_str}".strip
         output << "<#{opening_tag}>".html_safe
-
-        if block_given?
-          output << yield
-          output << "</#{name}>".html_safe
-        end
+        output << yield if block_given?
+        output << "</#{h name}>".html_safe
       end
     end
 
