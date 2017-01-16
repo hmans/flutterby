@@ -2,6 +2,9 @@
 
 ### 0.4.0 (in development)
 
+- **NEW:** Flutterby views now have a `tag` helper method available that can generate HTML tags programatically.
+- **NEW:** Flutterby views now have a `link_to` helper method available that renders link tags. You can use a URL string as the link target, eg. `link_to "Home", "/"`, or any Flutterby node, eg. `link_to "Blog", blog_node`.
+
 
 ### 0.3.1 (2017-01-15)
 
