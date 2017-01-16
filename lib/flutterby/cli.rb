@@ -75,6 +75,7 @@ module Flutterby
 
       say color("🏗  Creating a new Flutterby project in #{path}...", :bold)
       directory("new_project", path)
+      chmod("bin/flutterby", 0755)
       in_root { bundle_install }
     end
 
