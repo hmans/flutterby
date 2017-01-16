@@ -1,5 +1,8 @@
 # Version History
 
+### 0.4.0 (in development)
+
+
 ### 0.3.1 (2017-01-15)
 
 - **NEW:** Flutterby now uses ActiveSupport. It's a big dependency, but there's just so much useful goodness in there -- let's ride on the shoulders of that giant! This allows you to use all the neat little ActiveSupport toys you may know from Rails in your Flutterby project.
