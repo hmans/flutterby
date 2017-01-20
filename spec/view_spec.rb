@@ -51,3 +51,20 @@ describe "tag helpers" do
     end
   end
 end
+
+describe '#debug helper' do
+  let(:page)   { node "page.html.erb" }
+  let(:view)   { Flutterby::View.for(page) }
+
+  context "when passed any object that can be serialized to YAML" do
+    let(:object) { {bar: "baz"} }
+
+    let(:expected_output) do
+      %{<pre class=\"debug\">---\n:bar: baz\n</pre>}
+    end
+
+    it "dumps the object's YAML representation into a <pre> tag" do
+      expect(view.debug(object)).to eq(expected_output)
+    end
+  end
+end

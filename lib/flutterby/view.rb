@@ -57,6 +57,10 @@ module Flutterby
       tag(:a, attrs.merge(href: href)) { text }
     end
 
+    def debug(obj)
+      tag(:pre, class: "debug") { h obj.to_yaml }
+    end
+
     class << self
       # Factory method that returns a newly created view for the given node.
       # It also makes sure all available _view.rb extensions are loaded.
