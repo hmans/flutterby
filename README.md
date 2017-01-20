@@ -18,6 +18,9 @@
 - [Blog post introducing Flutterby](http://hmans.io/posts/2017/01/11/flutterby.html)
 - [New project template](https://github.com/hmans/flutterby/tree/master/lib/templates/new_project) (example code)
 - [Version History](https://github.com/hmans/flutterby/blob/master/CHANGES.md)
+- [Roadmap](https://github.com/hmans/flutterby/projects/1)
+- [Sites built with Flutterby](https://github.com/hmans/flutterby/wiki/Sites-built-with-Flutterby) (add yours!)
+
 
 ## Installation & Basic Usage
 
@@ -40,22 +43,6 @@ Flutterby comes with a local development server that will automatically pick up 
 
 **Note**: by default, both the `build` and `serve` commands assume `./site/` to be the source directory and `./_build/` to be the export directory. Please refer to `flutterby help` to see how you can override these.
 
-
-## Examples
-
-Please refer to the [Sites built with Flutterby](https://github.com/hmans/flutterby/wiki/Sites-built-with-Flutterby) page on the Flutterby Wiki for some examples.
-
-
-## Roadmap
-
-Flutterby is young, but already quite functional. Here's a list of changes I'm intending to make in the near future -- if you want to work on any of these, let me know!
-
-- Performance! Right now, the source file for every node is read into RAM as a whole. Not a big problem when you're building a small site, but add some larger images, and you'll have one.
-- Change `flutterby serve` so it doesn't always regenerate the _entire_ site graph when a file is modified.
-- Extract filters (like Slim, Sass etc.) to separate gems, to make the core gem more light-weight.
-- Improve the template site (`flutterby new`).
-- Produce a fun screencast to explain what the heck is going on here!
-- Write even more tests!
 
 
 ## Notes
