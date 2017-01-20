@@ -16,3 +16,38 @@ describe Flutterby::View do
     its(:body) { is_expected.to eq('&lt;g&gt;') }
   end
 end
+
+describe "tag helpers" do
+  let(:root) { node "/" }
+  let(:foo)  { node "foo", parent: root }
+  let(:bar)  { node "bar", parent: root }
+  let(:view) { Flutterby::View.for(foo) }
+
+  describe '#tag' do
+    it "generates HTML tags" do
+      expect(view.tag(:div, class: "foo")).to eq(%{<div class="foo"></div>})
+    end
+
+    it "properly escapes quotes in attributes" do
+      expect(view.tag(:div, class: "foo\"bar")).to eq(%{<div class="foo&quot;bar"></div>})
+    end
+
+    it "properly escapes quotes in tag names" do
+      expect(view.tag("foo\"bar", class: "foo")).to eq(%{<foo&quot;bar class="foo"></foo&quot;bar>})
+    end
+  end
+
+  describe '#link_to' do
+    it "generates links to nodes" do
+      expect(view.link_to("Bar", bar)).to eq(%{<a href="/bar">Bar</a>})
+    end
+
+    it "generates links to URL strings" do
+      expect(view.link_to("Bar", "http://bar.com")).to eq(%{<a href="http://bar.com">Bar</a>})
+    end
+
+    it "can use custom HTML attributes" do
+      expect(view.link_to("Bar", bar, class: "foo")).to eq(%{<a class="foo" href="/bar">Bar</a>})
+    end
+  end
+end
