@@ -44,7 +44,7 @@ module Flutterby
     end
 
     def call(env)
-      req  = Rack::Request.new(env)
+      req = Rack::Request.new(env)
       res = Rack::Response.new([], 200, {})
 
       # Look for target node in path registry
@@ -65,9 +65,11 @@ module Flutterby
     end
 
     def find_node_for_path(path)
-      @root.paths[path] ||
-      @root.paths[path + ".html"] ||
-      @root.paths[::File.join(path, "index.html")]
+      node = @root.find(path)
+
+      # If the node is a folder, try and find its "index" node.
+      # Otherwise, use the node directly.
+      node.folder? ? node.find('index') : node
     end
   end
 end

@@ -4,7 +4,7 @@ module Flutterby
   class Node
     attr_accessor :name, :ext, :source
     attr_writer :body
-    attr_reader :filters, :parent, :fs_path, :children, :paths
+    attr_reader :filters, :parent, :fs_path, :children
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
@@ -25,12 +25,6 @@ module Flutterby
     end
 
     concerning :Children do
-      def register_url!
-        if file? && should_publish?
-          root.paths[url] = self
-        end
-      end
-
       def find_child(name)
         if name.include?(".")
           @children.find { |c| c.full_name == name }
@@ -144,7 +138,6 @@ module Flutterby
         @body     = nil
         @data     = nil
         @children = []
-        @paths    = {}
 
         load_from_filesystem! if @fs_path
       end
@@ -233,7 +226,6 @@ module Flutterby
         #
         walk_tree do |node|
           node.render_body! if node.should_prerender?
-          node.register_url! if node.should_publish?
         end
       end
 
