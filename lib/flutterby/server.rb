@@ -65,11 +65,11 @@ module Flutterby
     end
 
     def find_node_for_path(path)
-      node = @root.find(path)
-
-      # If the node is a folder, try and find its "index" node.
-      # Otherwise, use the node directly.
-      node.folder? ? node.find('index') : node
+      if node = @root.find(path)
+        # If the node is a folder, try and find its "index" node.
+        # Otherwise, use the node directly.
+        node.folder? ? node.find('index') : node
+      end
     end
   end
 end

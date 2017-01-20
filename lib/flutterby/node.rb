@@ -33,6 +33,10 @@ module Flutterby
         end
       end
 
+      def emit_child(name)
+        # Override this to dynamically create child nodes.
+      end
+
       def tree_size
         children.inject(children.length) do |count, child|
           count + child.tree_size
@@ -92,7 +96,7 @@ module Flutterby
         return self if path.nil? || path.empty?
 
         # remove duplicate slashes
-        path.gsub!(%r{/+}, "/")
+        path = path.gsub(%r{/+}, "/")
 
         case path
         when %r{^\./?} then
@@ -100,7 +104,13 @@ module Flutterby
         when %r{^/} then
           root.find($')
         when %r{^([^/]+)/?} then
-          child = find_child($1)
+          # Use the next path part to find a child by that name.
+          # If no child can't be found, try to emit a child, but
+          # not if the requested name starts with an underscore.
+          child = find_child($1) || (emit_child($1) unless $1.start_with?("_"))
+
+          # Depending on the tail of the requested find expression,
+          # either return the found node, or ask it to find the tail.
           $'.empty? ? child : child.find($')
         end
       end
@@ -163,7 +173,7 @@ module Flutterby
       end
 
       def extract_data!
-        @data ||= {}
+        @data ||= {}.with_indifferent_access
 
         # Extract date from name
         if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
@@ -322,9 +332,10 @@ module Flutterby
       Flutterby.logger
     end
 
-    def copy(new_name)
+    def copy(new_name, data = {})
       dup.tap do |c|
         c.name = new_name
+        c.data.merge!(data)
         parent.children << c
       end
     end
