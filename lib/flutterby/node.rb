@@ -243,6 +243,17 @@ module Flutterby
             node.instance_eval(node.body)
           end
         end
+
+        # In a second pass, walk the tree to invoke any available
+        # setup methods.
+        #
+        TreeWalker.walk_tree(self) do |node|
+          node.setup
+        end
+      end
+
+      # Override this method in any node that requires specific setup.
+      def setup
       end
 
       # Extend all of this node's siblings with the specified module.
