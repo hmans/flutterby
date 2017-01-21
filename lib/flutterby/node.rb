@@ -24,13 +24,18 @@ module Flutterby
       reload!
     end
 
-    concerning :Paths do
+    module Paths
+      # Returns the node's URL.
+      #
       def url
         ::File.join(parent ? parent.url : "/", full_name)
       end
     end
 
-    concerning :Tree do
+    include Paths
+
+
+    module Tree
       # Returns the tree's root node.
       #
       def root
@@ -165,7 +170,10 @@ module Flutterby
       end
     end
 
-    concerning :Reading do
+    include Tree
+
+
+    module Reading
       def reload!
         @body     = nil
         @data     = nil
@@ -188,7 +196,10 @@ module Flutterby
       end
     end
 
-    concerning :Data do
+    include Reading
+
+
+    module Data
       def data
         extract_data! if @data.nil?
         @data
@@ -244,7 +255,11 @@ module Flutterby
       end
     end
 
-    concerning :Staging do
+    include Data
+
+
+
+    module Staging
       def stage!
         # First of all, we want to make sure all nodes have their
         # available extensions loaded.
@@ -273,8 +288,10 @@ module Flutterby
       end
     end
 
+    include Staging
 
-    concerning :Rendering do
+
+    module Rendering
       def view
         @view ||= View.for(self)
       end
@@ -318,6 +335,7 @@ module Flutterby
       end
     end
 
+    include Rendering
 
 
 
