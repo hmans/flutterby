@@ -239,7 +239,7 @@ module Flutterby
         #
         TreeWalker.walk_tree(self) do |node|
           if node.full_name == "_init.rb"
-            logger.info "Executing initializer #{node.url}"
+            logger.debug "Executing initializer #{node.url}"
             node.instance_eval(node.body)
           end
         end
@@ -265,7 +265,7 @@ module Flutterby
           Filters.apply!(self)
         end
 
-        logger.info "Rendered #{url} in #{sprintf "%.1f", time * 1000}ms"
+        logger.debug "Rendered #{url} in #{sprintf "%.1f", time * 1000}ms"
       end
 
       def body
