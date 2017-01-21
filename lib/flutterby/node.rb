@@ -102,6 +102,7 @@ module Flutterby
       end
 
       def find(path)
+        path = path.to_s
         return self if path.nil? || path.empty?
 
         # remove duplicate slashes
@@ -116,11 +117,11 @@ module Flutterby
           # Use the next path part to find a child by that name.
           # If no child can't be found, try to emit a child, but
           # not if the requested name starts with an underscore.
-          child = find_child($1) || (emit_child($1) unless $1.start_with?("_"))
-
-          # Depending on the tail of the requested find expression,
-          # either return the found node, or ask it to find the tail.
-          $'.empty? ? child : child.find($')
+          if child = find_child($1) || (emit_child($1) unless $1.start_with?("_"))
+            # Depending on the tail of the requested find expression,
+            # either return the found node, or ask it to find the tail.
+            $'.empty? ? child : child.find($')
+          end
         end
       end
 
