@@ -54,6 +54,18 @@ module Flutterby
         parent && (parent.children - [self])
       end
 
+      # Among this node's children, find a node by its name. If the
+      # name passed as an argument includes a dot, the name will match against
+      # the full name of the children; otherwise, just the base name.
+      #
+      # Examples:
+      #
+      #     # returns the first child called "index"
+      #     find_child("index")
+      #
+      #     # returns the child called "index" with extension "html"
+      #     find_child("index.html")
+      #
       def find_child(name)
         if name.include?(".")
           @children.find { |c| c.full_name == name }
