@@ -257,26 +257,30 @@ module Flutterby
       def setup
       end
 
-      # Extend all of this node's siblings with the specified module(s). If
-      # a block is given, the siblings will be extended with the code found
-      # in the block.
+      # Extend all of this node's siblings. See {#extend_all}.
       #
       def extend_siblings(*mods, &blk)
-        if block_given?
-          mods << Module.new(&blk)
-        end
-
-        siblings.each do |n|
-          n.extend(*mods)
-        end
+        extend_all(siblings, *mods, &blk)
       end
 
+      # Extend this node's parent. See {#extend_all}.
+      #
       def extend_parent(*mods, &blk)
+        extend_all([parent], *mods, &blk)
+      end
+
+      # Extend all of the specified `nodes` with the specified module(s). If
+      # a block is given, the nodes will be extended with the code found
+      # in the block.
+      #
+      def extend_all(nodes, *mods, &blk)
         if block_given?
           mods << Module.new(&blk)
         end
 
-        parent.extend(*mods)
+        nodes.each do |n|
+          n.extend(*mods)
+        end
       end
     end
 
