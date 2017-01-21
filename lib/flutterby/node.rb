@@ -343,9 +343,10 @@ module Flutterby
       Flutterby.logger
     end
 
-    def copy(new_name)
+    def copy(new_name, data = {})
       dup.tap do |c|
         c.name = new_name
+        c.data.merge!(data)
         parent.children << c
       end
     end
