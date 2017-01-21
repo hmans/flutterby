@@ -25,10 +25,6 @@ module Flutterby
     end
 
     concerning :Paths do
-      def path
-        parent ? ::File.join(parent.path, full_name) : full_name
-      end
-
       def url
         ::File.join(parent ? parent.url : "/", full_name)
       end
