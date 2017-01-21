@@ -4,7 +4,7 @@ module Flutterby
   class Node
     attr_accessor :name, :ext, :source
     attr_writer :body
-    attr_reader :filters, :parent, :fs_path, :children, :paths
+    attr_reader :filters, :parent, :fs_path, :children
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
@@ -25,18 +25,16 @@ module Flutterby
     end
 
     concerning :Children do
-      def register_url!
-        if file? && should_publish?
-          root.paths[url] = self
-        end
-      end
-
       def find_child(name)
         if name.include?(".")
           @children.find { |c| c.full_name == name }
         else
           @children.find { |c| c.name == name }
         end
+      end
+
+      def emit_child(name)
+        # Override this to dynamically create child nodes.
       end
 
       def tree_size
@@ -120,8 +118,14 @@ module Flutterby
         when %r{^/} then
           root.find($')
         when %r{^([^/]+)/?} then
-          child = find_child($1)
-          $'.empty? ? child : child.find($')
+          # Use the next path part to find a child by that name.
+          # If no child can't be found, try to emit a child, but
+          # not if the requested name starts with an underscore.
+          if child = find_child($1) || (emit_child($1) unless $1.start_with?("_"))
+            # Depending on the tail of the requested find expression,
+            # either return the found node, or ask it to find the tail.
+            $'.empty? ? child : child.find($')
+          end
         end
       end
 
@@ -158,7 +162,6 @@ module Flutterby
         @body     = nil
         @data     = nil
         @children = []
-        @paths    = {}
 
         load_from_filesystem! if @fs_path
       end
@@ -247,7 +250,6 @@ module Flutterby
         #
         walk_tree do |node|
           node.render_body! if node.should_prerender?
-          node.register_url! if node.should_publish?
         end
       end
 
