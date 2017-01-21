@@ -21,8 +21,8 @@ module Flutterby
     end
 
     desc "build", "Build your static site"
-    option :in, default: "./site/", aliases: [:i]
-    option :out, default: "./_build/", aliases: [:o]
+    option :in, default: "./site/", aliases: ["-i"]
+    option :out, default: "./_build/", aliases: ["-o"]
 
     def build
       # Simplify logger output
@@ -49,8 +49,8 @@ module Flutterby
 
 
     desc "serve", "Serve your site locally"
-    option :in, default: "./site/", aliases: [:i]
-    option :port, default: 4004, aliases: [:p], type: :numeric
+    option :in, default: "./site/", aliases: ["-i"]
+    option :port, default: 4004, aliases: ["-p"], type: :numeric
 
     def serve
       say_hi
