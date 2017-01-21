@@ -243,24 +243,12 @@ module Flutterby
             node.instance_eval(node.body)
           end
         end
-
-        # Now do another pass, prerendering stuff where necessary,
-        # extracting data, registering URLs to be exported, etc.
-        #
-        TreeWalker.walk_tree(self) do |node|
-          node.render_body! if node.should_prerender?
-        end
       end
 
       # Extend all of this node's siblings with the specified module.
       #
       def extend_siblings(mod)
         siblings.each { |n| n.extend mod }
-      end
-
-      def should_prerender?
-        !folder? &&
-          (["json", "yml", "yaml", "rb", "toml"] & filters).any?
       end
     end
 
