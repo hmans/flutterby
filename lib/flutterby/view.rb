@@ -25,6 +25,11 @@ module Flutterby
       logger.debug "Rendered #{node.url} in #{sprintf "%.1f", time * 1000}ms"
     end
 
+    def to_s
+      render! if @_body.nil?
+      @_body
+    end
+
     def date_format(date, fmt)
       date.strftime(fmt)
     end
