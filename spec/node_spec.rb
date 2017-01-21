@@ -38,4 +38,16 @@ describe Flutterby::Node do
       its(:parent) { is_expected.to eq(folder_node) }
     end
   end
+
+  describe '#siblings' do
+    context "when there's a parent" do
+      subject { page_node }
+      its(:siblings) { is_expected.to eq([file_node]) }
+    end
+
+    context "when there's no parent" do
+      subject { folder_node }
+      its(:siblings) { is_expected.to eq(nil) }
+    end
+  end
 end

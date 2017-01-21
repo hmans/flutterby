@@ -51,7 +51,7 @@ module Flutterby
       # same folder node.)
       #
       def siblings
-        parent && parent.children
+        parent && (parent.children - [self])
       end
 
       def find_child(name)
