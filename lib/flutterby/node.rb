@@ -46,13 +46,18 @@ module Flutterby
       end
 
       def parent=(new_parent)
+        # Remove from previous parent
         if @parent
           @parent.children.delete(self)
         end
 
+        # Assign new parent (it may be nil)
         @parent = new_parent
 
-        @parent.children << self
+        # Notify new parent
+        if @parent
+          @parent.children << self
+        end
       end
 
       # Returns all children that will compile to a HTML page.
