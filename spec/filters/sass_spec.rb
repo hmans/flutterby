@@ -6,6 +6,6 @@ describe "Sass Filter" do
   end
 
   specify "converted into CSS, with working partials" do
-    expect(subject.body).to eq(expected)
+    expect(subject.render).to eq(expected)
   end
 end

@@ -3,7 +3,6 @@ require 'benchmark'
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
-    attr_writer :body
     attr_reader :filters, :parent, :fs_path, :children
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
@@ -22,6 +21,7 @@ module Flutterby
       end
 
       reload!
+      extract_data!
     end
 
     module Paths
@@ -148,7 +148,6 @@ module Flutterby
 
     module Reading
       def reload!
-        @body     = nil
         @data     = nil
         @children = []
 
@@ -188,14 +187,16 @@ module Flutterby
 
         # Read remaining data from frontmatter. Data in frontmatter
         # will always have precedence!
-        parse_frontmatter!
+        extract_frontmatter!
 
-        # Do some extra processing depending on extension
+        # Do some extra processing depending on extension. This essentially
+        # means that your .json etc. files will be rendered at least once at
+        # bootup.
         meth = "read_#{ext}!"
         send(meth) if respond_to?(meth)
       end
 
-      def parse_frontmatter!
+      def extract_frontmatter!
         @data || {}
 
         if @source
@@ -212,11 +213,11 @@ module Flutterby
       end
 
       def read_json!
-        @data.merge!(JSON.parse(body))
+        @data.merge!(JSON.parse(render))
       end
 
       def read_yaml!
-        @data.merge!(YAML.load(body))
+        @data.merge!(YAML.load(render))
       end
 
       def read_yml!
@@ -224,7 +225,7 @@ module Flutterby
       end
 
       def read_toml!
-        @data.merge!(TOML.parse(body))
+        @data.merge!(TOML.parse(render))
       end
     end
 
@@ -240,7 +241,7 @@ module Flutterby
         TreeWalker.walk_tree(self) do |node|
           if node.full_name == "_init.rb"
             logger.debug "Executing initializer #{node.url}"
-            node.instance_eval(node.body)
+            node.instance_eval(node.render)
           end
         end
 
@@ -283,47 +284,12 @@ module Flutterby
 
 
     module Rendering
-      def view
-        @view ||= View.for(self)
-      end
-
-      def render_body!
-        time = Benchmark.realtime do
-          Filters.apply!(self)
-        end
-
-        logger.debug "Rendered #{url} in #{sprintf "%.1f", time * 1000}ms"
-      end
-
-      def body
-        if @body.nil?
-          # FIXME: the following may result in render_body! being invoked twice.
-          data   # make sure data is lazy-loaded
-          render_body!
-        end
-
-        @body
+      def view(opts = {})
+        View.for(self, opts)
       end
 
       def render(opts = {})
-        layout = opts[:layout]
-        view.opts.merge!(opts)
-        (layout && apply_layout?) ? apply_layout(body) : body
-      end
-
-      def apply_layout(input)
-        TreeWalker.walk_up(self, input) do |node, current|
-          if layout = node.sibling("_layout")
-            tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-            tilt.render(view) { current }.html_safe
-          else
-            current
-          end
-        end
-      end
-
-      def apply_layout?
-        page?
+        view(opts).render!
       end
     end
 

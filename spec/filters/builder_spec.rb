@@ -21,6 +21,6 @@ describe "XMLBuilder filter" do
   end
 
   specify "renders to XML" do
-    expect(subject.body).to eq(output)
+    expect(subject.render).to eq(output)
   end
 end

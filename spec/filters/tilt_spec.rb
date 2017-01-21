@@ -18,5 +18,5 @@ describe "Tilt template fallback" do
   end
 
   its(:full_name) { is_expected.to eq("index.html") }
-  its(:body) { is_expected.to eq(expected_body) }
+  its(:render) { is_expected.to eq(expected_body) }
 end
