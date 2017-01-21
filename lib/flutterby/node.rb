@@ -31,10 +31,14 @@ module Flutterby
     end
 
     concerning :Tree do
+      # Returns the tree's root node.
+      #
       def root
         parent ? parent.root : self
       end
 
+      # Returns true if this node is also the tree's root node.
+      #
       def root?
         root == self
       end
@@ -43,6 +47,9 @@ module Flutterby
         parent && parent.find(name)
       end
 
+      # Returns this node's siblings (ie. other nodes within the
+      # same folder node.)
+      #
       def siblings
         parent && parent.children
       end
