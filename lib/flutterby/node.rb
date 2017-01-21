@@ -97,8 +97,12 @@ module Flutterby
         parent && parent.children
       end
 
+      # Creates a new node, using the specified arguments, as a child
+      # of this node.
+      #
       def create(name, **args)
-        Node.new(name.to_s, parent: self, **args)
+        args[:parent] = self
+        Node.new(name.to_s, **args)
       end
 
       def find(path)

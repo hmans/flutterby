@@ -1,5 +1,10 @@
 # Version History
 
+### HEAD
+
+- **NEW:** Added `Node#create` as a convenience method for creating new child nodes below a given node.
+
+
 ### 0.4.0 (2017-01-21)
 
 - **NEW:** Flutterby views now have a `tag` helper method available that can generate HTML tags programatically.
