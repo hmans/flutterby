@@ -141,33 +141,6 @@ module Flutterby
           end
         end
       end
-
-      # Walk the tree up, invoking the passed block for every node
-      # found on the way, passing the node as its only argument.
-      #
-      def walk_up(val = nil, &blk)
-        val = blk.call(self, val)
-        parent ? parent.walk_up(val, &blk) : val
-      end
-
-      # Walk the graph from the root to this node. Just like walk_up,
-      # except the block will be called on higher level nodes first.
-      #
-      def walk_down(val = nil, &blk)
-        val = parent ? parent.walk_up(val, &blk) : val
-        blk.call(self, val)
-      end
-
-      # Walk the entire tree, top to bottom.
-      #
-      def walk_tree(val = nil, &blk)
-        val = blk.call(self, val)
-        children.each do |child|
-          val = child.walk_tree(val, &blk)
-        end
-
-        val
-      end
     end
 
     include Tree
@@ -264,14 +237,14 @@ module Flutterby
         # First of all, we want to make sure all nodes have their
         # available extensions loaded.
         #
-        walk_tree do |node|
+        TreeWalker.walk_tree(self) do |node|
           node.load_extension! unless node.name == "_node"
         end
 
         # Now do another pass, prerendering stuff where necessary,
         # extracting data, registering URLs to be exported, etc.
         #
-        walk_tree do |node|
+        TreeWalker.walk_tree(self) do |node|
           node.render_body! if node.should_prerender?
         end
       end
@@ -320,7 +293,7 @@ module Flutterby
       end
 
       def apply_layout(input)
-        walk_up(input) do |node, current|
+        TreeWalker.walk_up(self, input) do |node, current|
           if layout = node.sibling("_layout")
             tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
             tilt.render(view) { current }.html_safe

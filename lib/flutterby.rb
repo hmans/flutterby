@@ -4,6 +4,7 @@ require 'mime-types'
 require 'json'
 
 require "flutterby/version"
+require "flutterby/tree_walker"
 require "flutterby/node"
 require "flutterby/filters"
 require "flutterby/view"
