@@ -2,5 +2,4 @@ ul.post-list
   - for post in blog_posts
     li
       .post-meta = date_format post.date, "%B %e, %Y"
-
-      a href=post.url = post.title
+      = link_to post.title, post
