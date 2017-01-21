@@ -2,6 +2,8 @@
 
 ### HEAD
 
+- **NEW:** Added `Node#create` as a convenience method for creating new child nodes below a given node.
+
 
 ### 0.4.0 (2017-01-21)
 
