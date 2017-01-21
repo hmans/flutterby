@@ -108,7 +108,8 @@ module Flutterby
       end
 
       def find(path)
-        return self if path.nil? || path.empty?
+        path = path.to_s
+        return self if path.empty?
 
         # remove duplicate slashes
         path.gsub!(%r{/+}, "/")
