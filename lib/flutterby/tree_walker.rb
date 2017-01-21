@@ -1,4 +1,7 @@
 module Flutterby
+  # A helper module with methods to walk across a node tree in various
+  # directions and variations and perform a block of code on each passed node.
+  #
   module TreeWalker
     extend self
 
@@ -10,7 +13,7 @@ module Flutterby
       node.parent ? walk_up(node.parent, val, &blk) : val
     end
 
-    # Walk the graph from the root to the specified node. Just like walk_up,
+    # Walk the graph from the root to the specified node. Just like {#walk_up},
     # except the block will be called on higher level nodes first.
     #
     def walk_down(node, val = nil, &blk)
@@ -18,10 +21,12 @@ module Flutterby
       blk.call(node, val)
     end
 
-    # Walk the entire tree, top to bottom.
+    # Walk the entire tree, top to bottom, starting with its root, and then
+    # descending into its child layers.
     #
     def walk_tree(node, val = nil, &blk)
       val = blk.call(node, val)
+
       node.children.each do |child|
         val = walk_tree(child, val, &blk)
       end
