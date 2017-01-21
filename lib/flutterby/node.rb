@@ -187,7 +187,7 @@ module Flutterby
 
         # Read remaining data from frontmatter. Data in frontmatter
         # will always have precedence!
-        parse_frontmatter!
+        extract_frontmatter!
 
         # Do some extra processing depending on extension. This essentially
         # means that your .json etc. files will be rendered at least once at
@@ -196,7 +196,7 @@ module Flutterby
         send(meth) if respond_to?(meth)
       end
 
-      def parse_frontmatter!
+      def extract_frontmatter!
         @data || {}
 
         if @source
@@ -284,13 +284,12 @@ module Flutterby
 
 
     module Rendering
-      # def body
-      #   render
-      # end
+      def view(opts = {})
+        View.for(self, opts)
+      end
 
       def render(opts = {})
-        view = View.for(self, opts)
-        view.render!
+        view(opts).render!
       end
     end
 
