@@ -23,8 +23,11 @@ module Flutterby
     desc "build", "Build your static site"
     option :in, default: "./site/", aliases: ["-i"]
     option :out, default: "./_build/", aliases: ["-o"]
+    option :debug, default: false, aliases: ["-d"], type: :boolean
 
     def build
+      Flutterby.logger.level = options.debug ? Logger::DEBUG : Logger::INFO
+
       # Simplify logger output
       Flutterby.logger.formatter = proc do |severity, datetime, progname, msg|
         " • #{msg}\n"
@@ -51,8 +54,11 @@ module Flutterby
     desc "serve", "Serve your site locally"
     option :in, default: "./site/", aliases: ["-i"]
     option :port, default: 4004, aliases: ["-p"], type: :numeric
+    option :debug, default: false, aliases: ["-d"], type: :boolean
 
     def serve
+      Flutterby.logger.level = options.debug ? Logger::DEBUG : Logger::INFO
+      
       say_hi
 
       say color("📚  Importing site...", :bold)
