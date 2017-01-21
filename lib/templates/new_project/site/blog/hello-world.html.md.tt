@@ -1,5 +1,6 @@
 ---
 title: Welcome to Flutterby!
+date: <%= Date.today.to_s %>
 ---
 
 
