@@ -287,22 +287,8 @@ module Flutterby
         @view ||= View.for(self)
       end
 
-      def render_body!
-        time = Benchmark.realtime do
-          Filters.apply!(self)
-        end
-
-        logger.debug "Rendered #{url} in #{sprintf "%.1f", time * 1000}ms"
-      end
-
       def body
-        if @body.nil?
-          # FIXME: the following may result in render_body! being invoked twice.
-          data   # make sure data is lazy-loaded
-          render_body!
-        end
-
-        @body
+        View.for(self).to_s
       end
 
       def render(opts = {})

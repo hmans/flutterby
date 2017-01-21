@@ -1,6 +1,6 @@
 module Flutterby
   class View
-    attr_reader :node, :opts
+    attr_reader :node, :opts, :_body
     alias_method :page, :node
 
     # Include ERB::Util from ActiveSupport. This will provide
@@ -13,6 +13,16 @@ module Flutterby
     def initialize(node)
       @node = node
       @opts = {}
+      @source = node.source
+      @_body = nil
+    end
+
+    def render!
+      time = Benchmark.realtime do
+        Filters.apply!(self)
+      end
+
+      logger.debug "Rendered #{node.url} in #{sprintf "%.1f", time * 1000}ms"
     end
 
     def date_format(date, fmt)
