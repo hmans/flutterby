@@ -24,7 +24,37 @@ module Flutterby
       reload!
     end
 
-    concerning :Children do
+    concerning :Paths do
+      def path
+        parent ? ::File.join(parent.path, full_name) : full_name
+      end
+
+      def url
+        ::File.join(parent ? parent.url : "/", full_name)
+      end
+
+      def full_fs_path(base:)
+        ::File.expand_path(::File.join(base, full_name))
+      end
+    end
+
+    concerning :Tree do
+      def root
+        parent ? parent.root : self
+      end
+
+      def root?
+        root == self
+      end
+
+      def sibling(name)
+        parent && parent.find(name)
+      end
+
+      def siblings
+        parent && parent.children
+      end
+
       def find_child(name)
         if name.include?(".")
           @children.find { |c| c.full_name == name }
@@ -62,39 +92,6 @@ module Flutterby
       #
       def pages
         children.select { |c| c.page? }
-      end
-    end
-
-    concerning :Paths do
-      def path
-        parent ? ::File.join(parent.path, full_name) : full_name
-      end
-
-      def url
-        ::File.join(parent ? parent.url : "/", full_name)
-      end
-
-      def full_fs_path(base:)
-        ::File.expand_path(::File.join(base, full_name))
-      end
-    end
-
-
-    concerning :Tree do
-      def root
-        parent ? parent.root : self
-      end
-
-      def root?
-        root == self
-      end
-
-      def sibling(name)
-        parent && parent.find(name)
-      end
-
-      def siblings
-        parent && parent.children
       end
 
       # Creates a new node, using the specified arguments, as a child
@@ -319,7 +316,7 @@ module Flutterby
     #
 
     def to_s
-      "<#{self.class} #{self.path}>"
+      "<#{self.class} #{self.url}>"
     end
 
     def full_name
