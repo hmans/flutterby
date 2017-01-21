@@ -333,11 +333,11 @@ module Flutterby
     end
 
     def file?
-      !folder?
+      !folder? && should_publish?
     end
 
     def page?
-      !folder? && ext == "html" && should_publish?
+      file? && ext == "html"
     end
 
     def should_publish?
