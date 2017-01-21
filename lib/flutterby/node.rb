@@ -183,7 +183,7 @@ module Flutterby
       end
 
       def extract_data!
-        @data ||= {}
+        @data ||= {}.with_indifferent_access
 
         # Extract date from name
         if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
