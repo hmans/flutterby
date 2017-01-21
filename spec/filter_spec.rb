@@ -11,8 +11,9 @@ describe "Filters" do
     subject { Flutterby::Node.new("test.gif") }
 
     it "is exported with its original extension" do
-      Flutterby::Filters.apply!(subject)
+      Flutterby::Filters.apply!(subject.view)
       expect(subject.full_name).to eq("test.gif")
+      # NOTE: this spec doesn't make a terrible amount of sense anymore.
     end
   end
 end

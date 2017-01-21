@@ -1,6 +1,7 @@
 module Flutterby
   class View
-    attr_reader :node, :opts, :_body
+    attr_reader :node, :opts, :source
+    attr_accessor :_body
     alias_method :page, :node
 
     # Include ERB::Util from ActiveSupport. This will provide
@@ -10,9 +11,9 @@ module Flutterby
     #
     include ERB::Util
 
-    def initialize(node)
+    def initialize(node, opts = {})
       @node = node
-      @opts = {}
+      @opts = opts
       @source = node.source
       @_body = nil
     end
@@ -20,14 +21,31 @@ module Flutterby
     def render!
       time = Benchmark.realtime do
         Filters.apply!(self)
+
+        # Apply layouts
+        if opts[:layout] && node.page?
+          @_body = apply_layout!(@_body)
+        end
       end
 
       logger.debug "Rendered #{node.url} in #{sprintf "%.1f", time * 1000}ms"
+
+      @_body
+    end
+
+    def apply_layout!(input)
+      TreeWalker.walk_up(node, input) do |node, current|
+        if layout = node.sibling("_layout")
+          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
+          tilt.render(self) { current }.html_safe
+        else
+          current
+        end
+      end
     end
 
     def to_s
-      render! if @_body.nil?
-      @_body
+      @_body ||= render!
     end
 
     def date_format(date, fmt)
@@ -76,16 +94,20 @@ module Flutterby
       tag(:pre, class: "debug") { h obj.to_yaml }
     end
 
+    def logger
+      @logger ||= Flutterby.logger
+    end
+
     class << self
       # Factory method that returns a newly created view for the given node.
       # It also makes sure all available _view.rb extensions are loaded.
       #
-      def for(file)
+      def for(node, *args)
         # create a new view instance
-        view = new(file)
+        view = new(node, *args)
 
         # walk the tree up to dynamically extend the view
-        TreeWalker.walk_down(file) do |e|
+        TreeWalker.walk_down(node) do |e|
           if view_node = e.sibling("_view.rb")
             case view_node.ext
             when "rb" then

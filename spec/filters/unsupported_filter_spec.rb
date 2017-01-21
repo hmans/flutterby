@@ -11,6 +11,6 @@ describe "Unsupported filters" do
       .to receive(:warn)
       .with("Unsupported filter 'poop' for /index.html")
 
-    subject.render_body!
+    subject.view.to_s
   end
 end

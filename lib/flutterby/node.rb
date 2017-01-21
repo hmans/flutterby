@@ -292,24 +292,8 @@ module Flutterby
       end
 
       def render(opts = {})
-        layout = opts[:layout]
-        view.opts.merge!(opts)
-        (layout && apply_layout?) ? apply_layout(body) : body
-      end
-
-      def apply_layout(input)
-        TreeWalker.walk_up(self, input) do |node, current|
-          if layout = node.sibling("_layout")
-            tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-            tilt.render(view) { current }.html_safe
-          else
-            current
-          end
-        end
-      end
-
-      def apply_layout?
-        page?
+        view = View.for(self, opts)
+        view.render!
       end
     end
 
