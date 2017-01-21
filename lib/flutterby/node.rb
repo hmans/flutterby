@@ -112,7 +112,7 @@ module Flutterby
         return self if path.empty?
 
         # remove duplicate slashes
-        path.gsub!(%r{/+}, "/")
+        path = path.gsub(%r{/+}, "/")
 
         case path
         when %r{^\./?} then
