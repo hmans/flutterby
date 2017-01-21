@@ -1,6 +1,6 @@
 # Version History
 
-### HEAD
+### 0.5.0 (in development)
 
 - **NEW:** Added `Node#create` as a convenience method for creating new child nodes below a given node.
 
