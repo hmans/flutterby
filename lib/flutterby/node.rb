@@ -283,12 +283,8 @@ module Flutterby
 
 
     module Rendering
-      def view
-        @view ||= View.for(self)
-      end
-
       def body
-        View.for(self).to_s
+        render
       end
 
       def render(opts = {})

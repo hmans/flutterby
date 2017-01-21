@@ -9,9 +9,10 @@ describe "Filters" do
 
   context "with an image extension" do
     subject { Flutterby::Node.new("test.gif") }
+    let(:view) { Flutterby::View.for(subject) }
 
     it "is exported with its original extension" do
-      Flutterby::Filters.apply!(subject.view)
+      Flutterby::Filters.apply!(view)
       expect(subject.full_name).to eq("test.gif")
       # NOTE: this spec doesn't make a terrible amount of sense anymore.
     end
