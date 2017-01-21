@@ -11,13 +11,11 @@ describe "extending all nodes in a folder through _node.rb" do
 
   let!(:initializer) do
     node "_init.rb", parent: root, source: <<~EOF
-    module TestExtension
+    extend_siblings do
       def show_test
         "test"
       end
     end
-
-    extend_siblings TestExtension
     EOF
   end
 

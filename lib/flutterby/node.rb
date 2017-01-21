@@ -256,10 +256,26 @@ module Flutterby
       def setup
       end
 
-      # Extend all of this node's siblings with the specified module.
+      # Extend all of this node's siblings with the specified module(s). If
+      # a block is given, the siblings will be extended with the code found
+      # in the block.
       #
-      def extend_siblings(mod)
-        siblings.each { |n| n.extend mod }
+      def extend_siblings(*mods, &blk)
+        if block_given?
+          mods << Module.new(&blk)
+        end
+
+        siblings.each do |n|
+          n.extend(*mods)
+        end
+      end
+
+      def extend_parent(*mods, &blk)
+        if block_given?
+          mods << Module.new(&blk)
+        end
+
+        parent.extend(*mods)
       end
     end
 
