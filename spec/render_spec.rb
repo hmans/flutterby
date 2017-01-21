@@ -18,7 +18,7 @@ describe "rendering partials" do
     EOF
   end
 
-  its(:body) { is_expected.to include("I'm the partial!") }
+  its(:render) { is_expected.to include("I'm the partial!") }
 
   context "when passing variables to the partial" do
     let :page_source do
@@ -33,6 +33,6 @@ describe "rendering partials" do
       EOF
     end
 
-    its(:body) { is_expected.to include("Hello John Doe!") }
+    its(:render) { is_expected.to include("Hello John Doe!") }
   end
 end

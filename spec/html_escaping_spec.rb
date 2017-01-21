@@ -10,7 +10,7 @@ describe "html escaping" do
       EOF
     end
 
-    its(:body) { is_expected.to include("<p>Hi! &lt;g&gt;</p>") }
+    its(:render) { is_expected.to include("<p>Hi! &lt;g&gt;</p>") }
   end
 
   context "with Slim" do
@@ -24,6 +24,6 @@ describe "html escaping" do
       EOF
     end
 
-    its(:body) { is_expected.to include("<p>Hi! &lt;g&gt;</p>") }
+    its(:render) { is_expected.to include("<p>Hi! &lt;g&gt;</p>") }
   end
 end

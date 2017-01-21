@@ -12,6 +12,6 @@ describe "Ruby nodes" do
   specify "create a new node powered by custom Ruby code" do
     expect(subject).to be_kind_of(Flutterby::Node)
     expect(subject.ext).to eq("html")
-    expect(subject.body).to eq("<p>I&#39;m the body!</p>")
+    expect(subject.render).to eq("<p>I&#39;m the body!</p>")
   end
 end

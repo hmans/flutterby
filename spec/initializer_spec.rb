@@ -21,6 +21,6 @@ describe "extending all nodes in a folder through _node.rb" do
 
   specify "works :)" do
     root.stage!
-    expect(page.body).to eq("I'm a page! This is a test!\n")
+    expect(page.render).to eq("I'm a page! This is a test!\n")
   end
 end

@@ -3,7 +3,6 @@ require 'benchmark'
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
-    attr_writer :body
     attr_reader :filters, :parent, :fs_path, :children
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
@@ -22,6 +21,7 @@ module Flutterby
       end
 
       reload!
+      extract_data!
     end
 
     module Paths
@@ -148,7 +148,6 @@ module Flutterby
 
     module Reading
       def reload!
-        @body     = nil
         @data     = nil
         @children = []
 
@@ -190,7 +189,9 @@ module Flutterby
         # will always have precedence!
         parse_frontmatter!
 
-        # Do some extra processing depending on extension
+        # Do some extra processing depending on extension. This essentially
+        # means that your .json etc. files will be rendered at least once at
+        # bootup.
         meth = "read_#{ext}!"
         send(meth) if respond_to?(meth)
       end
@@ -212,11 +213,11 @@ module Flutterby
       end
 
       def read_json!
-        @data.merge!(JSON.parse(body))
+        @data.merge!(JSON.parse(render))
       end
 
       def read_yaml!
-        @data.merge!(YAML.load(body))
+        @data.merge!(YAML.load(render))
       end
 
       def read_yml!
@@ -224,7 +225,7 @@ module Flutterby
       end
 
       def read_toml!
-        @data.merge!(TOML.parse(body))
+        @data.merge!(TOML.parse(render))
       end
     end
 
@@ -240,7 +241,7 @@ module Flutterby
         TreeWalker.walk_tree(self) do |node|
           if node.full_name == "_init.rb"
             logger.debug "Executing initializer #{node.url}"
-            node.instance_eval(node.body)
+            node.instance_eval(node.render)
           end
         end
 
@@ -283,9 +284,9 @@ module Flutterby
 
 
     module Rendering
-      def body
-        render
-      end
+      # def body
+      #   render
+      # end
 
       def render(opts = {})
         view = View.for(self, opts)
