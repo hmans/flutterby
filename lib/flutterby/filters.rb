@@ -44,7 +44,7 @@ module Flutterby
 end
 
 Flutterby::Filters.add("rb") do |view|
-  view.node.instance_eval(view._body)
+  view._body = view.instance_eval(view._body)
 end
 
 Flutterby::Filters.add(["md", "markdown"]) do |view|

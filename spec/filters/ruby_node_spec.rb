@@ -1,13 +1,7 @@
 describe "Ruby nodes" do
   def ruby_code
     <<~EOF
-    # Add a method to the node
-    def generate_body
-      "<p>I'm the body!</p>"
-    end
-
-    # Set the node's body
-    self.body = generate_body
+    tag(:p) { "I'm the body!" }
     EOF
   end
 
@@ -18,7 +12,6 @@ describe "Ruby nodes" do
   specify "create a new node powered by custom Ruby code" do
     expect(subject).to be_kind_of(Flutterby::Node)
     expect(subject.ext).to eq("html")
-    expect(subject.body).to eq("<p>I'm the body!</p>")
-    expect(subject).to respond_to(:generate_body)
+    expect(subject.body).to eq("<p>I&#39;m the body!</p>")
   end
 end
