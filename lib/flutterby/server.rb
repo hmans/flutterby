@@ -44,7 +44,7 @@ module Flutterby
     end
 
     def call(env)
-      req  = Rack::Request.new(env)
+      req = Rack::Request.new(env)
       res = Rack::Response.new([], 200, {})
 
       # Look for target node in path registry
