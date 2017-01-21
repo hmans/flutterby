@@ -3,7 +3,7 @@ require 'benchmark'
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
-    attr_reader :filters, :parent, :fs_path, :children
+    attr_reader :data, :filters, :parent, :fs_path, :children
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
@@ -21,7 +21,6 @@ module Flutterby
       end
 
       reload!
-      extract_data!
     end
 
     module Paths
@@ -147,12 +146,19 @@ module Flutterby
 
 
     module Reading
+      # (Re-)loads the node from the filesystem, if it's a filesystem based
+      # node.
+      #
       def reload!
         @data     = nil
         @children = []
 
         load_from_filesystem! if @fs_path
+
+        extract_data!
       end
+
+      private
 
       def load_from_filesystem!
         if @fs_path
@@ -166,16 +172,8 @@ module Flutterby
           end
         end
       end
-    end
 
-    include Reading
-
-
-    module Data
-      def data
-        extract_data! if @data.nil?
-        @data
-      end
+      private
 
       def extract_data!
         @data ||= {}.with_indifferent_access
@@ -193,7 +191,7 @@ module Flutterby
         # means that your .json etc. files will be rendered at least once at
         # bootup.
         meth = "read_#{ext}!"
-        send(meth) if respond_to?(meth)
+        send(meth) if respond_to?(meth, true)
       end
 
       def extract_frontmatter!
@@ -229,7 +227,7 @@ module Flutterby
       end
     end
 
-    include Data
+    include Reading
 
 
 
@@ -288,10 +286,15 @@ module Flutterby
 
 
     module Rendering
+      # Returns a freshly created {View} instance for this node.
+      #
       def view(opts = {})
         View.for(self, opts)
       end
 
+      # Creates a new {View} instance through {#view} and uses it to
+      # render this node. Returns the rendered page as a string.
+      #
       def render(opts = {})
         view(opts).render!
       end
