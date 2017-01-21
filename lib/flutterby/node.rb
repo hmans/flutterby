@@ -282,6 +282,7 @@ module Flutterby
 
       def body
         if @body.nil?
+          # FIXME: the following may result in render_body! being invoked twice.
           data   # make sure data is lazy-loaded
           render_body!
         end
