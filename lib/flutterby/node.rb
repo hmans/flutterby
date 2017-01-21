@@ -28,10 +28,6 @@ module Flutterby
       def url
         ::File.join(parent ? parent.url : "/", full_name)
       end
-
-      def full_fs_path(base:)
-        ::File.expand_path(::File.join(base, full_name))
-      end
     end
 
     concerning :Tree do
