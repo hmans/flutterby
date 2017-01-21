@@ -97,6 +97,10 @@ module Flutterby
         parent && parent.children
       end
 
+      def create(name, **args)
+        Node.new(name.to_s, parent: self, **args)
+      end
+
       def find(path)
         return self if path.nil? || path.empty?
 
