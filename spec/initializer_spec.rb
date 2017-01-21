@@ -9,11 +9,15 @@ describe "extending all nodes in a folder through _node.rb" do
     EOF
   end
 
-  let!(:extension) do
-    node "_node.rb", parent: root, source: <<~EOF
-    def show_test
-      "test"
+  let!(:initializer) do
+    node "_init.rb", parent: root, source: <<~EOF
+    module TestExtension
+      def show_test
+        "test"
+      end
     end
+
+    extend_siblings TestExtension
     EOF
   end
 

@@ -2,6 +2,7 @@
 
 ### 0.5.0 (in development)
 
+- **BREAKING CHANGE:** The `_node.rb` mechanism is gone. In its stead, you can now add `_init.rb` files that will be evaluated automatically; those can use the new `extend_siblings` convenience method to extend all available siblings with the specified module.
 - **NEW:** Added `Node#create` as a convenience method for creating new child nodes below a given node.
 
 

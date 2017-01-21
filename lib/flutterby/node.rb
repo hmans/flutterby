@@ -234,11 +234,14 @@ module Flutterby
 
     module Staging
       def stage!
-        # First of all, we want to make sure all nodes have their
-        # available extensions loaded.
+        # First of all, we want to make sure all initializers
+        # (`_init.rb` files) are executed, starting at the top of the tree.
         #
         TreeWalker.walk_tree(self) do |node|
-          node.load_extension! unless node.name == "_node"
+          if node.full_name == "_init.rb"
+            logger.info "Executing initializer #{node.url}"
+            node.instance_eval(node.body)
+          end
         end
 
         # Now do another pass, prerendering stuff where necessary,
@@ -249,10 +252,10 @@ module Flutterby
         end
       end
 
-      def load_extension!
-        if extension = sibling("_node.rb")
-          instance_eval(extension.body)
-        end
+      # Extend all of this node's siblings with the specified module.
+      #
+      def extend_siblings(mod)
+        siblings.each { |n| n.extend mod }
       end
 
       def should_prerender?
