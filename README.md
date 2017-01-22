@@ -1,4 +1,4 @@
-# Flutterby
+# Flutterby 🦋
 
 ### A flexible, Ruby-powered static site generator.
 
