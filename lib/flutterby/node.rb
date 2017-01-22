@@ -191,6 +191,10 @@ module Flutterby
           @slug = name
         end
 
+        # Change this node's name to the slug. This may be made optional
+        # in the future.
+        @name = @slug
+
         # Extract date from prefix if possible
         if prefix =~ %r{\A(\d\d\d\d\-\d\d?\-\d\d?)\Z}
           @data['date'] = Date.parse($1)

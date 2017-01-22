@@ -3,6 +3,7 @@
 ### 0.5.0 (in development)
 
 - **NEW:** Nodes have two new attributes, `prefix` and `slug`, which are automatically generated from the node's name. If the name starts with a combination of decimals and dashes, these will become the `prefix`, and the remainder auf the name the `suffix`. For example, a name of `123-introduction` will result in a prefix of `123` and a slug of `introduction`. As before, a prefix that looks like a date (eg. `2017-04-01-introduction`) will automatically be parsed into `data[:date]`.
+- **NEW:** When nodes are being spawned, their names will be changed to their slugs by default (ie. any prefix contained in the original name will be removed.) For example, a `123-foo.html.md` will be exported as just `foo.html`.
 - **NEW:** Nodes now have first-class support of a node title through the new `title` attribute. This will either use `data[:title]`, when available, or generate a title from `slug` (eg. a node named `hello-world.html.md` will automatically have a title of `Hello World`.)
 - **BREAKING CHANGE:** The `_node.rb` mechanism is gone. In its stead, you can now add `_init.rb` files that will be evaluated automatically; those can use the new `extend_siblings` and `extend_parent` convenience methods to extend all available siblings (or the parent) with the specified module or block.
 - **NEW:** These node extensions can now supply an `on_setup` block that will be executed after the tree has been fully spawned. You can use these setup blocks to further modify the tree.

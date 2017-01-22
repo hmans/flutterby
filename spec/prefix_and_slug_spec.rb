@@ -4,6 +4,7 @@ describe "prefix and slug extraction" do
 
     its(:prefix) { is_expected.to be_nil }
     its(:slug) { is_expected.to eq("foo") }
+    its(:full_name) { is_expected.to eq("foo.html") }
   end
 
   context "when a single prefix is available" do
@@ -11,6 +12,7 @@ describe "prefix and slug extraction" do
 
     its(:prefix) { is_expected.to eq("123") }
     its(:slug) { is_expected.to eq("foo") }
+    its(:full_name) { is_expected.to eq("foo.html") }
   end
 
   context "when a multipart prefix is available" do
@@ -18,6 +20,7 @@ describe "prefix and slug extraction" do
 
     its(:prefix) { is_expected.to eq("123-45-6789") }
     its(:slug) { is_expected.to eq("foo") }
+    its(:full_name) { is_expected.to eq("foo.html") }
   end
 
   context "when a date prefix is available" do
@@ -26,5 +29,6 @@ describe "prefix and slug extraction" do
     its(:prefix) { is_expected.to eq("2017-04-01") }
     its(:slug) { is_expected.to eq("foo") }
     specify { expect(subject.data[:date]).to eq(Date.parse("2017-04-01")) }
+    its(:full_name) { is_expected.to eq("foo.html") }
   end
 end
