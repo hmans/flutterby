@@ -1,4 +1,4 @@
-describe "extending all nodes in a folder through _node.rb" do
+describe "extending all nodes in a folder through _init.rb" do
   let!(:root) do
     node "/"
   end
@@ -12,8 +12,12 @@ describe "extending all nodes in a folder through _node.rb" do
   let!(:initializer) do
     node "_init.rb", parent: root, source: <<~EOF
     extend_siblings do
+      setup do
+        @test = "test"
+      end
+
       def show_test
-        "test"
+        @test
       end
     end
     EOF

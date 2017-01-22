@@ -3,6 +3,7 @@
 ### 0.5.0 (in development)
 
 - **BREAKING CHANGE:** The `_node.rb` mechanism is gone. In its stead, you can now add `_init.rb` files that will be evaluated automatically; those can use the new `extend_siblings` and `extend_parent` convenience methods to extend all available siblings (or the parent) with the specified module or block.
+- **NEW:** These node extensions can now supply a `setup` block that will be executed after the tree has been fully spawned. You can use these setup blocks to further modify the tree.
 - **NEW:** The `flutterby build` and `flutterby serve` CLI commands now provide additional debug output when started with the `--debug` option.
 - **NEW:** Added `Node#create` as a convenience method for creating new child nodes below a given node.
 - **CHANGE:** Some massive refactoring, the primary intent being to perform the rendering of nodes in a thread-safe manner.

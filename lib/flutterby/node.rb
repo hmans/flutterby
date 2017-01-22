@@ -1,12 +1,15 @@
+require 'flutterby/node_extension'
 
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
     attr_reader :data, :filters, :parent, :fs_path, :children
+    attr_reader :_setup_procs
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
       @source  = source
+      @_setup_procs = []
 
       # Extract name, extension, and filters from given name
       parts    = name.split(".")
@@ -250,8 +253,19 @@ module Flutterby
         end
       end
 
-      # Override this method in any node that requires specific setup.
+      # Perform setup for this node. The setup step is run after the
+      # tree has been built up completely. It allows you to perform one-time
+      # setup operations that, for example, modify the tree (like sorting blog
+      # posts into date-specific subnodes.)
+      #
+      # Your nodes (or their extensions) may overload this method, but you
+      # may also simply use the `setup { ... }` syntax in a node extension
+      # to define a block of code to be run at setup time.
+      #
       def setup
+        _setup_procs.each do |p|
+          instance_exec(&p)
+        end
       end
 
       # Extend all of this node's siblings. See {#extend_all}.
@@ -272,7 +286,7 @@ module Flutterby
       #
       def extend_all(nodes, *mods, &blk)
         if block_given?
-          mods << Module.new(&blk)
+          mods << NodeExtension.new(&blk)
         end
 
         nodes.each do |n|
