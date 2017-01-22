@@ -1,3 +1,5 @@
+require 'benchmark'
+
 module Flutterby
   class View
     attr_reader :node, :opts, :source
