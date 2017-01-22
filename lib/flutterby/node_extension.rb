@@ -11,10 +11,12 @@ module Flutterby
     end
 
     def extended(base)
-      base._setup_procs.append(*@_setup_procs)
+      if @_setup_procs.any?
+        base._setup_procs.append(*@_setup_procs)
+      end
     end
 
-    def setup(&blk)
+    def on_setup(&blk)
       @_setup_procs << blk
     end
   end

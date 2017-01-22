@@ -12,7 +12,7 @@ describe "extending all nodes in a folder through _init.rb" do
   let!(:initializer) do
     node "_init.rb", parent: root, source: <<~EOF
     extend_siblings do
-      setup do
+      on_setup do
         @test = "test"
       end
 

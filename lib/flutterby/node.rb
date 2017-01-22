@@ -249,7 +249,7 @@ module Flutterby
         # setup methods.
         #
         TreeWalker.walk_tree(self) do |node|
-          node.setup
+          node.perform_setup!
         end
       end
 
@@ -262,7 +262,7 @@ module Flutterby
       # may also simply use the `setup { ... }` syntax in a node extension
       # to define a block of code to be run at setup time.
       #
-      def setup
+      def perform_setup!
         _setup_procs.each do |p|
           instance_exec(&p)
         end
