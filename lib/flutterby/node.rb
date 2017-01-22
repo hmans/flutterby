@@ -4,6 +4,7 @@ module Flutterby
   class Node
     attr_accessor :name, :ext, :source
     attr_reader :data, :filters, :parent, :fs_path, :children
+    attr_reader :prefix, :slug
     attr_reader :_setup_procs
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
@@ -153,6 +154,8 @@ module Flutterby
       #
       def reload!
         @data     = nil
+        @prefix   = nil
+        @slug     = nil
         @children = []
 
         load_from_filesystem! if @fs_path
@@ -180,8 +183,16 @@ module Flutterby
       def extract_data!
         @data ||= {}.with_indifferent_access
 
-        # Extract date from name
-        if name =~ %r{^(\d\d\d\d\-\d\d?\-\d\d?)\-}
+        # Extract prefix and slug
+        if name =~ %r{\A([\d-]+)-(.+)\Z}
+          @prefix = $1
+          @slug = $2
+        else
+          @slug = name
+        end
+
+        # Extract date from prefix if possible
+        if prefix =~ %r{\A(\d\d\d\d\-\d\d?\-\d\d?)\Z}
           @data['date'] = Date.parse($1)
         end
 

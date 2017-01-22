@@ -2,6 +2,7 @@
 
 ### 0.5.0 (in development)
 
+- **NEW:** Nodes have two new attributes, `prefix` and `slug`, which are automatically generated from the node's name. If the name starts with a combination of decimals and dashes, these will become the `prefix`, and the remainder auf the name the `suffix`. For example, a name of `123-introduction` will result in a prefix of `123` and a slug of `introduction`. As before, a prefix that looks like a date (eg. `2017-04-01-introduction`) will automatically be parsed into `data[:date]`.
 - **BREAKING CHANGE:** The `_node.rb` mechanism is gone. In its stead, you can now add `_init.rb` files that will be evaluated automatically; those can use the new `extend_siblings` and `extend_parent` convenience methods to extend all available siblings (or the parent) with the specified module or block.
 - **NEW:** These node extensions can now supply an `on_setup` block that will be executed after the tree has been fully spawned. You can use these setup blocks to further modify the tree.
 - **NEW:** The `flutterby build` and `flutterby serve` CLI commands now provide additional debug output when started with the `--debug` option.
