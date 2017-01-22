@@ -333,6 +333,14 @@ module Flutterby
     # Misc
     #
 
+    # Returns the node's title. If there is a `:title` key in {#data}, its
+    # value will be used; otherwise, as a fallback, it will generate a
+    # human-readable title from {#slug}.
+    #
+    def title
+      data[:title] || slug.try(:titleize)
+    end
+
     def to_s
       "<#{self.class} #{self.url}>"
     end

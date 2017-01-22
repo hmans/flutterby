@@ -8,8 +8,4 @@ extend_siblings do
   def date
     data["date"]
   end
-
-  def title
-    data["title"]
-  end
 end
