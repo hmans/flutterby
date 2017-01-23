@@ -3,6 +3,7 @@ require 'toml'
 require 'mime-types'
 require 'json'
 
+require "flutterby/dotaccess"
 require "flutterby/version"
 require "flutterby/tree_walker"
 require "flutterby/node"

@@ -3,7 +3,7 @@ require 'flutterby/node_extension'
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
-    attr_reader :data, :filters, :parent, :fs_path, :children
+    attr_reader :filters, :parent, :fs_path, :children
     attr_reader :prefix, :slug
     attr_reader :_setup_procs
 
@@ -154,6 +154,7 @@ module Flutterby
       #
       def reload!
         @data     = nil
+        @data_proxy = nil
         @prefix   = nil
         @slug     = nil
         @children = []
@@ -161,6 +162,10 @@ module Flutterby
         load_from_filesystem! if @fs_path
 
         extract_data!
+      end
+
+      def data
+        @data_proxy ||= Dotaccess[@data]
       end
 
       private
