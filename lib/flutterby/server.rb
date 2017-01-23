@@ -2,6 +2,12 @@ require 'rack'
 require 'listen'
 require 'better_errors'
 
+# Try to load Puma handler
+begin
+  require 'rack/handler/puma'
+rescue LoadError
+end
+
 module Flutterby
   class Server
     def initialize(root)
@@ -28,8 +34,12 @@ module Flutterby
         app.run this
       end
 
-      # Set up server
-      server = Rack::Handler::WEBrick
+      # Set up request handler
+      server = if defined?(Rack::Handler::Puma)
+        Rack::Handler::Puma
+      else
+        Rack::Handler::WEBrick
+      end
 
       # Make sure we handle interrupts correctly
       trap('INT') do
