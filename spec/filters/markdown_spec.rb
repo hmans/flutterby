@@ -2,15 +2,15 @@ describe "markdown rendering" do
   subject { node "markdown.html.md", source: source }
 
   let :source do
-    <<~EOF
-    # This is Markdown
+    <<-EOF
+# This is Markdown
 
-    It's great! Here's some Ruby code:
+It's great! Here's some Ruby code:
 
-    ~~~ ruby
-    puts "OMG"
-    ~~~
-    EOF
+~~~ ruby
+puts "OMG"
+~~~
+EOF
   end
 
   let :expected_body do

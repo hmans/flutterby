@@ -4,9 +4,9 @@
 
 describe "Tilt template fallback" do
   let :source do
-    <<~EOF
-    # RDoc test. +Yeah+!
-    EOF
+    <<-EOF
+# RDoc test. +Yeah+!
+EOF
   end
 
   let :expected_body do

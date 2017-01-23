@@ -16,13 +16,13 @@ describe 'Node#title' do
     subject { node "introduction.html.md", source: source }
 
     let(:source) do
-      <<~EOF
-      ---
-      title: "A Great Introduction"
-      ---
+      <<-EOF
+---
+title: "A Great Introduction"
+---
 
-      Hi!
-      EOF
+Hi!
+EOF
     end
 
     its(:title) { is_expected.to eq("A Great Introduction") }

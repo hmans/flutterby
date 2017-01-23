@@ -1,8 +1,8 @@
 describe "Ruby nodes" do
   let :ruby_code do
-    <<~EOF
-    tag(:p) { "I'm the body!" }
-    EOF
+    <<-EOF
+tag(:p) { "I'm the body!" }
+EOF
   end
 
   subject do
@@ -17,10 +17,10 @@ describe "Ruby nodes" do
 
   context "with instance variables" do
     let :ruby_code do
-      <<~EOF
-      @message = "Hooray, instance variables in views!"
-      tag(:p) { @message }
-      EOF
+      <<-EOF
+@message = "Hooray, instance variables in views!"
+tag(:p) { @message }
+EOF
     end
 
     its(:render) { is_expected.to eq("<p>Hooray, instance variables in views!</p>") }

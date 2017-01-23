@@ -20,10 +20,10 @@ describe "TOML files" do
   subject { node "data.toml", source: source }
 
   let :source do
-    <<~EOF
-    [site]
-    title = "Site Title"
-    url = "http://site.com"
+    <<-EOF
+[site]
+title = "Site Title"
+url = "http://site.com"
     EOF
   end
 

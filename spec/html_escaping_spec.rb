@@ -5,9 +5,7 @@ describe "html escaping" do
     end
 
     let(:source) do
-      <<~EOF
-      <p><%= "Hi! <g>" %></p>
-      EOF
+      %{<p><%= "Hi! <g>" %></p>}
     end
 
     its(:render) { is_expected.to include("<p>Hi! &lt;g&gt;</p>") }
@@ -19,9 +17,7 @@ describe "html escaping" do
     end
 
     let(:source) do
-      <<~EOF
-      p = "Hi! <g>"
-      EOF
+      %{p = "Hi! <g>"}
     end
 
     its(:render) { is_expected.to include("<p>Hi! &lt;g&gt;</p>") }
