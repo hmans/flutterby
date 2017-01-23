@@ -58,7 +58,7 @@ module Flutterby
 
     def serve
       Flutterby.logger.level = options.debug ? Logger::DEBUG : Logger::INFO
-      
+
       say_hi
 
       say color("📚  Importing site...", :bold)
@@ -67,8 +67,8 @@ module Flutterby
       say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
 
       say color("🌤  Serving your Flutterby site on http://localhost:#{options.port} - enjoy! \\o/", :bold)
-      server = Flutterby::Server.new(root, port: options.port)
-      server.run!
+      server = Flutterby::Server.new(root)
+      server.run!(port: options.port)
     end
 
 

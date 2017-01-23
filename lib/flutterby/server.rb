@@ -4,12 +4,11 @@ require 'better_errors'
 
 module Flutterby
   class Server
-    def initialize(root, port: 4004)
+    def initialize(root)
       @root = root
-      @port = port
     end
 
-    def run!
+    def run!(port: 4004)
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
         # puts "modified absolute path: #{modified}"
@@ -40,7 +39,7 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run app, Port: @port, Logger: Flutterby.logger
+      server.run app, Port: port, Logger: Flutterby.logger
     end
 
     def call(env)
