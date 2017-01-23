@@ -28,8 +28,8 @@ describe Dotaccess do
 
   if RUBY_VERSION >= "2.3.0"
     it "allows for using the safe navigation operator" do
-      expect(subject&.foo&.bar).to eq("baz")
-      expect(subject&.foe&.baz).to be_nil
+      expect(eval("subject&.foo&.bar")).to eq("baz")
+      expect(eval("subject&.foe&.baz")).to be_nil
     end
   end
 end
