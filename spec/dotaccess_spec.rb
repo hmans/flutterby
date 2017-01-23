@@ -26,6 +26,10 @@ describe Dotaccess do
       .from(nil).to("moo")
   end
 
+  it "allows to compare equality with other hashes" do
+    expect(subject.foo).to eq({ "bar" => "baz" })
+  end
+
   if RUBY_VERSION >= "2.3.0"
     it "allows for using the safe navigation operator" do
       expect(eval("subject&.foo&.bar")).to eq("baz")

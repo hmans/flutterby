@@ -15,6 +15,10 @@ module Dotaccess
         nil
       end
     end
+
+    def ==(o)
+      @hash == o
+    end
   end
 
   def self.[](hash)
