@@ -16,6 +16,10 @@ module Dotaccess
       end
     end
 
+    def [](k)
+      @hash[k]
+    end
+
     def ==(o)
       @hash == o
     end
