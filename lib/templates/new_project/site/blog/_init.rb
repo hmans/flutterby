@@ -6,6 +6,6 @@
 
 extend_siblings do
   def date
-    data["date"]
+    data.date
   end
 end
