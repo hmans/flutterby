@@ -356,6 +356,24 @@ module Flutterby
       data[:title] || slug.try(:titleize)
     end
 
+    def layout
+      data[:layout] || default_layout
+    end
+
+    def layout_node
+      find(layout) if layout
+    end
+
+    def default_layout
+      if name == "_layout" && parent.root?
+        nil
+      elsif name == "_layout"
+        "../_layout"
+      elsif page?
+        "./_layout"
+      end
+    end
+
     def to_s
       "<#{self.class} #{self.url}>"
     end
