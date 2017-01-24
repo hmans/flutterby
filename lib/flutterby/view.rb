@@ -45,33 +45,41 @@ module Flutterby
     end
 
     def apply_layout!(input)
-      output = input
-      layout = nil
+      collect_layouts.inject(input) do |output, layout|
+        tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
+        tilt.render(self) { output }.html_safe
+      end
+    end
 
-      # Apply any custom layouts (or the default ones)
-      layouts = node.layout.nil? ? ["./_layout"] : Array(node.layout)
+    def collect_layouts
+      layouts = []
 
-      layouts.each do |sel|
-        # if we ever encounter a false, return immediately.
-        return output if sel == false
+      # Collect layouts explicitly configured for node
+      if defined? node.layout
+        Array(node.layout).each do |sel|
+          # If a false is explicity specified, that's all the layouts
+          # we're expected to render
+          return layouts if sel == false
 
-        if layout = node.find(sel)
-          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-          output = tilt.render(self) { output }.html_safe
+          if layout = node.find(sel)
+            layouts << layout
+          else
+            raise "No layout found for path expression '#{sel}'"
+          end
         end
       end
 
-      # Now walk the tree and apply any _layout files found on the way,
-      # starting with either the last layout used, or the node being rendered.
-      start = layout || node
-      TreeWalker.walk_up(start.parent, output) do |node, current|
+      # Decide on a starting node for walking the tree upwards
+      start = layouts.any? ? layouts.last.parent : node
+
+      # Walk the tree up, collecting any layout files found on our way
+      TreeWalker.walk_up(start) do |node|
         if layout = node.sibling("_layout")
-          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-          tilt.render(self) { current }.html_safe
-        else
-          current
+          layouts << layout
         end
       end
+
+      layouts
     end
 
     def to_s

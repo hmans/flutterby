@@ -82,4 +82,15 @@ EOF
         .to eq(%{<h2>Alternative Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n})
     end
   end
+
+  context "with a missing layout specified" do
+    before do
+      page.data[:layout] = "./_missing_layout"
+    end
+
+    it "applies the specified layout, then walks up the tree" do
+      expect { page.render(layout: true) }
+        .to raise_error("No layout found for path expression './_missing_layout'")
+    end
+  end
 end
