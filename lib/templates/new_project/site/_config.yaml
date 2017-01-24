@@ -3,7 +3,7 @@
 site:
   title: My Flutterby Site
   description: >
-    This is my new <a href="https://github.com/hmans/flutterby">Flutterby</a> Site. I should probably
+    This is my new <a href="http://www.flutterby.run">Flutterby</a> Site. I should probably
     change this description in my site's configuration file,
     found at ./site/_config.yaml. Or I can just leave it as is.
     Isn't choice wonderful?
