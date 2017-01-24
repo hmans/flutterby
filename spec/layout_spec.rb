@@ -61,6 +61,17 @@ EOF
     end
   end
 
+  context "with multiple layouts specified (you crazy person, you)" do
+    before do
+      page.data[:layout] = ["/_layout", "./_alternative_layout", false]
+    end
+
+    it "applies the specified layout, then walks up the tree" do
+      expect(page.render(layout: true))
+        .to eq(%{<h2>Alternative Inner Layout</h2>\n<h1>Outer Layout &lt;g&gt;</h1>\n<p>I'm the actual page!</p>\n\n\n})
+    end
+  end
+
   context "with an alternative layout specified, and a false value" do
     before do
       page.data[:layout] = ["./_alternative_layout", false]
