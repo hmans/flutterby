@@ -1,6 +1,6 @@
 # Version History
 
-### 0.5.0 (in development)
+### 0.5.0 (2017-01-24)
 
 - **NEW:** Nodes have two new attributes, `prefix` and `slug`, which are automatically generated from the node's name. If the name starts with a combination of decimals and dashes, these will become the `prefix`, and the remainder auf the name the `suffix`. For example, a name of `123-introduction` will result in a prefix of `123` and a slug of `introduction`. As before, a prefix that looks like a date (eg. `2017-04-01-introduction`) will automatically be parsed into `data[:date]`.
 - **NEW:** When nodes are being spawned, their names will be changed to their slugs by default (ie. any prefix contained in the original name will be removed.) For example, a `123-foo.html.md` will be exported as just `foo.html`.
