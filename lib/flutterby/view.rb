@@ -45,14 +45,14 @@ module Flutterby
     end
 
     def apply_layout!(input)
-      TreeWalker.walk_up(node, input) do |node, current|
-        if layout = node.sibling("_layout")
-          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-          tilt.render(self) { current }.html_safe
-        else
-          current
-        end
+      output = input
+      layout = node
+      while layout = layout.layout_node
+        tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
+        output = tilt.render(self) { output }.html_safe
       end
+
+      output
     end
 
     def to_s
