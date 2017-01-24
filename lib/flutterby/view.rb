@@ -107,6 +107,8 @@ module Flutterby
       extend(*mods)
     end
 
+    private
+
     def logger
       @logger ||= Flutterby.logger
     end
