@@ -1,5 +1,10 @@
 # Version History
 
+### HEAD
+
+- **NEW:** Nodes can now control the layout(s) that will be applied to them in their front matter through the `layout` keyword.
+
+
 ### 0.5.1 (2017-01-24)
 
 - **NEW:** Views now provide an `extend_view` method that you can (and should) use in `_view.rb` extensions.
