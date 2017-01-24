@@ -59,7 +59,11 @@ module Flutterby
     end
 
     def render(expr, *args)
-      find(expr).render(*args)
+      if expr.is_a?(Node)
+        expr.render(*args)
+      else
+        find(expr).render(*args)
+      end
     end
 
     def find(*args)
