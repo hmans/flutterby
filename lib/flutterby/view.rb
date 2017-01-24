@@ -66,7 +66,11 @@ module Flutterby
     end
 
     def find(*args)
-      node.find(*args) or raise "No node found for #{args}"
+      node.find(*args)
+    end
+
+    def find!(*args)
+      node.find!(*args)
     end
 
     def siblings(*args)

@@ -121,6 +121,13 @@ module Flutterby
         Node.new(name.to_s, **args)
       end
 
+      # Like {find}, but raises an exception when the specified node could not
+      # be found.
+      #
+      def find!(path, *args)
+        find(path, *args) || raise("Could not find node for path expression '#{path}'")
+      end
+
       def find(path, opts = {})
         path = path.to_s
         return self if path.empty?

@@ -2,6 +2,7 @@
 
 ### HEAD
 
+- **NEW:** Just like `find`, there is now also a `find!` that will raise an exception when the specified node could not be found.
 - **NEW:** Nodes can now control the layout(s) that will be applied to them in their front matter through the `layout` keyword.
 
 

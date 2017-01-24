@@ -75,4 +75,12 @@ describe "#find" do
       end
     end
   end
+
+  describe "#find!" do
+    context "when using an invalid path" do
+      it "raises an error" do
+        expect { root.find!("invalid") }.to raise_error(%{Could not find node for path expression 'invalid'})
+      end
+    end
+  end
 end
