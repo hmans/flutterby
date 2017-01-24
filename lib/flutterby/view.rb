@@ -1,4 +1,5 @@
 require 'benchmark'
+require 'flutterby/layout'
 
 module Flutterby
   class View
@@ -26,7 +27,7 @@ module Flutterby
 
         # Apply layouts
         if opts[:layout] && node.page?
-          @_body = apply_layout!(@_body)
+          Layout.apply!(self)
         end
       end
 
@@ -42,17 +43,6 @@ module Flutterby
       logger.debug "Rendered #{node.url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
 
       @_body
-    end
-
-    def apply_layout!(input)
-      TreeWalker.walk_up(node, input) do |node, current|
-        if layout = node.sibling("_layout")
-          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-          tilt.render(self) { current }.html_safe
-        else
-          current
-        end
-      end
     end
 
     def to_s
@@ -116,6 +106,8 @@ module Flutterby
 
       extend(*mods)
     end
+
+    private
 
     def logger
       @logger ||= Flutterby.logger

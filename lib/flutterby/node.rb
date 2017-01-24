@@ -223,8 +223,6 @@ module Flutterby
       end
 
       def extract_frontmatter!
-        @data || {}
-
         if @source
           # YAML Front Matter
           if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
@@ -354,6 +352,13 @@ module Flutterby
     #
     def title
       data[:title] || slug.try(:titleize)
+    end
+
+    # Returns the layout(s) configured for this node. This is sourced from
+    # the node's {data} attribute, so it can be set from front matter.
+    #
+    def layout
+      data[:layout]
     end
 
     def to_s
