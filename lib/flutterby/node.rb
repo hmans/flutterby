@@ -73,11 +73,12 @@ module Flutterby
       #     # returns the child called "index" with extension "html"
       #     find_child("index.html")
       #
-      def find_child(name)
-        if name.include?(".")
-          @children.find { |c| c.full_name == name }
-        else
-          @children.find { |c| c.name == name }
+      def find_child(name, opts = {})
+        name_attr = name.include?(".") ? "full_name" : "name"
+
+        @children.find do |c|
+          (c.should_publish? || !opts[:public_only]) &&
+            (c.send(name_attr) == name)
         end
       end
 
@@ -120,7 +121,7 @@ module Flutterby
         Node.new(name.to_s, **args)
       end
 
-      def find(path)
+      def find(path, opts = {})
         path = path.to_s
         return self if path.empty?
 
@@ -128,18 +129,23 @@ module Flutterby
         path = path.gsub(%r{/+}, "/")
 
         case path
+        # ./foo/...
         when %r{^\./?} then
-          parent ? parent.find($') : root.find($')
+          parent ? parent.find($', opts) : root.find($', opts)
+
+        # /foo/...
         when %r{^/} then
-          root.find($')
+          root.find($', opts)
+
+        # foo/...
         when %r{^([^/]+)/?} then
           # Use the next path part to find a child by that name.
           # If no child can't be found, try to emit a child, but
           # not if the requested name starts with an underscore.
-          if child = find_child($1) || (emit_child($1) unless $1.start_with?("_"))
+          if child = find_child($1, opts) || (emit_child($1) unless $1.start_with?("_"))
             # Depending on the tail of the requested find expression,
             # either return the found node, or ask it to find the tail.
-            $'.empty? ? child : child.find($')
+            $'.empty? ? child : child.find($', opts)
           end
         end
       end

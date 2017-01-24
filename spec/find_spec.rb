@@ -12,6 +12,10 @@ describe "#find" do
   let!(:bar)  { node "bar", parent: root }
   let!(:baz)  { node "baz.html", parent: bar }
 
+  # add a secret folder with some equally secret data
+  let!(:secret) { node "_secret", parent: root }
+  let!(:data)   { node "data", parent: secret }
+
   specify "normal singular expressions" do
     expect(root.find("foo")).to eq(foo)
     expect(root.find("bar")).to eq(bar)
@@ -58,5 +62,17 @@ describe "#find" do
     expect(bar.find("baz")).to eq(baz)
     expect(bar.find("baz.html")).to eq(baz)
     expect(bar.find("baz.txt")).to eq(nil)
+  end
+
+  describe "private vs. public nodes" do
+    specify "by default, finds within private nodes" do
+      expect(root.find("_secret/data")).to eq(data)
+    end
+
+    context "with public_only set to true" do
+      specify "it does not find private nodes" do
+        expect(root.find("_secret/data", public_only: true)).to eq(nil)
+      end
+    end
   end
 end
