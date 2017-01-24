@@ -17,6 +17,7 @@
 
 - [Blog post introducing Flutterby](http://hmans.io/posts/2017/01/11/flutterby.html)
 - [New project template](https://github.com/hmans/flutterby/tree/master/lib/templates/new_project) (example code)
+- [Code Reference Documentation](http://www.rubydoc.info/github/hmans/flutterby)
 - [Version History](https://github.com/hmans/flutterby/blob/master/CHANGES.md)
 - [Issues/Roadmap](https://github.com/hmans/flutterby/issues)
 - [Sites built with Flutterby](https://github.com/hmans/flutterby/wiki/Sites-built-with-Flutterby) (add yours!)
