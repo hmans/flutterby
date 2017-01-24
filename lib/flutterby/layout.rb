@@ -4,6 +4,10 @@ module Flutterby
       @view = view
     end
 
+    # Determines which layouts should be applied to the view object (based on
+    # the node it is rendering), and then applies each of these layouts in order,
+    # modifying the view in place.
+    #
     def apply!
       @view._body = collect_layouts.inject(@view._body) do |output, layout|
         tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
@@ -12,6 +16,9 @@ module Flutterby
     end
 
     class << self
+      # Convenience method for quickly creating a new Layout instace and
+      # invoking its primary method, {apply!}.
+      #
       def apply!(view)
         new(view).apply!
       end
