@@ -354,6 +354,9 @@ module Flutterby
       data[:title] || slug.try(:titleize)
     end
 
+    # Returns the layout(s) configured for this node. This is sourced from
+    # the node's {data} attribute, so it can be set from front matter.
+    #
     def layout
       data[:layout]
     end
