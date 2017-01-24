@@ -17,7 +17,7 @@ module Flutterby
 
       if node.file?
         ::File.write(path, node.render(layout: true))
-        logger.info "Exported #{node.url}"
+        logger.info "Exported #{node.url.colorize(:light_white)}"
       else
         FileUtils.mkdir_p(path)
         node.children.each do |child|

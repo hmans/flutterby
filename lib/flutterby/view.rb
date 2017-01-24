@@ -30,7 +30,16 @@ module Flutterby
         end
       end
 
-      logger.info "Rendered #{node.url} in #{sprintf "%.1f", time * 1000}ms"
+      # Log rendering times using different colors based on duration
+      color = if time > 1
+        :red
+      elsif time > 0.25
+        :yellow
+      else
+        :green
+      end
+
+      logger.debug "Rendered #{node.url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
 
       @_body
     end

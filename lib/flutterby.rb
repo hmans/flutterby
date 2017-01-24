@@ -2,6 +2,7 @@ require 'active_support/all'
 require 'toml'
 require 'mime-types'
 require 'json'
+require 'colorize'
 
 require "flutterby/dotaccess"
 require "flutterby/version"
