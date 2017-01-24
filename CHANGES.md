@@ -2,6 +2,7 @@
 
 ### HEAD
 
+- **NEW:** Views now provide an `extend_view` method that you can (and should) use in `_view.rb` extensions.
 - **NEW:** Improved log output, especially when using `--debug`.
 
 

@@ -109,6 +109,14 @@ module Flutterby
       tag(:pre, class: "debug") { h obj.to_yaml }
     end
 
+    def extend_view(*mods, &blk)
+      if block_given?
+        mods << Module.new(&blk)
+      end
+
+      extend(*mods)
+    end
+
     def logger
       @logger ||= Flutterby.logger
     end
