@@ -46,13 +46,29 @@ module Flutterby
 
     def apply_layout!(input)
       output = input
-      layout = node
-      while layout = layout.layout_node
-        tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-        output = tilt.render(self) { output }.html_safe
+
+      # Apply any custom layouts (or the default ones)
+      layouts = node.layout.nil? ? ["./_layout"] : Array(node.layout)
+
+      layouts.each do |sel|
+        # if we ever encounter a false, return immediately.
+        return output if sel == false
+
+        if layout = node.find(sel)
+          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
+          output = tilt.render(self) { output }.html_safe
+        end
       end
 
-      output
+      # Now walk the tree and apply any _layout files found on the way.
+      TreeWalker.walk_up(node.parent, output) do |node, current|
+        if layout = node.sibling("_layout")
+          tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
+          tilt.render(self) { current }.html_safe
+        else
+          current
+        end
+      end
     end
 
     def to_s

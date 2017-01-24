@@ -223,8 +223,6 @@ module Flutterby
       end
 
       def extract_frontmatter!
-        @data || {}
-
         if @source
           # YAML Front Matter
           if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
@@ -357,21 +355,7 @@ module Flutterby
     end
 
     def layout
-      data[:layout] || default_layout
-    end
-
-    def layout_node
-      find(layout) if layout
-    end
-
-    def default_layout
-      if name == "_layout" && parent.root?
-        nil
-      elsif name == "_layout"
-        "../_layout"
-      elsif page?
-        "./_layout"
-      end
+      data[:layout]
     end
 
     def to_s
