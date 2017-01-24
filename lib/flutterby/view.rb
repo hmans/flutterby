@@ -30,7 +30,7 @@ module Flutterby
         end
       end
 
-      logger.debug "Rendered #{node.url} in #{sprintf "%.1f", time * 1000}ms"
+      logger.info "Rendered #{node.url} in #{sprintf "%.1f", time * 1000}ms"
 
       @_body
     end
