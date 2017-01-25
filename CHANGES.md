@@ -1,5 +1,10 @@
 # Version History
 
+### HEAD
+
+- **BREAKING CHANGE:** Layout files now follow the same extension pattern as any other file, so they must now be named `_layout.html.erb` instead if `_layout.html`.
+
+
 ### 0.5.2 (2017-01-25)
 
 - **NEW:** Just like `find`, there is now also a `find!` that will raise an exception when the specified node could not be found.

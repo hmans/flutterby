@@ -2,7 +2,7 @@ describe "layouts" do
   let!(:root) { node "/" }
 
   let!(:outer_layout) do
-    node "_layout.erb", parent: root, source: <<-EOF
+    node "_layout.html.erb", parent: root, source: <<-EOF
 <h1><%= "Outer Layout <g>" %></h1>
 <%= yield %>
 EOF
@@ -14,19 +14,22 @@ EOF
 
   let!(:page) do
     node "page.html", parent: folder, source: <<-EOF
+---
+title: Page Title
+---
 <p>I'm the actual page!</p>
 EOF
   end
 
   let!(:inner_layout) do
-    node "_layout.erb", parent: folder, source: <<-EOF
-<h2>Inner Layout</h2>
+    node "_layout.html.erb", parent: folder, source: <<-EOF
+<h2><%= page.title %></h2>
 <%= yield %>
 EOF
   end
 
   let!(:alternative_layout) do
-    node "_alternative_layout.erb", parent: folder, source: <<-EOF
+    node "_alternative_layout.html.erb", parent: folder, source: <<-EOF
 <h2>Alternative Inner Layout</h2>
 <%= yield %>
 EOF
@@ -35,7 +38,7 @@ EOF
   context "with the normal layout behavior" do
     it "walks up the tree, applying all _layout files" do
       expect(page.render(layout: true))
-        .to eq(%{<h1>Outer Layout &lt;g&gt;</h1>\n<h2>Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n\n})
+        .to eq(%{<h1>Outer Layout &lt;g&gt;</h1>\n<h2>Page Title</h2>\n<p>I'm the actual page!</p>\n\n\n})
     end
   end
 

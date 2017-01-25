@@ -333,8 +333,34 @@ module Flutterby
       # Creates a new {View} instance and uses it to
       # render this node. Returns the rendered page as a string.
       #
-      def render(opts = {})
-        View.for(self, opts).render!
+      def render(opts = {}, &blk)
+        render_with_view(View.for(self, opts), &blk)
+      end
+
+      def render_with_view(view, &blk)
+        output = ""
+
+        time = Benchmark.realtime do
+          output = Filters.apply!(self, view: view, &blk)
+
+          # Apply layouts
+          if view.opts[:layout] && page?
+            output = Layout.apply!(output, view: view)
+          end
+        end
+
+        # Log rendering times using different colors based on duration
+        color = if time > 1
+          :red
+        elsif time > 0.25
+          :yellow
+        else
+          :green
+        end
+
+        logger.debug "Rendered #{url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
+
+        output
       end
     end
 
