@@ -1,4 +1,4 @@
-describe "rendering partials" do
+describe "rendering" do
   let!(:root) { node "/" }
   let!(:page) { node "page.html.erb", parent: root, source: page_source }
   let!(:partial) { node "_partial.html.erb", parent: root, source: partial_source }
@@ -16,17 +16,25 @@ EOF
     %{<p>I'm the partial!</p>}
   end
 
-  its(:render) { is_expected.to include("I'm the partial!") }
-
-  context "when passing variables to the partial" do
-    let :page_source do
-      %{<%= find("./_partial.html").render(name: "John Doe") %>}
+  describe "without partials" do
+    specify do
+      expect(partial.render).to eq("<p>I'm the partial!</p>")
     end
+  end
 
-    let :partial_source do
-      %{Hello <%= opts[:name] %>!}
+  describe "rendering partials" do
+    its(:render) { is_expected.to include("I'm the partial!") }
+
+    context "when passing variables to the partial" do
+      let :page_source do
+        %{<%= find("./_partial.html").render(name: "John Doe") %>}
+      end
+
+      let :partial_source do
+        %{Hello <%= opts[:name] %>!}
+      end
+
+      its(:render) { is_expected.to include("Hello John Doe!") }
     end
-
-    its(:render) { is_expected.to include("Hello John Doe!") }
   end
 end

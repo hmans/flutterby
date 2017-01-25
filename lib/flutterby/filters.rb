@@ -8,19 +8,18 @@ require 'flutterby/markdown_formatter'
 
 module Flutterby
   module Filters
-    def self.apply!(view)
-      view._body = view.source.try(:html_safe)
-
+    def self.apply!(input, view:)
       # Apply all filters
-      view.node.filters.each do |filter|
+      view.node.filters.inject(input) do |body, filter|
         meth = "process_#{filter}!"
 
         if Filters.respond_to?(meth)
-          Filters.send(meth, view)
-        elsif template = tilt(filter, view._body)
-          view._body = template.render(view).html_safe
+          Filters.send(meth, body, view: view)
+        elsif template = tilt(filter, body)
+          template.render(view).html_safe
         else
           Flutterby.logger.warn "Unsupported filter '#{filter}' for #{view.node.url}"
+          body
         end
       end
     end
@@ -43,15 +42,15 @@ module Flutterby
   end
 end
 
-Flutterby::Filters.add("rb") do |view|
-  view._body = view.instance_eval(view._body)
+Flutterby::Filters.add("rb") do |input, view:|
+  view.instance_eval(input)
 end
 
-Flutterby::Filters.add(["md", "markdown"]) do |view|
-  view._body = Flutterby::MarkdownFormatter.new(view._body).complete.to_s.html_safe
+Flutterby::Filters.add(["md", "markdown"]) do |input, view:|
+  Flutterby::MarkdownFormatter.new(input).complete.to_s.html_safe
 end
 
-Flutterby::Filters.add("scss") do |view|
+Flutterby::Filters.add("scss") do |input, view:|
   sass_options = {
     syntax: :scss,
     load_paths: []
@@ -61,5 +60,5 @@ Flutterby::Filters.add("scss") do |view|
     sass_options[:load_paths] << File.dirname(view.node.fs_path)
   end
 
-  view._body = Sass::Engine.new(view._body, sass_options).render
+  Sass::Engine.new(input, sass_options).render
 end

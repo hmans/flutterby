@@ -3,8 +3,7 @@ require 'flutterby/layout'
 
 module Flutterby
   class View
-    attr_reader :node, :opts, :source
-    attr_accessor :_body
+    attr_reader :node, :opts
     alias_method :page, :node
 
     # Include ERB::Util from ActiveSupport. This will provide
@@ -17,17 +16,17 @@ module Flutterby
     def initialize(node, opts = {})
       @node = node
       @opts = opts
-      @source = node.source
-      @_body = nil
     end
 
     def render!
+      output = node.source.try(:html_safe)
+
       time = Benchmark.realtime do
-        Filters.apply!(self)
+        output = Filters.apply!(output, view: self)
 
         # Apply layouts
         if opts[:layout] && node.page?
-          Layout.apply!(self)
+          output = Layout.apply!(output, view: self)
         end
       end
 
@@ -42,11 +41,7 @@ module Flutterby
 
       logger.debug "Rendered #{node.url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
 
-      @_body
-    end
-
-    def to_s
-      @_body ||= render!
+      output
     end
 
     def date_format(date, fmt)
