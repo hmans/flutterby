@@ -26,18 +26,6 @@ module Flutterby
       end
     end
 
-    def supported?(format)
-      supported_via_method?(format) || supported_via_tilt?(format)
-    end
-
-    def supported_via_tilt?(format)
-      Tilt.registered?(format)
-    end
-
-    def supported_via_method?(format)
-      respond_to? "process_#{format}!"
-    end
-
     def add(fmts, &blk)
       Array(fmts).each do |fmt|
         define_singleton_method("process_#{fmt}!", &blk)
