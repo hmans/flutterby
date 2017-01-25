@@ -14,13 +14,16 @@ EOF
 
   let!(:page) do
     node "page.html", parent: folder, source: <<-EOF
+---
+title: Page Title
+---
 <p>I'm the actual page!</p>
 EOF
   end
 
   let!(:inner_layout) do
     node "_layout.html.erb", parent: folder, source: <<-EOF
-<h2>Inner Layout</h2>
+<h2><%= page.title %></h2>
 <%= yield %>
 EOF
   end
@@ -35,7 +38,7 @@ EOF
   context "with the normal layout behavior" do
     it "walks up the tree, applying all _layout files" do
       expect(page.render(layout: true))
-        .to eq(%{<h1>Outer Layout &lt;g&gt;</h1>\n<h2>Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n\n})
+        .to eq(%{<h1>Outer Layout &lt;g&gt;</h1>\n<h2>Page Title</h2>\n<p>I'm the actual page!</p>\n\n\n})
     end
   end
 

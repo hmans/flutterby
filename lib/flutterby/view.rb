@@ -18,32 +18,6 @@ module Flutterby
       @opts = opts
     end
 
-    def render!(&blk)
-      output = node.source.try(:html_safe)
-
-      time = Benchmark.realtime do
-        output = Filters.apply!(output, view: self, &blk)
-
-        # Apply layouts
-        if opts[:layout] && node.page?
-          output = Layout.apply!(output, view: self)
-        end
-      end
-
-      # Log rendering times using different colors based on duration
-      color = if time > 1
-        :red
-      elsif time > 0.25
-        :yellow
-      else
-        :green
-      end
-
-      logger.debug "Rendered #{node.url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
-
-      output
-    end
-
     def date_format(date, fmt)
       date.strftime(fmt)
     end
