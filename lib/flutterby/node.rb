@@ -338,29 +338,7 @@ module Flutterby
       end
 
       def render_with_view(view, &blk)
-        output = ""
-
-        time = Benchmark.realtime do
-          output = Filters.apply!(self, view: view, &blk)
-
-          # Apply layouts
-          if view.opts[:layout] && page?
-            output = Layout.apply!(output, view: view)
-          end
-        end
-
-        # Log rendering times using different colors based on duration
-        color = if time > 1
-          :red
-        elsif time > 0.25
-          :yellow
-        else
-          :green
-        end
-
-        logger.debug "Rendered #{url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
-
-        output
+        NodeRenderer.render(self, view, &blk)
       end
     end
 

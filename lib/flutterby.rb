@@ -8,6 +8,7 @@ require "flutterby/dotaccess"
 require "flutterby/version"
 require "flutterby/tree_walker"
 require "flutterby/node"
+require "flutterby/node_renderer"
 require "flutterby/filters"
 require "flutterby/view"
 
