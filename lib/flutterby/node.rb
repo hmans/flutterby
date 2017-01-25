@@ -333,8 +333,8 @@ module Flutterby
       # Creates a new {View} instance and uses it to
       # render this node. Returns the rendered page as a string.
       #
-      def render(opts = {})
-        View.for(self, opts).render!
+      def render(opts = {}, &blk)
+        View.for(self, opts).render!(&blk)
       end
     end
 

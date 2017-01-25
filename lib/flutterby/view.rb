@@ -18,11 +18,11 @@ module Flutterby
       @opts = opts
     end
 
-    def render!
+    def render!(&blk)
       output = node.source.try(:html_safe)
 
       time = Benchmark.realtime do
-        output = Filters.apply!(output, view: self)
+        output = Filters.apply!(output, view: self, &blk)
 
         # Apply layouts
         if opts[:layout] && node.page?

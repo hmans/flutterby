@@ -8,8 +8,7 @@ module Flutterby
     #
     def apply!(body, view:)
       collect_layouts(view).inject(body) do |acc, layout|
-        tilt = Flutterby::Filters.tilt(layout.ext, layout.source)
-        tilt.render(view) { acc }.html_safe
+        layout.render { acc }
       end
     end
 

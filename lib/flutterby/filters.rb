@@ -8,15 +8,17 @@ require 'flutterby/markdown_formatter'
 
 module Flutterby
   module Filters
-    def self.apply!(input, view:)
+    extend self
+
+    def apply!(input, view:, &blk)
       # Apply all filters
       view.node.filters.inject(input) do |body, filter|
         meth = "process_#{filter}!"
 
         if Filters.respond_to?(meth)
-          Filters.send(meth, body, view: view)
+          Filters.send(meth, body, view: view, &blk)
         elsif template = tilt(filter, body)
-          template.render(view).html_safe
+          template.render(view, &blk).html_safe
         else
           Flutterby.logger.warn "Unsupported filter '#{filter}' for #{view.node.url}"
           body
@@ -24,13 +26,25 @@ module Flutterby
       end
     end
 
-    def self.add(fmts, &blk)
+    def supported?(format)
+      supported_via_method?(format) || supported_via_tilt?(format)
+    end
+
+    def supported_via_tilt?(format)
+      Tilt.registered?(format)
+    end
+
+    def supported_via_method?(format)
+      respond_to? "process_#{format}!"
+    end
+
+    def add(fmts, &blk)
       Array(fmts).each do |fmt|
         define_singleton_method("process_#{fmt}!", &blk)
       end
     end
 
-    def self.tilt(format, body, options = {})
+    def tilt(format, body, options = {})
       default_options = {
         "erb" => { engine_class: Erubis::Auto::EscapedEruby }
       }
