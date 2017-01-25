@@ -330,17 +330,11 @@ module Flutterby
 
 
     module Rendering
-      # Returns a freshly created {View} instance for this node.
-      #
-      def view(opts = {})
-        View.for(self, opts)
-      end
-
-      # Creates a new {View} instance through {#view} and uses it to
+      # Creates a new {View} instance and uses it to
       # render this node. Returns the rendered page as a string.
       #
       def render(opts = {})
-        view(opts).render!
+        View.for(self, opts).render!
       end
     end
 
