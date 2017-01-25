@@ -2,7 +2,7 @@ describe "layouts" do
   let!(:root) { node "/" }
 
   let!(:outer_layout) do
-    node "_layout.html.erb", parent: root, source: <<-EOF
+    node "_layout.erb", parent: root, source: <<-EOF
 <h1><%= "Outer Layout <g>" %></h1>
 <%= yield %>
 EOF
@@ -22,14 +22,14 @@ EOF
   end
 
   let!(:inner_layout) do
-    node "_layout.html.erb", parent: folder, source: <<-EOF
+    node "_layout.erb", parent: folder, source: <<-EOF
 <h2><%= page.title %></h2>
 <%= yield %>
 EOF
   end
 
   let!(:alternative_layout) do
-    node "_alternative_layout.html.erb", parent: folder, source: <<-EOF
+    node "_alternative_layout.erb", parent: folder, source: <<-EOF
 <h2>Alternative Inner Layout</h2>
 <%= yield %>
 EOF

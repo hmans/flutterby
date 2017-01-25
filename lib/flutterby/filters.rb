@@ -10,9 +10,9 @@ module Flutterby
   module Filters
     extend self
 
-    def apply!(node, view:, &blk)
+    def apply!(input, filters, view:, &blk)
       # Apply all filters
-      node.filters.inject(node.source.html_safe) do |body, filter|
+      filters.inject(input) do |body, filter|
         meth = "process_#{filter}!"
 
         if Filters.respond_to?(meth)
@@ -20,7 +20,7 @@ module Flutterby
         elsif template = tilt(filter, body)
           template.render(view, &blk).html_safe
         else
-          Flutterby.logger.warn "Unsupported filter '#{filter}' for #{node.url}"
+          Flutterby.logger.warn "Unsupported filter '#{filter}'"
           body
         end
       end

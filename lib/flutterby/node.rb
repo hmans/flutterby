@@ -337,8 +337,8 @@ module Flutterby
         render_with_view(View.for(self, opts), &blk)
       end
 
-      def render_with_view(view, &blk)
-        NodeRenderer.render(self, view, &blk)
+      def render_with_view(view, *args, &blk)
+        NodeRenderer.render(self, view, *args, &blk)
       end
     end
 

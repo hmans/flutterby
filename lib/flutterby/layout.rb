@@ -8,7 +8,7 @@ module Flutterby
     #
     def apply!(body, view:)
       collect_layouts(view.node).inject(body) do |acc, layout|
-        layout.render_with_view(view) { acc }
+        layout.render_with_view(view, extra_filters: [layout.ext]) { acc }
       end
     end
 

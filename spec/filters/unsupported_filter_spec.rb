@@ -9,7 +9,7 @@ describe "Unsupported filters" do
   specify "logs a warning" do
     expect(Flutterby.logger)
       .to receive(:warn)
-      .with("Unsupported filter 'poop' for /index.html")
+      .with("Unsupported filter 'poop'")
 
     subject.render
   end

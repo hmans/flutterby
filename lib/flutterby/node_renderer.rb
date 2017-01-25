@@ -2,11 +2,11 @@ module Flutterby
   module NodeRenderer
     extend self
 
-    def render(node, view, &blk)
+    def render(node, view, extra_filters: [], &blk)
       output = ""
 
       time = Benchmark.realtime do
-        output = Filters.apply!(node, view: view, &blk)
+        output = Filters.apply!(node.source.html_safe, node.filters + extra_filters, view: view, &blk)
 
         # Apply layouts
         if view.opts[:layout] && node.page?

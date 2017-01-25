@@ -2,7 +2,6 @@
 
 ### 0.6.0 (in development)
 
-- **BREAKING CHANGE:** Layout files now follow the same extension pattern as any other file, so they must now be named `_layout.html.erb` instead if `_layout.html`.
 
 
 ### 0.5.2 (2017-01-25)
