@@ -5,7 +5,7 @@
 [![Gem Version](https://badge.fury.io/rb/flutterby.svg)](https://badge.fury.io/rb/flutterby) [![Build Status](https://travis-ci.org/hmans/flutterby.svg?branch=master)](https://travis-ci.org/hmans/flutterby) [![license](https://img.shields.io/github/license/hmans/flutterby.svg)](https://github.com/hmans/flutterby/blob/master/LICENSE.txt) ![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
 
 
-### Links:
+#### Links:
 
 - [Official Flutterby Website](http://www.flutterby.run/)
 - [Flutterby Documentation](http://www.flutterby.run/docs/) and [Reference](http://www.rubydoc.info/github/hmans/flutterby)
@@ -23,17 +23,17 @@
 - [Blog post introducing Flutterby](http://hmans.io/posts/2017/01/11/flutterby.html)
 
 
-### Installation & Basic Usage
+#### Installation & Basic Usage
 
 Please refer to the [Flutterby Documentation](http://www.flutterby.run/docs/).
 
 
-### Contributing to Flutterby's Development
+#### Contributing to Flutterby's Development
 
 Please refer to [Contributing to Flutterby](http://www.flutterby.run/docs/flutterby-development/contributing-to-flutterby.html) for details.
 
 
 
-### License
+#### License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
