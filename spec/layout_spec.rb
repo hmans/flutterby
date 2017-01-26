@@ -2,7 +2,7 @@ describe "layouts" do
   let!(:root) { node "/" }
 
   let!(:outer_layout) do
-    node "_layout.erb", parent: root, source: <<-EOF
+    node "_layout.html.erb", parent: root, source: <<-EOF
 <h1><%= "Outer Layout <g>" %></h1>
 <%= yield %>
 EOF
@@ -21,15 +21,20 @@ title: Page Title
 EOF
   end
 
+  let!(:stylesheet) do
+    node "styles.css", parent: folder,
+      source: %[body { color: red }]
+  end
+
   let!(:inner_layout) do
-    node "_layout.erb", parent: folder, source: <<-EOF
+    node "_layout.html.erb", parent: folder, source: <<-EOF
 <h2><%= page.title %></h2>
 <%= yield %>
 EOF
   end
 
   let!(:alternative_layout) do
-    node "_alternative_layout.erb", parent: folder, source: <<-EOF
+    node "_alternative_layout.html.erb", parent: folder, source: <<-EOF
 <h2>Alternative Inner Layout</h2>
 <%= yield %>
 EOF
@@ -53,7 +58,7 @@ EOF
     end
   end
 
-  context "with an alternative layout specified" do
+  context "with an alternative layout specified in the node data" do
     before do
       page.data[:layout] = "./_alternative_layout"
     end
@@ -75,7 +80,7 @@ EOF
     end
   end
 
-  context "with an alternative layout specified, and a false value" do
+  context "with an alternative layout specified in the node data, and a false value" do
     before do
       page.data[:layout] = ["./_alternative_layout", false]
     end
@@ -83,6 +88,20 @@ EOF
     it "applies the specified layout, then stops" do
       expect(page.render(layout: true))
         .to eq(%{<h2>Alternative Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n})
+    end
+  end
+
+  context "with an alternative layout explicitly specified" do
+    it "applies the specified layout, then stops" do
+      expect(page.render(layout: "./_alternative_layout"))
+        .to eq(%{<h2>Alternative Inner Layout</h2>\n<p>I'm the actual page!</p>\n\n})
+    end
+  end
+
+  context "when rendering something that is not a HTML page" do
+    specify "layouts are not applied automatically" do
+      expect(stylesheet.render(layout: true))
+        .to eq("body { color: red }")
     end
   end
 

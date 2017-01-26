@@ -18,7 +18,7 @@ module Flutterby
         if Filters.respond_to?(meth)
           Filters.send(meth, body, view: view, &blk)
         elsif template = tilt(filter, body)
-          template.render(view, &blk).html_safe
+          template.render(view, view.locals, &blk).html_safe
         else
           Flutterby.logger.warn "Unsupported filter '#{filter}'"
           body

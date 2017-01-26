@@ -3,7 +3,7 @@ require 'flutterby/layout'
 
 module Flutterby
   class View
-    attr_reader :node, :opts
+    attr_reader :node, :locals
     alias_method :page, :node
 
     # Include ERB::Util from ActiveSupport. This will provide
@@ -13,9 +13,9 @@ module Flutterby
     #
     include ERB::Util
 
-    def initialize(node, opts = {})
+    def initialize(node, locals: {})
       @node = node
-      @opts = opts
+      @locals = locals
     end
 
     def date_format(date, fmt)
@@ -26,12 +26,16 @@ module Flutterby
       str.html_safe
     end
 
-    def render(expr, *args)
-      if expr.is_a?(Node)
-        expr.render(*args)
-      else
-        find(expr).render(*args)
+    def render(expr, as: nil, locals: {}, **args)
+      node = expr.is_a?(Node) ? expr : find(expr)
+
+      # Resolve rendering "as" specific things
+      if as
+        locals[as] = node
+        node = node.find!("./_#{as}.#{self.node.ext}")
       end
+
+      node.render(**args, locals: locals.with_indifferent_access, **args)
     end
 
     def find(*args)

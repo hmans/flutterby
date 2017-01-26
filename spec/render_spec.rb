@@ -27,11 +27,11 @@ EOF
 
     context "when passing variables to the partial" do
       let :page_source do
-        %{<%= find("./_partial.html").render(name: "John Doe") %>}
+        %{<%= find("./_partial.html").render(locals: {name: "John Doe"}) %>}
       end
 
       let :partial_source do
-        %{Hello <%= opts[:name] %>!}
+        %{Hello <%= locals[:name] %>!}
       end
 
       its(:render) { is_expected.to include("Hello John Doe!") }
