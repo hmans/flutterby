@@ -1,0 +1,14 @@
+task default: [:build]
+
+desc "Build the website"
+task :build do
+  system "rm -rf _build/* && bin/flutterby build"
+end
+
+# This is a sample "deploy" task that will upload your
+# statically generated website to your server via rsync.
+#
+# desc "Deploy the website"
+# task deploy: [:build] do
+#   system "rsync -vr --del _build/* server:/path/to/website/"
+# end
