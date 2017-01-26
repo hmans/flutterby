@@ -23,17 +23,17 @@
 - [Blog post introducing Flutterby](http://hmans.io/posts/2017/01/11/flutterby.html)
 
 
-#### Installation & Basic Usage
+#### Installation & Basic Usage:
 
 Please refer to the [Flutterby Documentation](http://www.flutterby.run/docs/).
 
 
-#### Contributing to Flutterby's Development
+#### Contributing to Flutterby's Development:
 
 Please refer to [Contributing to Flutterby](http://www.flutterby.run/docs/flutterby-development/contributing-to-flutterby.html) for details.
 
 
 
-#### License
+#### License:
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
