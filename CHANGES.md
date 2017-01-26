@@ -4,6 +4,7 @@
 
 - **NEW:** Within a view context, you can now invoke `render(node, as: "foo")`, and it will use a `_foo` partial in the same folder as `node`, passing `node` as a `foo` local. This allows you to easily apply decorator partials to nodes.
 - **NEW:** When invoking `Node#render`, you now have additional control over the layout behavior through the `layout` argument. Like before, when `true`, the default page layouts will be applied; when `false`, no layout will be applied whatsoever; but now you can also pass one or more nodes (or node selectors) that will be applied as layouts.
+- **BREAKING:** If you want to pass locals to `render`, you now need to use the `locals:` key. Example: `node.render(locals: { foo: "bar" })`
 
 
 ### 0.5.2 (2017-01-25)
