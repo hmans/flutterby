@@ -94,6 +94,11 @@ module Flutterby
         end
       end
 
+      def move_to(new_parent)
+        self.parent = new_parent.is_a(Node) ?
+          new_parent : find(new_parent)
+      end
+
       def parent=(new_parent)
         # Remove from previous parent
         if @parent

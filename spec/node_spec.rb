@@ -50,4 +50,12 @@ describe Flutterby::Node do
       its(:siblings) { is_expected.to eq(nil) }
     end
   end
+
+  describe '#descendants' do
+    pending
+  end
+
+  describe '#move_to' do
+    pending
+  end
 end
