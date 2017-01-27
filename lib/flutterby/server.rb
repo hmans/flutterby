@@ -15,12 +15,18 @@ module Flutterby
         # puts "added absolute path: #{added}"
         # puts "removed absolute path: #{removed}"
 
-        Flutterby.logger.info "Change detected, reloading everything!"
-        time = Benchmark.realtime do
-          @root.reload!
-          @root.stage!
+        modified.each do |fs_path|
+          node = @root.find_for_fs_path(fs_path)
+          logger.info "Reloading node #{node}"
+          node.reload!
         end
-        Flutterby.logger.info "Reloaded complete tree in #{sprintf("%.1fms", time * 1000).colorize(:green)}"
+
+        # Flutterby.logger.info "Change detected, reloading everything!"
+        # time = Benchmark.realtime do
+        #   @root.reload!
+        #   @root.stage!
+        # end
+        # Flutterby.logger.info "Reloaded complete tree in #{sprintf("%.1fms", time * 1000).colorize(:green)}"
       end
 
       # Set up Rack app
@@ -72,6 +78,10 @@ module Flutterby
         # Otherwise, use the node directly.
         node.folder? ? node.find('index') : node
       end
+    end
+
+    def logger
+      @logger ||= Flutterby.logger
     end
   end
 end

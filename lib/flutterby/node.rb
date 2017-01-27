@@ -5,25 +5,20 @@ module Flutterby
     attr_accessor :name, :ext, :source
     attr_reader :filters, :parent, :fs_path, :children
     attr_reader :prefix, :slug
-    attr_reader :_setup_procs
+    attr_reader :_handlers
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
+      @original_name = name
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
       @source  = source
-      @_setup_procs = []
-
-      # Extract name, extension, and filters from given name
-      parts    = name.split(".")
-      @name    = parts.shift
-      @ext     = parts.shift
-      @filters = parts.reverse
+      @_handlers = {}
 
       # Register this node with its parent
       if parent
         self.parent = parent
       end
 
-      reload!
+      load!
     end
 
     module Paths
@@ -59,6 +54,13 @@ module Flutterby
       #
       def siblings
         parent && (parent.children - [self])
+      end
+
+      # Returns all of this node's descendants (ie. children and
+      # their children and so on.)
+      #
+      def descendants
+        [children, children.map(&:descendants)].flatten.uniq
       end
 
       # Among this node's children, find a node by its name. If the
@@ -156,25 +158,68 @@ module Flutterby
           end
         end
       end
+
+      def find_for_fs_path(fs_path)
+        fs_path = File.expand_path(fs_path)
+        TreeWalker.walk_tree(self) do |node|
+          return node if node.fs_path == fs_path
+        end
+      end
     end
 
     include Tree
 
 
+    module Notifications
+      def emit(evt, *args)
+        TreeWalker.walk_up(self) do |node|
+          node.handle(evt, *args)
+        end
+      end
+
+      def respond_to?(meth, *args)
+        super || (meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1))
+      end
+
+      # Handle an incoming event. This will dispatch to a handle_* method if
+      # it's available.
+      #
+      def handle(evt, *args)
+        meth = "handle_#{evt}"
+        send(meth, *args) if respond_to?(meth)
+      end
+
+      private
+
+      def method_missing(meth, *args, &blk)
+        if meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1)
+          handlers_for($1).each do |handler|
+            instance_exec(&handler)
+          end
+        else
+          super
+        end
+      end
+
+      def can_handle?(evt)
+        !!handlers_for(evt)
+      end
+
+      def handlers_for(evt)
+        @_handlers[evt.to_sym]
+      end
+    end
+
+    include Notifications
+
     module Reading
-      # (Re-)loads the node from the filesystem, if it's a filesystem based
+      # Reloads the node from the filesystem, if it's a filesystem based
       # node.
       #
       def reload!
-        @data     = nil
-        @data_proxy = nil
-        @prefix   = nil
-        @slug     = nil
-        @children = []
-
-        load_from_filesystem! if @fs_path
-
-        extract_data!
+        load!
+        stage!
+        emit(:reloaded)
       end
 
       def data
@@ -182,6 +227,24 @@ module Flutterby
       end
 
       private
+
+      def load!
+        @data     = nil
+        @data_proxy = nil
+        @prefix   = nil
+        @slug     = nil
+        @children = []
+
+        # Extract name, extension, and filters from given name
+        parts    = @original_name.split(".")
+        @name    = parts.shift
+        @ext     = parts.shift
+        @filters = parts.reverse
+
+        load_from_filesystem! if @fs_path
+
+        extract_data!
+      end
 
       def load_from_filesystem!
         if @fs_path
@@ -280,22 +343,7 @@ module Flutterby
         # setup methods.
         #
         TreeWalker.walk_tree(self) do |node|
-          node.perform_setup!
-        end
-      end
-
-      # Perform setup for this node. The setup step is run after the
-      # tree has been built up completely. It allows you to perform one-time
-      # setup operations that, for example, modify the tree (like sorting blog
-      # posts into date-specific subnodes.)
-      #
-      # Your nodes (or their extensions) may overload this method, but you
-      # may also simply use the `setup { ... }` syntax in a node extension
-      # to define a block of code to be run at setup time.
-      #
-      def perform_setup!
-        _setup_procs.each do |p|
-          instance_exec(&p)
+          node.handle(:setup)
         end
       end
 

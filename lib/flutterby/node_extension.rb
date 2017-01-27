@@ -6,18 +6,27 @@ module Flutterby
   #
   class NodeExtension < Module
     def initialize(*args)
-      @_setup_procs = []
+      @_handlers = {}
       super
     end
 
     def extended(base)
-      if @_setup_procs.any?
-        base._setup_procs.append(*@_setup_procs)
+      if @_handlers.any?
+        @_handlers.each do |evt, handlers|
+          base._handlers[evt] ||= []
+          base._handlers[evt].append(*handlers)
+        end
       end
     end
 
     def on_setup(&blk)
-      @_setup_procs << blk
+      on(:setup, &blk)
+    end
+
+    def on(evt, &blk)
+      evt = evt.to_sym
+      @_handlers[evt] ||= []
+      @_handlers[evt] << blk
     end
   end
 end
