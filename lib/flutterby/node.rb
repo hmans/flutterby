@@ -367,8 +367,7 @@ module Flutterby
         #
         TreeWalker.walk_tree(self) do |node|
           if node.full_name == "_init.rb"
-            logger.debug "Executing initializer #{node.url}"
-            node.parent.instance_eval(node.render)
+            node.parent.load_initializer!(node)
           end
         end
 
@@ -404,6 +403,13 @@ module Flutterby
         Array(nodes).each do |n|
           n.extend(*mods)
         end
+      end
+
+
+      protected def load_initializer!(initializer)
+        logger.info "Loading initializer #{initializer.url}"
+        @_handlers = {}
+        instance_eval(initializer.render)
       end
     end
 
