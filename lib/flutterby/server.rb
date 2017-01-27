@@ -11,9 +11,9 @@ module Flutterby
     def run!(port: 4004)
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
-        puts "modified absolute path: #{modified}"
-        puts "added absolute path: #{added}"
-        puts "removed absolute path: #{removed}"
+        # puts "modified absolute path: #{modified}"
+        # puts "added absolute path: #{added}"
+        # puts "removed absolute path: #{removed}"
 
         modified.each do |fs_path|
           if node = @root.find_for_fs_path(fs_path)
