@@ -407,7 +407,7 @@ module Flutterby
 
 
       protected def load_initializer!(initializer)
-        logger.info "Loading initializer #{initializer.url}"
+        logger.info "Executing initializer #{initializer.url}"
         @_handlers = {}
         instance_eval(initializer.render)
       end
