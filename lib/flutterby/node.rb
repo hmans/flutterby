@@ -60,7 +60,18 @@ module Flutterby
       # their children and so on.)
       #
       def descendants
-        [children, children.map(&:descendants)].flatten.uniq
+        _descendants.flatten.uniq
+      end
+
+      private def _descendants
+        [children, children.map(&:descendants)]
+      end
+
+      # Returns the size of the graph starting with this
+      # node.
+      #
+      def size
+        descendants.length + 1
       end
 
       # Among this node's children, find a node by its name. If the
@@ -86,12 +97,6 @@ module Flutterby
 
       def emit_child(name)
         # Override this to dynamically create child nodes.
-      end
-
-      def tree_size
-        children.inject(children.length) do |count, child|
-          count + child.tree_size
-        end
       end
 
       def move_to(new_parent)

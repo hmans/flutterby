@@ -40,7 +40,7 @@ module Flutterby
         say color("📚  Importing site...", :bold)
         root = Flutterby::Node.new("/", fs_path: options.in)
         root.stage!
-        say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
+        say color("🌲  Read #{root.size} nodes.", :green, :bold)
 
         # Export site
         say color("💾  Exporting site...", :bold)
@@ -64,7 +64,7 @@ module Flutterby
       say color("📚  Importing site...", :bold)
       root = Flutterby::Node.new("/", fs_path: options.in)
       root.stage!
-      say color("🌲  Read #{root.tree_size} nodes.", :green, :bold)
+      say color("🌲  Read #{root.size} nodes.", :green, :bold)
 
       say color("🌤  Serving your Flutterby site on http://localhost:#{options.port} - enjoy! \\o/", :bold)
       server = Flutterby::Server.new(root)

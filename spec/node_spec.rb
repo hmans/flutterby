@@ -53,7 +53,15 @@ describe Flutterby::Node do
   end
 
   describe '#descendants' do
-    pending
+    it "returns a flat array with all of the node's descendants" do
+      expect(root.descendants).to eq [folder, file, page]
+    end
+  end
+
+  describe '#tree_size' do
+    it "returns the size of the complete tree, starting with this node" do
+      expect(root.size).to eq(4)
+    end
   end
 
   describe '#move_to' do
