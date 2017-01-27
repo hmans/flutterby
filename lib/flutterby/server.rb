@@ -16,8 +16,11 @@ module Flutterby
         # puts "removed absolute path: #{removed}"
 
         Flutterby.logger.info "Change detected, reloading everything!"
-        @root.reload!
-        @root.stage!
+        time = Benchmark.realtime do
+          @root.reload!
+          @root.stage!
+        end
+        Flutterby.logger.info "Reloaded complete tree in #{sprintf("%.1fms", time * 1000).colorize(:green)}"
       end
 
       # Set up Rack app
