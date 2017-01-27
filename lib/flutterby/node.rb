@@ -1,5 +1,3 @@
-require 'flutterby/node_extension'
-
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
@@ -200,6 +198,14 @@ module Flutterby
         send(meth, *args) if respond_to?(meth)
       end
 
+      # Register an event handler.
+      #
+      def on(evt, &blk)
+        evt = evt.to_sym
+        @_handlers[evt] ||= []
+        @_handlers[evt] << blk
+      end
+
       private
 
       def method_missing(meth, *args, &blk)
@@ -230,7 +236,7 @@ module Flutterby
       end
 
       def delete!
-        handle(:deleted)
+        emit(:deleted, self)
         move_to(nil)
         @deleted = true
       end
@@ -246,7 +252,7 @@ module Flutterby
       def reload!
         load!
         stage!
-        handle(:reloaded)
+        emit(:reloaded, self)
       end
 
       def data
@@ -362,7 +368,7 @@ module Flutterby
         TreeWalker.walk_tree(self) do |node|
           if node.full_name == "_init.rb"
             logger.debug "Executing initializer #{node.url}"
-            node.instance_eval(node.render)
+            node.parent.instance_eval(node.render)
           end
         end
 
@@ -370,7 +376,7 @@ module Flutterby
         # setup methods.
         #
         TreeWalker.walk_tree(self) do |node|
-          node.handle(:setup)
+          node.emit(:created, node)
         end
       end
 
@@ -392,10 +398,10 @@ module Flutterby
       #
       def extend_all(nodes, *mods, &blk)
         if block_given?
-          mods << NodeExtension.new(&blk)
+          mods << Module.new(&blk)
         end
 
-        nodes.each do |n|
+        Array(nodes).each do |n|
           n.extend(*mods)
         end
       end

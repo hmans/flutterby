@@ -27,7 +27,6 @@ module Flutterby
             logger.info "Adding node to #{parent}"
             node = parent.create(File.basename(fs_path), fs_path: fs_path)
             node.stage!
-            node.handle(:created)
           end
         end
 
