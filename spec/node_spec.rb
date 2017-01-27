@@ -57,6 +57,29 @@ describe Flutterby::Node do
   end
 
   describe '#move_to' do
-    pending
+    let!(:another_folder) { root.create("another_folder") }
+
+    context "when specifying another node" do
+      it "will move the node to that node" do
+        expect { file.move_to(another_folder) }
+          .to change { file.parent }
+          .from(folder).to(another_folder)
+      end
+    end
+
+    context "when specifying a path expression" do
+      it "will move the node to the node found by the expression" do
+        expect { file.move_to("/another_folder") }
+          .to change { file.parent }
+          .from(folder).to(another_folder)
+      end
+
+      context "when the path expression is invalid" do
+        it "will raise an error" do
+          expect { file.move_to("/INVALID") }
+            .to raise_error %{Could not find node for path expression '/INVALID'}
+        end
+      end
+    end
   end
 end
