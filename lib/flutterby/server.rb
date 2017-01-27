@@ -22,6 +22,14 @@ module Flutterby
           end
         end
 
+        added.each do |fs_path|
+          if parent = @root.find_for_fs_path(File.dirname(fs_path))
+            logger.info "Adding node to #{parent}"
+            node = parent.create(File.basename(fs_path), fs_path: fs_path)
+            node.handle(:created)
+          end
+        end
+
         removed.each do |fs_path|
           if node = @root.find_for_fs_path(fs_path)
             logger.info "Removing node #{node}"
