@@ -50,6 +50,14 @@ module Flutterby
       node.siblings(*args)
     end
 
+    def parent
+      node.parent
+    end
+
+    def root
+      node.root
+    end
+
     def tag(name, attributes = {})
       ActiveSupport::SafeBuffer.new.tap do |output|
         attributes_str = attributes.keys.sort.map do |k|
