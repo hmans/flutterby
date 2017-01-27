@@ -8,6 +8,7 @@ module Flutterby
     attr_reader :_handlers
 
     def initialize(name, parent: nil, fs_path: nil, source: nil)
+      @deleted = false
       @original_name = name
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
       @source  = source
@@ -25,7 +26,7 @@ module Flutterby
       # Returns the node's URL.
       #
       def url
-        ::File.join(parent ? parent.url : "/", full_name)
+        deleted? ? nil : ::File.join(parent ? parent.url : "/", full_name)
       end
     end
 
@@ -100,8 +101,8 @@ module Flutterby
       end
 
       def move_to(new_parent)
-        self.parent = new_parent.is_a?(Node) ?
-          new_parent : find!(new_parent)
+        self.parent = new_parent.is_a?(String) ?
+          find!(new_parent) : new_parent
       end
 
       def parent=(new_parent)
@@ -222,6 +223,22 @@ module Flutterby
 
     include Notifications
 
+
+    module Deletion
+      def deleted?
+        @deleted
+      end
+
+      def delete!
+        handle(:deleted)
+        move_to(nil)
+        @deleted = true
+      end
+    end
+
+    include Deletion
+
+
     module Reading
       # Reloads the node from the filesystem, if it's a filesystem based
       # node.
@@ -229,7 +246,7 @@ module Flutterby
       def reload!
         load!
         stage!
-        emit(:reloaded)
+        handle(:reloaded)
       end
 
       def data
@@ -492,7 +509,7 @@ module Flutterby
     end
 
     def should_publish?
-      !name.start_with?("_")
+      !name.start_with?("_") && !deleted?
     end
 
     def logger

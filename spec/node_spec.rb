@@ -89,5 +89,13 @@ describe Flutterby::Node do
         end
       end
     end
+
+    context "when specifying another node" do
+      it "will move the node to that node" do
+        expect { file.move_to(nil) }
+          .to change { file.parent }
+          .from(folder).to(nil)
+      end
+    end
   end
 end

@@ -11,22 +11,23 @@ module Flutterby
     def run!(port: 4004)
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
-        # puts "modified absolute path: #{modified}"
-        # puts "added absolute path: #{added}"
-        # puts "removed absolute path: #{removed}"
+        puts "modified absolute path: #{modified}"
+        puts "added absolute path: #{added}"
+        puts "removed absolute path: #{removed}"
 
         modified.each do |fs_path|
-          node = @root.find_for_fs_path(fs_path)
-          logger.info "Reloading node #{node}"
-          node.reload!
+          if node = @root.find_for_fs_path(fs_path)
+            logger.info "Reloading node #{node}"
+            node.reload!
+          end
         end
 
-        # Flutterby.logger.info "Change detected, reloading everything!"
-        # time = Benchmark.realtime do
-        #   @root.reload!
-        #   @root.stage!
-        # end
-        # Flutterby.logger.info "Reloaded complete tree in #{sprintf("%.1fms", time * 1000).colorize(:green)}"
+        removed.each do |fs_path|
+          if node = @root.find_for_fs_path(fs_path)
+            logger.info "Removing node #{node}"
+            node.delete!
+          end
+        end
       end
 
       # Set up Rack app
