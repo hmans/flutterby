@@ -26,6 +26,7 @@ module Flutterby
           if parent = @root.find_for_fs_path(File.dirname(fs_path))
             logger.info "Adding node to #{parent}"
             node = parent.create(File.basename(fs_path), fs_path: fs_path)
+            node.stage!
             node.handle(:created)
           end
         end
