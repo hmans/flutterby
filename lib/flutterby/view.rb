@@ -58,6 +58,10 @@ module Flutterby
       node.root
     end
 
+    def data
+      node.data
+    end
+
     def tag(name, attributes = {})
       ActiveSupport::SafeBuffer.new.tap do |output|
         attributes_str = attributes.keys.sort.map do |k|
