@@ -184,7 +184,7 @@ module Flutterby
     module Notifications
       def emit(evt, *args)
         TreeWalker.walk_up(self) do |node|
-          node.handle(evt, *args)
+          node.handle(evt, self, *args)
         end
       end
 
@@ -195,28 +195,45 @@ module Flutterby
       # Handle an incoming event. This will dispatch to a handle_* method if
       # it's available.
       #
-      def handle(evt, *args)
+      def handle(evt, node, *args)
         meth = "handle_#{evt}"
-        send(meth, *args) if respond_to?(meth)
+        send(meth, node, *args) if respond_to?(meth)
       end
 
       # Register an event handler.
       #
-      def on(evt, &blk)
+      def on(evt, selector = nil, &blk)
         evt = evt.to_sym
         @_handlers[evt] ||= []
-        @_handlers[evt] << blk
+        @_handlers[evt] << { selector: selector, blk: blk }
       end
 
       private
 
       def method_missing(meth, *args, &blk)
         if meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1)
-          handlers_for($1).each do |handler|
-            handler.call(*args)
-          end
+          execute_handlers($1, *args)
         else
           super
+        end
+      end
+
+      def execute_handlers(evt, node, *args)
+        handlers_for(evt).each do |handler|
+          if node.handler_applies?(handler)
+            handler[:blk].call(node, *args)
+          end
+        end
+      end
+
+      protected def handler_applies?(handler)
+        selector = handler[:selector]
+
+        case selector
+        when nil    then true
+        when String then url == selector
+        when Regexp then url =~ selector
+        when Node   then self == selector
         end
       end
 
@@ -238,7 +255,7 @@ module Flutterby
       end
 
       def delete!
-        emit(:deleted, self)
+        emit(:deleted)
         move_to(nil)
         @deleted = true
       end
@@ -254,7 +271,7 @@ module Flutterby
       def reload!
         load!
         stage!
-        emit(:reloaded, self)
+        emit(:reloaded)
       end
 
       def data
@@ -377,7 +394,7 @@ module Flutterby
         # setup methods.
         #
         TreeWalker.walk_tree(self) do |node|
-          node.emit(:created, node)
+          node.emit(:created)
         end
       end
 
