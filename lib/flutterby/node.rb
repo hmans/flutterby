@@ -2,7 +2,7 @@ module Flutterby
   class Node
     attr_accessor :name, :ext, :source
     attr_reader :filters, :parent, :fs_path, :children
-    attr_reader :prefix, :slug
+    attr_reader :prefix, :slug, :timestamp
     attr_reader :_handlers
 
     def initialize(name = nil, parent: nil, fs_path: nil, source: nil)
@@ -296,6 +296,7 @@ module Flutterby
         @slug     = nil
         @children = []
         @_handlers = {}
+        @timestamp = Time.now
 
         # Extract name, extension, and filters from given name
         parts    = @original_name.split(".")
@@ -310,6 +311,8 @@ module Flutterby
 
       def load_from_filesystem!
         if @fs_path
+          @timestamp = File.mtime(fs_path)
+
           if ::File.directory?(fs_path)
             Dir[::File.join(fs_path, "*")].each do |entry|
               name = ::File.basename(entry)
