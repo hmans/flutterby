@@ -5,10 +5,12 @@ module Flutterby
     attr_reader :prefix, :slug
     attr_reader :_handlers
 
-    def initialize(name, parent: nil, fs_path: nil, source: nil)
-      @deleted = false
-      @original_name = name
+    def initialize(name = nil, parent: nil, fs_path: nil, source: nil)
+      raise "Either name or fs_path need to be specified." unless name || fs_path
+
+      @original_name = name || File.basename(fs_path)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
+      @deleted = false
       @source  = source
       @_handlers = {}
 
