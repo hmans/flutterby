@@ -270,9 +270,15 @@ module Flutterby
       # node.
       #
       def reload!
-        load!
-        stage!
-        emit(:reloaded)
+        logger.info "Reloading #{url.colorize(:blue)}"
+
+        time = Benchmark.realtime do
+          load!
+          stage!
+          emit(:reloaded)
+        end
+
+        logger.info "Reloaded #{url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(:light_white)}"
       end
 
       def data
@@ -287,6 +293,7 @@ module Flutterby
         @prefix   = nil
         @slug     = nil
         @children = []
+        @_handlers = {}
 
         # Extract name, extension, and filters from given name
         parts    = @original_name.split(".")
