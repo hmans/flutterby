@@ -213,7 +213,7 @@ module Flutterby
       def method_missing(meth, *args, &blk)
         if meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1)
           handlers_for($1).each do |handler|
-            instance_exec(*args, &handler)
+            handler.call(*args)
           end
         else
           super
