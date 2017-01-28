@@ -1,5 +1,10 @@
 # Version History
 
+### 0.6.1 (in development)
+
+- **FIXED:** Front matter is now extracted using a non-greedy regular expression, fixing the problem with `---` horizontal rules in Markdown bodies.
+
+
 ### 0.6.0 (2017-01-26)
 
 - **NEW:** Within a view context, you can now invoke `render(node, as: "foo")`, and it will use a `_foo` partial in the same folder as `node`, passing `node` as a `foo` local. This allows you to easily apply decorator partials to nodes.

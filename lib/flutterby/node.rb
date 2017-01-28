@@ -348,12 +348,12 @@ module Flutterby
       def extract_frontmatter!
         if @source
           # YAML Front Matter
-          if @source.sub!(/\A\-\-\-\n(.+)\n\-\-\-\n/m, "")
+          if @source.sub!(/\A\-\-\-\n(.+?)\n\-\-\-\n/m, "")
             @data.merge! YAML.load($1)
           end
 
           # TOML Front Matter
-          if @source.sub!(/\A\+\+\+\n(.+)\n\+\+\+\n/m, "")
+          if @source.sub!(/\A\+\+\+\n(.+?)\n\+\+\+\n/m, "")
             @data.merge! TOML.parse($1)
           end
         end
