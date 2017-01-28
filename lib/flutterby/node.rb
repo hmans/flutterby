@@ -202,10 +202,12 @@ module Flutterby
 
       # Register an event handler.
       #
-      def on(evt, selector = nil, &blk)
-        evt = evt.to_sym
-        @_handlers[evt] ||= []
-        @_handlers[evt] << { selector: selector, blk: blk }
+      def on(evts, selector = nil, &blk)
+        Array(evts).map do |evt|
+          evt = evt.to_sym
+          @_handlers[evt] ||= []
+          @_handlers[evt] << { selector: selector, blk: blk }
+        end
       end
 
       private
