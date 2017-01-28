@@ -531,10 +531,10 @@ module Flutterby
     end
 
     def copy(new_name, data = {})
-      dup.tap do |c|
-        c.name = new_name
-        c.data.merge!(data)
-        parent.children << c
+      full_new_name = [new_name, ext, filters.reverse].flatten.join(".")
+
+      parent.create(full_new_name, source: source, fs_path: fs_path).tap do |node|
+        node.data.merge!(data)
       end
     end
   end
