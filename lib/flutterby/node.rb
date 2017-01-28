@@ -234,6 +234,7 @@ module Flutterby
         when String then url == selector
         when Regexp then url =~ selector
         when Node   then self == selector
+        when Proc   then selector.call(self)
         end
       end
 
