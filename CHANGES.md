@@ -1,6 +1,6 @@
 # Version History
 
-### HEAD
+### 0.6.2 (2017-01-29)
 
 - **FIXED:** Images and other binaries would crash Flutterby when trying to extract frontmatter from them. Woops! ([#29](https://github.com/hmans/flutterby/issues/29))
 
