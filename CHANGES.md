@@ -1,6 +1,6 @@
 # Version History
 
-### 0.6.1 (in development)
+### 0.6.1 (2017-01-29)
 
 - **FIXED:** Front matter is now extracted using a non-greedy regular expression, fixing the problem with `---` horizontal rules in Markdown bodies.
 
