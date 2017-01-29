@@ -42,10 +42,6 @@ module Flutterby
     prepend Rendering
 
 
-    #
-    # Misc
-    #
-
     # Returns the node's title. If there is a `:title` key in {#data}, its
     # value will be used; otherwise, as a fallback, it will generate a
     # human-readable title from {#slug}.
