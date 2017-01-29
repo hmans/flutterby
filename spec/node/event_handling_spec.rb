@@ -67,6 +67,26 @@ describe Flutterby::EventHandling do
     end
   end
 
+  describe '#emit' do
+    let!(:root) { node "/" }
+    let!(:foo)  { root.create "foo" }
+    let!(:bar)  { foo.create "bar" }
+    let!(:baz)  { foo.create "baz" }
+
+    context "when invoked on a low-level node" do
+      it "travels up the tree, invoking handlers on its way" do
+        expect(bar).to  receive(:handle).with(:test, bar)
+        expect(foo).to  receive(:handle).with(:test, bar)
+        expect(root).to receive(:handle).with(:test, bar)
+        bar.emit :test
+      end
+
+      it "does not invoke the handler on nodes that are not on the way up the tree" do
+        expect(baz).to_not receive(:handle)
+        bar.emit :test
+      end
+    end
+  end
 
   describe "integration with initializers" do
     let!(:root) { node "/" }
