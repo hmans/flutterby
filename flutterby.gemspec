@@ -9,10 +9,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Hendrik Mans"]
   spec.email         = ["hendrik@mans.de"]
 
-  spec.summary       = %q{There are many static site generators. This is mine.}
-  spec.description   = %q{There are many static site generators. This is mine.}
+  spec.summary       = %q{A flexible, Ruby-powered website creation framework.}
+  spec.description   = %q{Flutterby is a flexible, Ruby-powered, routing graph-based web application framework that will serve your website dynamically or export it as a static site.}
   spec.homepage      = "https://github.com/hmans/flutterby"
   spec.license       = "MIT"
+
+  spec.post_install_message = %q{Please note that Flutterby is still under heavy development. If you use it to build a website, please expect breakage in future versions! Please keep an eye (or two) on the official website at <http://flutterby.run>.}
 
   spec.required_ruby_version = '~> 2.2'
 
