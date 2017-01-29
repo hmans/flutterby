@@ -14,6 +14,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/hmans/flutterby"
   spec.license       = "MIT"
 
+  spec.post_install_message = %q{Please note that Flutterby is still under heavy development. If you use it to build a website, please expect breakage in future versions! Please keep an eye (or two) on the official website at <http://flutterby.run>.}
+
   spec.required_ruby_version = '~> 2.2'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
