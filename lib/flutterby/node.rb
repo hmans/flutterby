@@ -9,7 +9,6 @@ module Flutterby
 
       @original_name = name || File.basename(fs_path)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
-      @deleted = false
       @source  = source
 
       # Register this node with its parent
@@ -35,18 +34,7 @@ module Flutterby
     include Tree
 
 
-    module Deletion
-      def deleted?
-        @deleted
-      end
-
-      def delete!
-        emit(:deleted)
-        move_to(nil)
-        @deleted = true
-      end
-    end
-
+    require 'flutterby/node/deletion'
     include Deletion
 
 
