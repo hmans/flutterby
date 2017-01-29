@@ -9,6 +9,13 @@ module Flutterby
       @children = []
     end
 
+    # Returns true if this node represents a folder, ie. it contains
+    # additional children.
+    #
+    def folder?
+      children.any?
+    end
+
     # Returns the tree's root node.
     #
     def root

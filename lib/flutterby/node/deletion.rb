@@ -1,7 +1,5 @@
 module Flutterby
   module Deletion
-    extend ActiveSupport::Concern
-
     def initialize(*args)
       @deleted = false
       super

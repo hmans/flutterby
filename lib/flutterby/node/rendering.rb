@@ -1,7 +1,5 @@
 module Flutterby
   module Rendering
-    extend ActiveSupport::Concern
-    
     # Renders the node. One of the most important methods in Flutterby, which
     # explains why it's wholly undocumented. Apologies, I'm working on it!
     #

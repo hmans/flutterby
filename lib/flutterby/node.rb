@@ -8,8 +8,7 @@ require 'flutterby/node/rendering'
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
-    attr_reader :filters, :fs_path
-    attr_reader :prefix, :slug, :timestamp
+    attr_reader :filters, :fs_path, :prefix, :slug, :timestamp
 
     def initialize(name = nil, parent: nil, fs_path: nil, source: nil)
       raise "Either name or fs_path need to be specified." unless name || fs_path
@@ -74,10 +73,6 @@ module Flutterby
 
     def full_name
       [name, ext].compact.join(".")
-    end
-
-    def folder?
-      children.any?
     end
 
     def file?
