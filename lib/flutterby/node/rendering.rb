@@ -40,7 +40,7 @@ module Flutterby
         :green
       end
 
-      logger.debug "Rendered #{url.colorize(:blue)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
+      logger.debug "Rendered #{url.colorize(:magenta)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
 
       output
     end

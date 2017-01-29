@@ -19,12 +19,29 @@ module Flutterby
       @data_proxy ||= Dotaccess[@data]
     end
 
+    # Will return the node's current source. If no source is stored with the
+    # node instance, this method will load (but not memoize) the contents of
+    # the file backing this node.
+    #
     def source
-      @source ||= (fs_path && File.file?(fs_path) ? File.read(fs_path) : nil)
+      @source || load_file_contents
     end
 
-
     private
+
+    # Pre-load the contents of the file backing this node and store it with
+    # this node instance.
+    #
+    def load_source!
+      @source = load_file_contents
+    end
+
+    def load_file_contents
+      if fs_path && File.file?(fs_path)
+        logger.debug "Loading #{url.colorize(:blue)} from file system"
+        File.read(fs_path)
+      end
+    end
 
     def load!
       clear!
@@ -50,8 +67,19 @@ module Flutterby
             name = ::File.basename(entry)
             Flutterby::Node.new(name, parent: self, fs_path: entry)
           end
+
+        # If the file starts with frontmatter, load its entire source
+        # and keep it
+        elsif preload_source?
+          load_source!
         end
       end
+    end
+
+    # Returns true if the source for this node should be preloaded.
+    #
+    def preload_source?
+      mime_type.ascii? || File.size(fs_path) < 5.kilobytes
     end
 
     def extract_data!
@@ -86,18 +114,32 @@ module Flutterby
     end
 
     def extract_frontmatter!
-      if source
+      # If the file backing this node has frontmatter, preload the source.
+      load_source! if file_has_frontmatter?
+
+      # If any source is available at all, let's try and parse it for
+      # frontmatter.
+      if @source
         # YAML Front Matter
-        if source.sub!(/\A\-\-\-\n(.+?)\n\-\-\-\n/m, "")
+        if @source.sub!(/\A\-\-\-\n(.+?)\n\-\-\-\n/m, "")
           @data.merge! YAML.load($1)
         end
 
         # TOML Front Matter
-        if source.sub!(/\A\+\+\+\n(.+?)\n\+\+\+\n/m, "")
+        if @source.sub!(/\A\+\+\+\n(.+?)\n\+\+\+\n/m, "")
           @data.merge! TOML.parse($1)
         end
       end
     rescue ArgumentError => e
+    end
+
+    def file_has_frontmatter?
+      if fs_path && File.file?(fs_path)
+        first_line = File.open(fs_path, &:readline)
+        ["---\n", "+++\n"].include? first_line
+      end
+    rescue EOFError
+      false
     end
 
     def read_json!

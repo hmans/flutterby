@@ -26,7 +26,7 @@ module Flutterby
     #   node.emit(:foo, name: "John")
     #
     def emit(evt, *args)
-      logger.debug "#{self} emitting event '#{evt}' with #{args.inspect}"
+      logger.debug "#{self.url.colorize(:green)} emitting event '#{evt}' with #{args.inspect}"
 
       TreeWalker.walk_up(self) do |node|
         node.handle(evt, self, *args)
