@@ -108,6 +108,9 @@ module Flutterby
         # Override this to dynamically create child nodes.
       end
 
+      # Move this node to a new parent. The parent can be specified as either
+      # a node object, or a path expression.
+      #
       def move_to(new_parent)
         self.parent = new_parent.is_a?(String) ?
           find!(new_parent) : new_parent
@@ -149,6 +152,8 @@ module Flutterby
         find(path, *args) || raise("Could not find node for path expression '#{path}'")
       end
 
+      # Find a node by the specified path expression.
+      #
       def find(path, opts = {})
         path = path.to_s
         return self if path.empty?
@@ -178,6 +183,9 @@ module Flutterby
         end
       end
 
+      # Within this (sub-)tree, find the node that matches the file system
+      # path specified in `fs_path`.
+      #
       def find_for_fs_path(fs_path)
         fs_path = File.expand_path(fs_path)
         TreeWalker.walk_tree(self) do |node|
