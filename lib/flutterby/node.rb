@@ -29,7 +29,7 @@ module Flutterby
       end
     end
 
-    include Paths
+    prepend Paths
 
 
     def clear!
@@ -45,7 +45,7 @@ module Flutterby
 
 
     require 'flutterby/node/deletion'
-    include Deletion
+    prepend Deletion
 
 
     module Reading
@@ -164,7 +164,7 @@ module Flutterby
       end
     end
 
-    include Reading
+    prepend Reading
 
 
     require 'flutterby/node/event_handling'
@@ -225,11 +225,11 @@ module Flutterby
       end
     end
 
-    include Staging
+    prepend Staging
 
 
     require 'flutterby/node/rendering'
-    include Rendering
+    prepend Rendering
 
 
 
