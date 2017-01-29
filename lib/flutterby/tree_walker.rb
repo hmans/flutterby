@@ -25,13 +25,16 @@ module Flutterby
     # descending into its child layers.
     #
     def walk_tree(node, val = nil, &blk)
-      val = blk.call(node, val)
+      # Build a list of nodes to run block against. Since
+      # tree walking will also be used to modify the tree,
+      # we can't relay on simple recursion and iteration here.
+      #
+      nodes = [node] + node.descendants
 
-      node.children.each do |child|
-        val = walk_tree(child, val, &blk)
+      # Execute block
+      nodes.inject(val) do |val, n|
+        blk.call(n, val)
       end
-
-      val
     end
   end
 end

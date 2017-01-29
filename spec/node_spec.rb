@@ -51,4 +51,57 @@ describe Flutterby::Node do
       its(:siblings) { is_expected.to eq(nil) }
     end
   end
+
+  describe '#descendants' do
+    it "returns a flat array with all of the node's descendants" do
+      expect(root.descendants).to eq [folder, file, page]
+    end
+  end
+
+  describe '#full_tree' do
+    it "returns a flat array with all nodes in the tree" do
+      expect(root.all_nodes).to eq [root, folder, file, page]
+    end
+  end
+
+  describe '#tree_size' do
+    it "returns the number of all nodes in the tree" do
+      expect(root.size).to eq(4)
+    end
+  end
+
+  describe '#move_to' do
+    let!(:another_folder) { root.create("another_folder") }
+
+    context "when specifying another node" do
+      it "will move the node to that node" do
+        expect { file.move_to(another_folder) }
+          .to change { file.parent }
+          .from(folder).to(another_folder)
+      end
+    end
+
+    context "when specifying a path expression" do
+      it "will move the node to the node found by the expression" do
+        expect { file.move_to("/another_folder") }
+          .to change { file.parent }
+          .from(folder).to(another_folder)
+      end
+
+      context "when the path expression is invalid" do
+        it "will raise an error" do
+          expect { file.move_to("/INVALID") }
+            .to raise_error %{Could not find node for path expression '/INVALID'}
+        end
+      end
+    end
+
+    context "when specifying another node" do
+      it "will move the node to that node" do
+        expect { file.move_to(nil) }
+          .to change { file.parent }
+          .from(folder).to(nil)
+      end
+    end
+  end
 end

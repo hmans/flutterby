@@ -11,16 +11,8 @@ module Flutterby
     def run!(port: 4004)
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
-        # puts "modified absolute path: #{modified}"
-        # puts "added absolute path: #{added}"
-        # puts "removed absolute path: #{removed}"
-
-        Flutterby.logger.info "Change detected, reloading everything!"
-        time = Benchmark.realtime do
-          @root.reload!
-          @root.stage!
-        end
-        Flutterby.logger.info "Reloaded complete tree in #{sprintf("%.1fms", time * 1000).colorize(:green)}"
+        @root.reload!
+        # handle_fs_change(modified, added, removed)
       end
 
       # Set up Rack app
@@ -43,6 +35,30 @@ module Flutterby
       # Go!
       listener.start
       server.run app, Port: port, Logger: Flutterby.logger
+    end
+
+    def handle_fs_change(modified, added, removed)
+      modified.each do |fs_path|
+        if node = @root.find_for_fs_path(fs_path)
+          logger.info "Reloading node #{node}"
+          node.reload!
+        end
+      end
+
+      added.each do |fs_path|
+        if parent = @root.find_for_fs_path(File.dirname(fs_path))
+          logger.info "Adding node to #{parent}"
+          node = parent.create(File.basename(fs_path), fs_path: fs_path)
+          node.stage!
+        end
+      end
+
+      removed.each do |fs_path|
+        if node = @root.find_for_fs_path(fs_path)
+          logger.info "Removing node #{node}"
+          node.delete!
+        end
+      end
     end
 
     def call(env)
@@ -72,6 +88,10 @@ module Flutterby
         # Otherwise, use the node directly.
         node.folder? ? node.find('index') : node
       end
+    end
+
+    def logger
+      @logger ||= Flutterby.logger
     end
   end
 end
