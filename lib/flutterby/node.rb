@@ -3,7 +3,7 @@ module Flutterby
     attr_accessor :name, :ext, :source
     attr_reader :filters, :parent, :fs_path, :children
     attr_reader :prefix, :slug, :timestamp
-    attr_reader :_handlers
+    attr_reader :event_handlers
 
     def initialize(name = nil, parent: nil, fs_path: nil, source: nil)
       raise "Either name or fs_path need to be specified." unless name || fs_path
@@ -12,7 +12,7 @@ module Flutterby
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
       @deleted = false
       @source  = source
-      @_handlers = {}
+      @event_handlers = {}
 
       # Register this node with its parent
       if parent
@@ -205,8 +205,8 @@ module Flutterby
       def on(evts, selector = nil, &blk)
         Array(evts).map do |evt|
           evt = evt.to_sym
-          @_handlers[evt] ||= []
-          @_handlers[evt] << { selector: selector, blk: blk }
+          @event_handlers[evt] ||= []
+          @event_handlers[evt] << { selector: selector, blk: blk }
         end
       end
 
@@ -214,13 +214,13 @@ module Flutterby
 
       def method_missing(meth, *args, &blk)
         if meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1)
-          execute_handlers($1, *args)
+          executeevent_handlers($1, *args)
         else
           super
         end
       end
 
-      def execute_handlers(evt, node, *args)
+      def executeevent_handlers(evt, node, *args)
         handlers_for(evt).each do |handler|
           if node.handler_applies?(handler)
             handler[:blk].call(node, *args)
@@ -245,7 +245,7 @@ module Flutterby
       end
 
       def handlers_for(evt)
-        @_handlers[evt.to_sym]
+        @event_handlers[evt.to_sym]
       end
     end
 
@@ -295,7 +295,7 @@ module Flutterby
         @prefix   = nil
         @slug     = nil
         @children = []
-        @_handlers = {}
+        @event_handlers = {}
         @timestamp = Time.now
 
         # Extract name, extension, and filters from given name
@@ -440,7 +440,7 @@ module Flutterby
 
       protected def load_initializer!(initializer)
         logger.info "Executing initializer #{initializer.url}"
-        @_handlers = {}
+        @event_handlers = {}
         instance_eval(initializer.render)
       end
     end
