@@ -67,11 +67,8 @@ module Flutterby
 
       # Look for target node in path registry
       if node = find_node_for_path(req.path)
-        # Determine MIME type
-        mime_type = MIME::Types.type_for(node.ext) || "text/plain"
-
         # Build response
-        res.headers["Content-Type"] = mime_type
+        res.headers["Content-Type"] = node.mime_type.to_s
         res.body = [node.render(layout: true)]
       else
         res.status = 404

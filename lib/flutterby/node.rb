@@ -71,6 +71,10 @@ module Flutterby
       [name, ext].compact.join(".")
     end
 
+    def mime_type
+      MIME::Types.type_for(ext).first || MIME::Types["text/plain"].first
+    end
+
     def file?
       !folder? && should_publish?
     end
