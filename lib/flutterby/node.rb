@@ -11,7 +11,6 @@ module Flutterby
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
       @deleted = false
       @source  = source
-      @event_handlers = {}
 
       # Register this node with its parent
       if parent
@@ -196,10 +195,6 @@ module Flutterby
     include Tree
 
 
-    require 'flutterby/node/event_handling'
-    include EventHandling
-
-
     module Deletion
       def deleted?
         @deleted
@@ -243,7 +238,6 @@ module Flutterby
         @prefix   = nil
         @slug     = nil
         @children = []
-        @event_handlers = {}
         @timestamp = Time.now
 
         # Extract name, extension, and filters from given name
@@ -339,6 +333,11 @@ module Flutterby
     include Reading
 
 
+    require 'flutterby/node/event_handling'
+    include EventHandling
+
+
+
 
     module Staging
       def stage!
@@ -388,7 +387,6 @@ module Flutterby
 
       protected def load_initializer!(initializer)
         logger.info "Executing initializer #{initializer.url}"
-        @event_handlers = {}
         instance_eval(initializer.render)
       end
     end

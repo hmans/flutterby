@@ -67,6 +67,11 @@ module Flutterby
 
     private
 
+    def load!
+      @event_handlers = {}
+      super
+    end
+
     def method_missing(meth, *args, &blk)
       if meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1)
         execute_event_handlers($1, *args)
