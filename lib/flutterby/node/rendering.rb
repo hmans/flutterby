@@ -20,7 +20,7 @@ module Flutterby
       output = ""
       time = Benchmark.realtime do
         # Apply filters
-        output = Filters.apply! @source.html_safe,
+        output = Filters.apply! source.html_safe,
           filters + extra_filters,
           view: view, &blk
 
