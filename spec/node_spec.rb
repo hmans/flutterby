@@ -58,8 +58,14 @@ describe Flutterby::Node do
     end
   end
 
+  describe '#full_tree' do
+    it "returns a flat array with all nodes in the tree" do
+      expect(root.all_nodes).to eq [root, folder, file, page]
+    end
+  end
+
   describe '#tree_size' do
-    it "returns the size of the complete tree, starting with this node" do
+    it "returns the number of all nodes in the tree" do
       expect(root.size).to eq(4)
     end
   end

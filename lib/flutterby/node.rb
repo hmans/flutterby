@@ -46,15 +46,17 @@ module Flutterby
         root == self
       end
 
-      def sibling(name)
-        parent && parent.find(name)
-      end
-
       # Returns this node's siblings (ie. other nodes within the
       # same folder node.)
       #
       def siblings
         parent && (parent.children - [self])
+      end
+
+      # Returns the sibling with the specified name.
+      #
+      def sibling(name)
+        parent && parent.find(name)
       end
 
       # Returns all of this node's descendants (ie. children and
@@ -68,11 +70,17 @@ module Flutterby
         [children, children.map(&:descendants)]
       end
 
+      # Returns the complete tree, including this node.
+      #
+      def all_nodes
+        [self] + descendants
+      end
+
       # Returns the size of the graph starting with this
       # node.
       #
       def size
-        descendants.length + 1
+        all_nodes.length
       end
 
       # Among this node's children, find a node by its name. If the
