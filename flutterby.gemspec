@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Hendrik Mans"]
   spec.email         = ["hendrik@mans.de"]
 
-  spec.summary       = %q{There are many static site generators. This is mine.}
-  spec.description   = %q{There are many static site generators. This is mine.}
+  spec.summary       = %q{A flexible, Ruby-powered website creation framework.}
+  spec.description   = %q{Flutterby is a flexible, Ruby-powered, routing graph-based web application framework that will serve your website dynamically or export it as a static site.}
   spec.homepage      = "https://github.com/hmans/flutterby"
   spec.license       = "MIT"
 
