@@ -3,7 +3,7 @@
 ### HEAD
 
 - **NEW:** Event system! (TODO: add link to tutorial.)
-
+- **NEW:** Flutterby will now add your project's `lib` directory to Ruby's load path. Use it to house any Ruby modules that you want out of your site directory.
 
 ### 0.6.2 (2017-01-29)
 

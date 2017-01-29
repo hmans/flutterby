@@ -11,7 +11,6 @@ require "flutterby/node"
 require "flutterby/filters"
 require "flutterby/view"
 
-
 module Flutterby
   extend self
 
@@ -21,3 +20,6 @@ module Flutterby
     @logger ||= Logger.new(STDOUT)
   end
 end
+
+# Add local lib directory of project using this gem to load path
+$:.unshift File.join(Dir.getwd, "/lib")
