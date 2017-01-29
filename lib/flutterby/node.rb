@@ -7,7 +7,7 @@ require 'flutterby/node/rendering'
 
 module Flutterby
   class Node
-    attr_accessor :name, :ext, :source
+    attr_accessor :name, :ext
     attr_reader :filters, :fs_path, :prefix, :slug, :timestamp
 
     def initialize(name = nil, parent: nil, fs_path: nil, source: nil)

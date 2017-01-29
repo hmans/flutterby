@@ -19,6 +19,11 @@ module Flutterby
       @data_proxy ||= Dotaccess[@data]
     end
 
+    def source
+      @source ||= (fs_path && File.file?(fs_path) ? File.read(fs_path) : nil)
+    end
+
+
     private
 
     def load!
@@ -45,13 +50,9 @@ module Flutterby
             name = ::File.basename(entry)
             Flutterby::Node.new(name, parent: self, fs_path: entry)
           end
-        else
-          @source = ::File.read(fs_path)
         end
       end
     end
-
-    private
 
     def extract_data!
       @data ||= {}.with_indifferent_access
@@ -85,14 +86,14 @@ module Flutterby
     end
 
     def extract_frontmatter!
-      if @source
+      if source
         # YAML Front Matter
-        if @source.sub!(/\A\-\-\-\n(.+?)\n\-\-\-\n/m, "")
+        if source.sub!(/\A\-\-\-\n(.+?)\n\-\-\-\n/m, "")
           @data.merge! YAML.load($1)
         end
 
         # TOML Front Matter
-        if @source.sub!(/\A\+\+\+\n(.+?)\n\+\+\+\n/m, "")
+        if source.sub!(/\A\+\+\+\n(.+?)\n\+\+\+\n/m, "")
           @data.merge! TOML.parse($1)
         end
       end
