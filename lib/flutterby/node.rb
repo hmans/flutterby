@@ -241,6 +241,7 @@ module Flutterby
             @data.merge! TOML.parse($1)
           end
         end
+      rescue ArgumentError => e
       end
 
       def read_json!

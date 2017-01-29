@@ -1,5 +1,10 @@
 # Version History
 
+### HEAD
+
+- **FIXED:** Images and other binaries would crash Flutterby when trying to extract frontmatter from them. Woops! ([#29](https://github.com/hmans/flutterby/issues/29))
+
+
 ### 0.6.1 (2017-01-29)
 
 - **FIXED:** Front matter is now extracted using a non-greedy regular expression, fixing the problem with `---` horizontal rules in Markdown bodies.
