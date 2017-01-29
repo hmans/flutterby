@@ -1,3 +1,10 @@
+require 'flutterby/node/tree'
+require 'flutterby/node/deletion'
+require 'flutterby/node/reading'
+require 'flutterby/node/event_handling'
+require 'flutterby/node/staging'
+require 'flutterby/node/rendering'
+
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
@@ -28,39 +35,12 @@ module Flutterby
       @slug     = nil
     end
 
-    module Paths
-      # Returns the node's URL.
-      #
-      def url
-        deleted? ? nil : ::File.join(parent ? parent.url : "/", full_name)
-      end
-    end
-
-    prepend Paths
-
-
-    require 'flutterby/node/tree'
     prepend Tree
-
-
-    require 'flutterby/node/deletion'
     prepend Deletion
-
-
-    require 'flutterby/node/reading'
     prepend Reading
-
-
-    require 'flutterby/node/event_handling'
     prepend EventHandling
-
-    require 'flutterby/node/staging'
     prepend Staging
-
-    require 'flutterby/node/rendering'
     prepend Rendering
-
-
 
 
     #
@@ -73,6 +53,12 @@ module Flutterby
     #
     def title
       data[:title] || slug.try(:titleize)
+    end
+
+    # Returns the node's URL.
+    #
+    def url
+      deleted? ? nil : ::File.join(parent ? parent.url : "/", full_name)
     end
 
     # Returns the layout(s) configured for this node. This is sourced from
