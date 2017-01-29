@@ -1,6 +1,13 @@
 module Flutterby
   module Tree
-    extend ActiveSupport::Concern
+    def self.prepended(base)
+      base.send :attr_reader, :children, :parent
+    end
+
+    def clear!
+      super
+      @children = []
+    end
 
     # Returns the tree's root node.
     #
@@ -161,5 +168,4 @@ module Flutterby
       end
     end
   end
-
 end

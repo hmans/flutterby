@@ -1,11 +1,13 @@
 module Flutterby
   class Node
     attr_accessor :name, :ext, :source
-    attr_reader :filters, :parent, :fs_path, :children
+    attr_reader :filters, :fs_path
     attr_reader :prefix, :slug, :timestamp
 
     def initialize(name = nil, parent: nil, fs_path: nil, source: nil)
       raise "Either name or fs_path need to be specified." unless name || fs_path
+
+      clear!
 
       @original_name = name || File.basename(fs_path)
       @fs_path = fs_path ? ::File.expand_path(fs_path) : nil
@@ -30,8 +32,16 @@ module Flutterby
     include Paths
 
 
+    def clear!
+      @data     = nil
+      @data_proxy = nil
+      @prefix   = nil
+      @slug     = nil
+    end
+
+
     require 'flutterby/node/tree'
-    include Tree
+    prepend Tree
 
 
     require 'flutterby/node/deletion'
@@ -61,11 +71,7 @@ module Flutterby
       private
 
       def load!
-        @data     = nil
-        @data_proxy = nil
-        @prefix   = nil
-        @slug     = nil
-        @children = []
+        clear!
         @timestamp = Time.now
 
         # Extract name, extension, and filters from given name
@@ -162,7 +168,7 @@ module Flutterby
 
 
     require 'flutterby/node/event_handling'
-    include EventHandling
+    prepend EventHandling
 
 
 

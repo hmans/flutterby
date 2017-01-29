@@ -2,10 +2,13 @@ module Flutterby
   # Methods related to the emitting and handling of events.
   #
   module EventHandling
-    extend ActiveSupport::Concern
+    def self.prepended(base)
+      base.send :attr_reader, :event_handlers
+    end
 
-    included do
-      attr_reader :event_handlers
+    def clear!
+      super
+      @event_handlers = {}
     end
 
     # Emits a new event from this node. Emitting an event will make it
@@ -66,11 +69,6 @@ module Flutterby
     end
 
     private
-
-    def load!
-      @event_handlers = {}
-      super
-    end
 
     def method_missing(meth, *args, &blk)
       if meth =~ %r{\Ahandle_(.+)\Z} && can_handle?($1)
