@@ -7,6 +7,7 @@ require 'colorize'
 require "flutterby/dotaccess"
 require "flutterby/version"
 require "flutterby/tree_walker"
+require "flutterby/event"
 require "flutterby/node"
 require "flutterby/filters"
 require "flutterby/view"

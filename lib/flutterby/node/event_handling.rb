@@ -25,11 +25,17 @@ module Flutterby
     # @example Emitting an event with extra arguments
     #   node.emit(:foo, name: "John")
     #
-    def emit(evt, *args)
-      logger.debug "#{self.url.colorize(:green)} emitting event '#{evt}' with #{args.inspect}"
+    def emit(evt, **args)
+      if evt.is_a?(Event)
+        evt.source = self
+      else
+        evt = Event.new(evt, source: self, args: args)
+      end
+
+      logger.debug "#{self.url.colorize(:green)} emitting event '#{evt.name}' with #{evt.args.inspect}"
 
       TreeWalker.walk_up(self) do |node|
-        node.handle(evt, self, *args)
+        node.handle(evt)
       end
     end
 
@@ -41,9 +47,9 @@ module Flutterby
     # Handle an incoming event. This will dispatch to a handle_* method if
     # it's available.
     #
-    def handle(evt, node, *args)
-      meth = "handle_#{evt}"
-      send(meth, node, *args) if respond_to?(meth)
+    def handle(evt)
+      meth = "handle_#{evt.name}"
+      send(meth, evt, evt.source) if respond_to?(meth)
     end
 
     # Register an event handler.
@@ -60,11 +66,11 @@ module Flutterby
     #   If selector is a {Node} instance, it matches if the specified node is
     #   the originating node.
     #
-    def on(evts, selector = nil, &blk)
-      Array(evts).map do |evt|
-        evt = evt.to_sym
-        @event_handlers[evt] ||= []
-        @event_handlers[evt] << { selector: selector, blk: blk }
+    def on(names, selector = nil, &blk)
+      Array(names).map do |name|
+        name = name.to_sym
+        @event_handlers[name] ||= []
+        @event_handlers[name] << { selector: selector, blk: blk }
       end
     end
 
@@ -78,10 +84,10 @@ module Flutterby
       end
     end
 
-    def execute_event_handlers(evt, node, *args)
-      event_handlers_for(evt).each do |handler|
-        if node.event_handler_applies?(handler)
-          handler[:blk].call(node, *args)
+    def execute_event_handlers(evt_name, evt, *args)
+      event_handlers_for(evt_name).each do |handler|
+        if evt.source.event_handler_applies?(handler)
+          handler[:blk].call(evt, *args)
         end
       end
     end
