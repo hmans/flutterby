@@ -5,7 +5,7 @@
 # In this simple example, we're simply adding some convenience methods to
 # all available blog posts for easier access to specific pieces of data.
 
-on(:created, ->(n) { n.page? }) do |node|
+on(:created, ->(n) { n.page? }) do |evt, node|
   node.extend PostExtension
 end
 
