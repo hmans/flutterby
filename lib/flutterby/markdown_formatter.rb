@@ -9,6 +9,7 @@ module Flutterby
     def kramdown_options
       {
         input: "GFM",
+        hard_wrap: false,
         syntax_highlighter: nil,
         syntax_highlighter_opts: { }
       }
