@@ -2,6 +2,7 @@ require 'rack'
 require 'rack/livereload'
 require 'listen'
 require 'better_errors'
+require 'flutterby/livereload_server'
 
 module Flutterby
   class Server
@@ -10,9 +11,13 @@ module Flutterby
     end
 
     def run!(port: 4004)
+      # Spawn livereload server
+      lrs = LiveReloadServer.new(@root)
+
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
         @root.reload!
+        lrs.reload_browser(modified)
         # handle_fs_change(modified, added, removed)
       end
 
@@ -32,6 +37,7 @@ module Flutterby
       trap('INT') do
         listener.stop
         server.shutdown
+        lrs.stop
       end
 
       # Go!
