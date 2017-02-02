@@ -68,12 +68,13 @@ module Flutterby
       # Look for target node in path registry
       if (node = find_node_for_path(req.path)) && node.can_render?
         # Build response
+        res.status = 200
         res.headers["Content-Type"] = node.mime_type.to_s
         res.body = [node.render(layout: true)]
       else
         res.status = 404
         res.headers["Content-Type"] = "text/html"
-        res.body = ["404"]
+        res.body = [File.read(File.expand_path("../../templates/404.html", __FILE__))]
       end
 
       res
