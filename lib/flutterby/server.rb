@@ -1,4 +1,5 @@
 require 'rack'
+require 'rack/livereload'
 require 'listen'
 require 'better_errors'
 
@@ -20,6 +21,7 @@ module Flutterby
       this = self
       app = Rack::Builder.app do |app|
         app.use BetterErrors::Middleware
+        app.use Rack::LiveReload
         app.run this
       end
 
