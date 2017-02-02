@@ -25,6 +25,8 @@ module Flutterby
       end
 
       load!
+
+      logger.debug "Created node #{url.colorize(:green)}"
     end
 
     private def clear!

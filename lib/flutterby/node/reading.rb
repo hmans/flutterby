@@ -38,7 +38,7 @@ module Flutterby
 
     def load_file_contents
       if fs_path && File.file?(fs_path)
-        logger.debug "Loading #{url.colorize(:blue)} from file system"
+        logger.debug "Pre-loading source for #{url.colorize(:blue)}"
         File.read(fs_path)
       end
     end
