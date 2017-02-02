@@ -66,7 +66,7 @@ module Flutterby
       res = Rack::Response.new([], 200, {})
 
       # Look for target node in path registry
-      if node = find_node_for_path(req.path)
+      if (node = find_node_for_path(req.path)) && node.can_render?
         # Build response
         res.headers["Content-Type"] = node.mime_type.to_s
         res.body = [node.render(layout: true)]

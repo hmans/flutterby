@@ -1,9 +1,17 @@
 module Flutterby
   module Rendering
+    # Returns true if this node can be rendered.
+    #
+    def can_render?
+      !source.nil?
+    end
+
     # Renders the node. One of the most important methods in Flutterby, which
     # explains why it's wholly undocumented. Apologies, I'm working on it!
     #
     def render(layout: false, view: nil, extra_filters: [], locals: {}, &blk)
+      raise "Nodes without source can't be rendered" unless can_render?
+
       # If no view was specified, create a new one for this node.
       view ||= View.for(self, locals: locals)
       layouts = []

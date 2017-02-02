@@ -74,7 +74,7 @@ module Flutterby
     end
 
     def mime_type
-      MIME::Types.type_for(ext).first || MIME::Types["text/plain"].first
+      (ext && MIME::Types.type_for(ext).first) || MIME::Types["text/plain"].first
     end
 
     def file?

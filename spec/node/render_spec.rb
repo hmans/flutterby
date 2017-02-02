@@ -38,3 +38,21 @@ EOF
     end
   end
 end
+
+describe Flutterby::Rendering do
+  describe '#can_render?' do
+    it "returns true if the node can be rendered" do
+      folder = node("folder", source: nil)
+      expect(folder.can_render?).to eq(false)
+    end
+  end
+
+  describe '#render' do
+    context "on a node that can't be rendered" do
+      it "should raise an exception" do
+        folder = node("folder", source: nil)
+        expect{folder.render}.to raise_error("Nodes without source can't be rendered")
+      end
+    end
+  end
+end
