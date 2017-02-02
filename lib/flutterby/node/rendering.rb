@@ -52,18 +52,5 @@ module Flutterby
 
       output
     end
-
-
-
-    # Creates a new {View} instance and uses it to
-    # render this node. Returns the rendered page as a string.
-    #
-    # def render(opts = {}, &blk)
-    #   render_with_view(View.for(self, opts), &blk)
-    # end
-    #
-    # def render_with_view(view, *args, &blk)
-    #   NodeRenderer.render(self, view, *args, &blk)
-    # end
   end
 end
