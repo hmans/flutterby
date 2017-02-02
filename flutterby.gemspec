@@ -48,6 +48,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'better_errors', '~> 2.1'
   spec.add_dependency 'activesupport', '~> 5.0'
 
+  # LiveReload related
+  spec.add_dependency 'rack-livereload', '~> 0.3.16'
+  spec.add_dependency 'em-websocket', '~> 0.5.1'
+
   # We support some template engines out of the box.
   # There's a chance these will be extracted/made optional
   # at some point in the future.
