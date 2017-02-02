@@ -4,13 +4,13 @@ module Flutterby
       @root = root
     end
 
-    def export!(into:)
+    def export!(into:, threads: 1)
       # Set up queue
       q = Queue.new
       @root.all_nodes.each { |node| q.push(node) }
 
       # Work through queue
-      workers = (1..4).map do
+      workers = (1..threads).map do
         Thread.new do
           begin
             while node = q.pop(true)

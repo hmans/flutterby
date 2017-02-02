@@ -6,7 +6,6 @@
 - **NEW:** **Event system!** (TODO: add link to tutorial.)
 - **NEW:** If your project has a `/404.html(.*)` page, it will be used by `flutterby serve` to render 404 errors. If it doesn't, Flutterby now has a somewhat nicer to look at internal template that it will use.
 - **NEW:** Flutterby will now add your project's `lib` directory to Ruby's load path. Use it to house any Ruby modules that you want out of your site directory.
-- **CHANGED:** `flutterby build` now uses a small pool of threads to render multiple files concurrently, giving a decent speed boost when exporting your site. If you encounter any weird behavior, you can blame me!
 
 
 ### 0.6.2 (2017-01-29)
