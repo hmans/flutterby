@@ -11,52 +11,50 @@ module Flutterby
 
     def initialize(root, options = {})
       @root = root
-      @options     = DEFAULT_OPTIONS.merge(options)
-      @web_sockets = []
-      @mutex       = Thread::Mutex.new
-      @thread      = start
-    end
-
-    def logger
-      Flutterby.logger
+      @options = DEFAULT_OPTIONS.merge(options)
+      @sockets = []
+      @thread = start
     end
 
     def stop
-      thread.kill
+      @thread.kill
     end
 
-    def reload_browser(paths = [])
-      paths = Array(paths)
-      logger.info "== LiveReloading path: #{paths.join(' ')}"
-      paths.each do |path|
+    def trigger_reload(paths = [])
+      Array(paths).each do |path|
         # Find node corresponding to path
         if node = @root.find_for_fs_path(path)
           path = node.url
         end
 
         data = JSON.dump(['refresh', {
-          :path           => path,
-          :apply_js_live  => true,
-          :apply_css_live => true
+          path: path,
+          apply_js_live: true,
+          apply_css_live: true
         }])
 
-        @web_sockets.each { |ws| ws.send(data) }
+        @sockets.each { |ws| ws.send(data) }
       end
     end
 
+
+    private
+
+    def logger
+      Flutterby.logger
+    end
+
     def start
-      logger.info "Starting LiveReload websocket server"
+      logger.info "Starting LiveReload websocket server on #{options[:host]}:#{options[:port]}"
       Thread.new do
         EventMachine.run do
           EventMachine.start_server(options[:host], options[:port], EventMachine::WebSocket::Connection, {}) do |ws|
             ws.onopen do
               begin
+                @sockets << ws
                 ws.send "!!ver:1.6"
-                @web_sockets << ws
-                logger.debug "== LiveReload browser connected"
               rescue
                 logger.error $!
-                logger.error $!.backtrace
               end
             end
 
@@ -65,8 +63,7 @@ module Flutterby
             end
 
             ws.onclose do
-              @web_sockets.delete ws
-              logger.debug "== LiveReload browser disconnected"
+              @sockets.delete(ws)
             end
           end
         end

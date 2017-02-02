@@ -17,7 +17,7 @@ module Flutterby
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
         @root.reload!
-        lrs.reload_browser(modified)
+        lrs.trigger_reload(modified + added + removed)
         # handle_fs_change(modified, added, removed)
       end
 
