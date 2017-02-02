@@ -67,18 +67,22 @@ module Flutterby
 
       # Look for target node in path registry
       if (node = find_node_for_path(req.path)) && node.can_render?
-        # Build response
         res.status = 200
-        res.headers["Content-Type"] = node.mime_type.to_s
-        res.body = [node.render(layout: true)]
+        render_node(res, node)
       else
         res.status = 404
-        res.headers["Content-Type"] = "text/html"
-        res.body = [File.read(File.expand_path("../../templates/404.html", __FILE__))]
+        if node_404 = @root.find("/404")
+          render_node(res, node_404)
+        else
+          res.headers["Content-Type"] = "text/html"
+          res.body = [File.read(File.expand_path("../../templates/404.html", __FILE__))]
+        end
       end
 
       res
     end
+
+    private
 
     def find_node_for_path(path)
       if node = @root.find(path, public_only: true)
@@ -90,6 +94,11 @@ module Flutterby
 
     def logger
       @logger ||= Flutterby.logger
+    end
+
+    def render_node(res, node)
+      res.headers["Content-Type"] = node.mime_type.to_s
+      res.body = [node.render(layout: true)]
     end
   end
 end
