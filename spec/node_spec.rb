@@ -40,6 +40,19 @@ describe Flutterby::Node do
     end
   end
 
+  describe '#should_publish?' do
+    it "returns false for nodes starting with underscores" do
+      page = node "_secret.html"
+      expect(page.should_publish?).to eq(false)
+    end
+
+    it "returns false for nodes within private folders" do
+      folder = node "_secret"
+      page = folder.create "page.html"
+      expect(page.should_publish?).to eq(false)
+    end
+  end
+
   describe '#siblings' do
     context "when there's a parent" do
       subject { page }

@@ -86,7 +86,7 @@ module Flutterby
     end
 
     def should_publish?
-      !name.start_with?("_") && !deleted?
+      (!name.start_with?("_") && !deleted?) && (parent ? parent.should_publish? : true)
     end
 
     def logger
