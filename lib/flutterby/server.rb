@@ -12,12 +12,12 @@ module Flutterby
 
     def run!(port: 4004)
       # Spawn livereload server
-      lrs = LiveReloadServer.new(@root)
+      livereload = LiveReloadServer.new(@root)
 
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
         @root.reload!
-        lrs.trigger_reload(modified + added + removed)
+        livereload.trigger_reload(modified + added + removed)
         # handle_fs_change(modified, added, removed)
       end
 
@@ -37,7 +37,7 @@ module Flutterby
       trap('INT') do
         listener.stop
         server.shutdown
-        lrs.stop
+        livereload.stop
       end
 
       # Go!
