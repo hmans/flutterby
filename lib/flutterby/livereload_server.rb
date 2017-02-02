@@ -40,10 +40,6 @@ module Flutterby
 
     private
 
-    def logger
-      Flutterby.logger
-    end
-
     def start
       logger.info "Starting LiveReload websocket server on #{options[:host]}:#{options[:port]}"
       Thread.new do
@@ -59,7 +55,7 @@ module Flutterby
             end
 
             ws.onmessage do |msg|
-              logger.debug "LiveReload Browser URL: #{msg}"
+              logger.debug "LiveReload message: #{msg}"
             end
 
             ws.onclose do
@@ -68,6 +64,10 @@ module Flutterby
           end
         end
       end
+    end
+
+    def logger
+      Flutterby.logger
     end
   end
 end
