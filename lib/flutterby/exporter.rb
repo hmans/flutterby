@@ -27,12 +27,12 @@ module Flutterby
     def export_node(node, into:)
       return unless node.should_publish?
 
-      path = ::File.expand_path(::File.join(into, node.url))
+      path = ::File.expand_path(::File.join(into, node.path(prefix: false)))
 
       if node.file?
         FileUtils.mkdir_p(File.dirname(path))
         File.write(path, node.render(layout: true))
-        logger.info "Exported #{node.url.colorize(:light_white)}"
+        logger.info "Exported #{node.path(prefix: false).colorize(:light_white)}"
       else
         FileUtils.mkdir_p(path)
       end

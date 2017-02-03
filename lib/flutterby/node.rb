@@ -63,7 +63,7 @@ module Flutterby
     end
 
     def to_s
-      "<#{self.class} #{self.url}>"
+      "<#{self.class} #{path(prefix: false)}>"
     end
 
     def full_name
