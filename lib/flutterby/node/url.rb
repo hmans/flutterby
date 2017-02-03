@@ -3,7 +3,12 @@ module Flutterby
     # Returns the node's URL.
     #
     def url
-      deleted? ? nil : ::File.join(parent ? parent.url : "/", full_name)
+      path
+    end
+
+    def path
+      raise "node has been deleted" if deleted?
+      File.join(parent ? parent.path : "/", full_name)
     end
   end
 end
