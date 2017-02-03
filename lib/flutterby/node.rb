@@ -4,6 +4,7 @@ require 'flutterby/node/reading'
 require 'flutterby/node/event_handling'
 require 'flutterby/node/staging'
 require 'flutterby/node/rendering'
+require 'flutterby/node/url'
 
 module Flutterby
   class Node
@@ -42,6 +43,7 @@ module Flutterby
     prepend EventHandling
     prepend Staging
     prepend Rendering
+    prepend Url
 
 
     # Returns the node's title. If there is a `:title` key in {#data}, its
@@ -52,11 +54,6 @@ module Flutterby
       data[:title] || slug.try(:titleize)
     end
 
-    # Returns the node's URL.
-    #
-    def url
-      deleted? ? nil : ::File.join(parent ? parent.url : "/", full_name)
-    end
 
     # Returns the layout(s) configured for this node. This is sourced from
     # the node's {data} attribute, so it can be set from front matter.
