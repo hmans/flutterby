@@ -24,8 +24,10 @@ module Flutterby
     option :in, default: "./site/", aliases: ["-i"]
     option :out, default: "./_build/", aliases: ["-o"]
     option :debug, default: false, aliases: ["-d"], type: :boolean
+    option :prefix
 
     def build
+      Flutterby.config.prefix = options.prefix
       Flutterby.logger.level = options.debug ? Logger::DEBUG : Logger::INFO
 
       # Simplify logger output
