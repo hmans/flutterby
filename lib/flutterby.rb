@@ -20,6 +20,10 @@ module Flutterby
   def logger
     @logger ||= Logger.new(STDOUT)
   end
+
+  def config
+    @config ||= Dotaccess[{}]
+  end
 end
 
 # Add local lib directory of project using this gem to load path
