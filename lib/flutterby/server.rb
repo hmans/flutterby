@@ -26,7 +26,7 @@ module Flutterby
       this = self
       app = Rack::Builder.app do |app|
         app.use BetterErrors::Middleware
-        app.use Rack::LiveReload
+        app.use Rack::LiveReload, no_swf: true
         app.run this
       end
 
