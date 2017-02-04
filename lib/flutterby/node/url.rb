@@ -5,7 +5,7 @@ module Flutterby
     # Returns the node's fully qualified URL.
     #
     def url
-      Flutterby.config.prefix_uri ?
+      Flutterby.config.prefix_uri&.host ?
         URI.join(Flutterby.config.prefix_uri, path).to_s : path
     end
 

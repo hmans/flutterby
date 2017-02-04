@@ -23,9 +23,16 @@ describe Flutterby::Node do
       end
     end
 
-    context "when a prefix is given" do
-      it "returns the prefixed" do
+    context "when a URL prefix is given" do
+      it "returns the prefixed path" do
         Flutterby.config.prefix = "http://www.foo.com/subdir/"
+        expect(subject.path).to eq("/subdir/folder/page.html")
+      end
+    end
+
+    context "when a path prefix is given" do
+      it "returns the prefixed path" do
+        Flutterby.config.prefix = "/subdir/"
         expect(subject.path).to eq("/subdir/folder/page.html")
       end
     end
@@ -58,10 +65,17 @@ describe Flutterby::Node do
       end
     end
 
-    context "when a prefix is configured" do
+    context "when a URL prefix is configured" do
       it "returns the full URL" do
         Flutterby.config.prefix = "http://www.foo.com/subdir/"
         expect(subject.url).to eq("http://www.foo.com/subdir/folder/page.html")
+      end
+    end
+
+    context "when a path prefix is configured" do
+      it "returns the path instead" do
+        Flutterby.config.prefix = "/subdir/"
+        expect(subject.url).to eq("/subdir/folder/page.html")
       end
     end
   end
