@@ -1,11 +1,10 @@
 module Flutterby
   class Config
-    def prefix=(prefix)
-      @prefix = prefix
-    end
+    attr_reader :prefix, :prefix_uri
 
-    def prefix
-      @prefix
+    def prefix=(prefix)
+      @prefix_uri = prefix && URI(prefix)
+      @prefix = prefix
     end
   end
 end

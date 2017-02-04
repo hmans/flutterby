@@ -5,15 +5,15 @@ module Flutterby
     # Returns the node's fully qualified URL.
     #
     def url
-      Flutterby.config.prefix ?
-        URI.join(Flutterby.config.prefix, path).to_s : path
+      Flutterby.config.prefix_uri ?
+        URI.join(Flutterby.config.prefix_uri, path).to_s : path
     end
 
     # Returns the node's path, taking any configured prefix into account.
     #
     def path
-      Flutterby.config.prefix ?
-        File.join(URI(Flutterby.config.prefix).path, internal_path) : internal_path
+      Flutterby.config.prefix_uri ?
+        File.join(Flutterby.config.prefix_uri.path, internal_path) : internal_path
     end
 
     # Return's the node's "internal" path: the path of the node that can also
