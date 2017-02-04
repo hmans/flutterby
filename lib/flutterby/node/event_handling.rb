@@ -32,7 +32,7 @@ module Flutterby
         evt = Event.new(evt, source: self, args: args)
       end
 
-      logger.debug "#{self.url.colorize(:green)} emitting event '#{evt.name}' with #{evt.args.inspect}"
+      logger.debug "#{self.internal_path.colorize(:green)} emitting event '#{evt.name}' with #{evt.args.inspect}"
 
       TreeWalker.walk_up(self) do |node|
         node.handle(evt)
