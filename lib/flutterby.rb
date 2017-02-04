@@ -11,6 +11,7 @@ require "flutterby/event"
 require "flutterby/node"
 require "flutterby/filters"
 require "flutterby/view"
+require "flutterby/config"
 
 module Flutterby
   extend self
@@ -22,7 +23,11 @@ module Flutterby
   end
 
   def config
-    @config ||= Dotaccess[{}]
+    @config ||= Flutterby::Config.new
+  end
+
+  def reset_config!
+    @config = nil
   end
 end
 

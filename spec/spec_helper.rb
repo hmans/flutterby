@@ -50,8 +50,8 @@ end
 
 RSpec.configure do |c|
   c.include Helpers
-  
+
   c.before(:each) do
-    Flutterby.config.clear
+    Flutterby.reset_config!
   end
 end
