@@ -48,7 +48,7 @@ module Flutterby
         :green
       end
 
-      logger.debug "Rendered #{path(prefix: false).colorize(:magenta)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
+      logger.debug "Rendered #{internal_path.colorize(:magenta)} in #{sprintf("%.1fms", time * 1000).colorize(color)}"
 
       output
     end

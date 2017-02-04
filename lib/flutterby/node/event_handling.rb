@@ -97,8 +97,8 @@ module Flutterby
 
       case selector
       when nil    then true
-      when String then path(prefix: false) == selector
-      when Regexp then path(prefix: false) =~ selector
+      when String then internal_path == selector
+      when Regexp then internal_path =~ selector
       when Node   then self == selector
       when Proc   then selector.call(self)
       end

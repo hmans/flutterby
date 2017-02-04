@@ -31,6 +31,26 @@ describe Flutterby::Node do
     end
   end
 
+  describe '#internal_path' do
+    context "when no prefix is configured" do
+      it "returns the node's path" do
+        expect(subject.internal_path).to eq("/folder/page.html")
+      end
+
+      it "is equal to #path" do
+        expect(subject.internal_path).to eq(subject.path)
+      end
+    end
+
+    context "when a prefix is configured" do
+      before { Flutterby.config.prefix = "http://www.foo.com/subdir/" }
+
+      it "is not affected" do
+        expect(subject.internal_path).to eq("/folder/page.html")
+      end
+    end
+  end
+
   describe '#url' do
     context "when no prefix is configured" do
       it "returns the path" do
