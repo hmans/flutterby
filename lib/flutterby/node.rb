@@ -27,7 +27,7 @@ module Flutterby
 
       load!
 
-      logger.debug "Created node #{url.colorize(:green)}"
+      logger.debug "Created node #{internal_path.colorize(:green)}"
     end
 
     private def clear!
@@ -63,7 +63,7 @@ module Flutterby
     end
 
     def to_s
-      "<#{self.class} #{self.url}>"
+      "<#{self.class} #{internal_path}>"
     end
 
     def full_name

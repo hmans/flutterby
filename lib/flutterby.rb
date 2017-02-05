@@ -11,6 +11,7 @@ require "flutterby/event"
 require "flutterby/node"
 require "flutterby/filters"
 require "flutterby/view"
+require "flutterby/config"
 
 module Flutterby
   extend self
@@ -19,6 +20,14 @@ module Flutterby
 
   def logger
     @logger ||= Logger.new(STDOUT)
+  end
+
+  def config
+    @config ||= Flutterby::Config.new
+  end
+
+  def reset_config!
+    @config = nil
   end
 end
 

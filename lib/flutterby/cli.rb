@@ -21,11 +21,16 @@ module Flutterby
     end
 
     desc "build", "Build your static site"
-    option :in, default: "./site/", aliases: ["-i"]
-    option :out, default: "./_build/", aliases: ["-o"]
-    option :debug, default: false, aliases: ["-d"], type: :boolean
+    option :in, default: "./site/", aliases: ["-i"],
+      desc: "Input directory."
+    option :out, default: "./_build/", aliases: ["-o"],
+      desc: "Output directory."
+    option :debug, default: false, aliases: ["-d"], type: :boolean, desc: "Print extra debugging information."
+    option :prefix, type: :string, aliases: ["-p"],
+      desc: "URL or path prefix (used when generating URLs for nodes.)"
 
     def build
+      Flutterby.config.prefix = options.prefix
       Flutterby.logger.level = options.debug ? Logger::DEBUG : Logger::INFO
 
       # Simplify logger output

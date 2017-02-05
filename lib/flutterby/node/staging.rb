@@ -46,7 +46,7 @@ module Flutterby
 
 
     protected def load_initializer!(initializer)
-      logger.info "Executing initializer #{initializer.url}"
+      logger.info "Executing initializer #{initializer.internal_path}"
       instance_eval(initializer.render)
     end
   end
