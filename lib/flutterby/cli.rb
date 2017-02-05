@@ -33,16 +33,22 @@ module Flutterby
       aliases: ["-o"],
       desc: "Output directory."
 
+    option :prefix,
+      type: :string,
+      aliases: ["-p"],
+      desc: "URL or path prefix (used when generating URLs for nodes.)"
+
+    option :threads,
+      type: :numeric,
+      default: 1,
+      aliases: ["-t"],
+      desc: "Number of threads to use."
+
     option :debug,
       default: false,
       aliases: ["-d"],
       type: :boolean,
       desc: "Print extra debugging information."
-
-    option :prefix,
-      type: :string,
-      aliases: ["-p"],
-      desc: "URL or path prefix (used when generating URLs for nodes.)"
 
     def build
       Flutterby.config.prefix = options.prefix
@@ -63,8 +69,8 @@ module Flutterby
         say color("🌲  Read #{root.size} nodes.", :green, :bold)
 
         # Export site
-        say color("💾  Exporting site...", :bold)
-        Flutterby::Exporter.new(root).export!(into: options.out)
+        say color("💾  Exporting site#{options.threads > 1 ? " (using #{options.threads} threads)" : ""}...", :bold)
+        Flutterby::Exporter.new(root).export!(into: options.out, threads: options.threads)
       end
 
       say color("✅  Done. (took #{sprintf "%.2f", time}s)", :green, :bold)
