@@ -42,7 +42,7 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run app, BindAddress: address, Port: port, Logger: Flutterby.logger
+      server.run app, Host: address, Port: port, Logger: Flutterby.logger
     end
 
     def handle_fs_change(modified, added, removed)
