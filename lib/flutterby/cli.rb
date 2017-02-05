@@ -84,6 +84,10 @@ module Flutterby
       aliases: ["-i"],
       desc: "Input directory."
 
+    option :address,
+      default: "localhost",
+      aliases: ["-a"]
+
     option :port,
       default: 4004,
       aliases: ["-p"],
@@ -104,9 +108,9 @@ module Flutterby
       root.stage!
       say color("🌲  Read #{root.size} nodes.", :green, :bold)
 
-      say color("🌤  Serving your Flutterby site on http://localhost:#{options.port} - enjoy! \\o/", :bold)
+      say color("🌤  Serving your Flutterby site on http://#{options.address}:#{options.port} - enjoy! \\o/", :bold)
       server = Flutterby::Server.new(root)
-      server.run!(port: options.port)
+      server.run!(address: options.address, port: options.port)
     end
 
 

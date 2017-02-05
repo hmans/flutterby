@@ -10,9 +10,9 @@ module Flutterby
       @root = root
     end
 
-    def run!(port: 4004)
+    def run!(address: "localhost", port: 4004)
       # Spawn livereload server
-      livereload = LiveReloadServer.new(@root)
+      livereload = LiveReloadServer.new(@root, { host: address })
 
       # Set up listener
       listener = Listen.to(@root.fs_path) do |modified, added, removed|
@@ -42,7 +42,7 @@ module Flutterby
 
       # Go!
       listener.start
-      server.run app, Port: port, Logger: Flutterby.logger
+      server.run app, BindAddress: address, Port: port, Logger: Flutterby.logger
     end
 
     def handle_fs_change(modified, added, removed)
