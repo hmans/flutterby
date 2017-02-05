@@ -20,13 +20,28 @@ module Flutterby
       say_hi
     end
 
+
     desc "build", "Build your static site"
-    option :in, default: "./site/", aliases: ["-i"],
+
+    option :in,
+      default: "./site/",
+      aliases: ["-i"],
       desc: "Input directory."
-    option :out, default: "./_build/", aliases: ["-o"],
+
+    option :out,
+      default: "./_build/",
+      aliases: ["-o"],
       desc: "Output directory."
-    option :debug, default: false, aliases: ["-d"], type: :boolean, desc: "Print extra debugging information."
-    option :prefix, type: :string, aliases: ["-p"],
+
+    option :debug,
+      default: false,
+      aliases: ["-d"],
+      type: :boolean,
+      desc: "Print extra debugging information."
+
+    option :prefix,
+      type: :string,
+      aliases: ["-p"],
       desc: "URL or path prefix (used when generating URLs for nodes.)"
 
     def build
@@ -57,9 +72,21 @@ module Flutterby
 
 
     desc "serve", "Serve your site locally"
-    option :in, default: "./site/", aliases: ["-i"]
-    option :port, default: 4004, aliases: ["-p"], type: :numeric
-    option :debug, default: false, aliases: ["-d"], type: :boolean
+
+    option :in,
+      default: "./site/",
+      aliases: ["-i"],
+      desc: "Input directory."
+
+    option :port,
+      default: 4004,
+      aliases: ["-p"],
+      type: :numeric
+
+    option :debug,
+      default: false,
+      aliases: ["-d"],
+      type: :boolean
 
     def serve
       Flutterby.logger.level = options.debug ? Logger::DEBUG : Logger::INFO
