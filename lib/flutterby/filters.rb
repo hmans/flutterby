@@ -17,8 +17,6 @@ module Flutterby
 
         if Filters.respond_to?(meth)
           Filters.send(meth, body, view: view, &blk)
-        elsif template = tilt(filter, body)
-          template.render(view, view.locals, &blk).html_safe
         else
           Flutterby.logger.warn "Unsupported filter '#{filter}'"
           body
@@ -26,9 +24,21 @@ module Flutterby
       end
     end
 
+    def supported?(fmt)
+      respond_to?("process_#{fmt}!")
+    end
+
     def add(fmts, &blk)
       Array(fmts).each do |fmt|
         define_singleton_method("process_#{fmt}!", &blk)
+      end
+    end
+
+    def enable_tilt(*fmts)
+      Array(fmts).flatten.each do |fmt|
+        add(fmt) do |input, view:, &blk|
+          tilt(fmt, input).render(view, view.locals, &blk).html_safe
+        end
       end
     end
 
@@ -43,6 +53,10 @@ module Flutterby
     end
   end
 end
+
+# Add a bunch of formats that we support through Tilt
+Flutterby::Filters.enable_tilt("erb", "slim", "haml",
+  "coffee", "rdoc", "builder", "jbuilder")
 
 Flutterby::Filters.add("rb") do |input, view:|
   view.instance_eval(input)
