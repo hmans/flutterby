@@ -18,4 +18,13 @@ describe "names, extensions and filters" do
     its(:filters) { is_expected.to eq([]) }
     its(:full_name) { is_expected.to eq("jquery.min.js") }
   end
+
+  context "with a name like static.txt" do
+    let(:name) { "static.txt" }
+
+    its(:name) { is_expected.to eq("static") }
+    its(:ext) { is_expected.to eq("txt") }
+    its(:filters) { is_expected.to eq([]) }
+    its(:full_name) { is_expected.to eq("static.txt") }
+  end
 end
