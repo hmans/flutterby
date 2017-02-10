@@ -68,10 +68,8 @@ module Flutterby
         filters << parts.pop
       end
 
-      # Assign extension, if available
-      if parts.any?
-        ext = parts.pop
-      end
+      # Assign extension
+      ext = parts.any? ? parts.pop : filters.pop
 
       # Make the remainder part of the name
       name += parts
