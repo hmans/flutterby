@@ -48,14 +48,20 @@ module Flutterby
       @timestamp = Time.now
 
       # Extract name, extension, and filters from given name
-      parts    = @original_name.split(".")
-      @name    = parts.shift
-      @ext     = parts.shift
-      @filters = parts.reverse
+      @name, @ext, @filters = split_filename(@original_name)
 
       load_from_filesystem! if @fs_path
 
       extract_data!
+    end
+
+    def split_filename(name)
+      parts   = name.split(".")
+      name    = parts.shift
+      ext     = parts.shift
+      filters = parts.reverse
+
+      [name, ext, filters]
     end
 
     def load_from_filesystem!
