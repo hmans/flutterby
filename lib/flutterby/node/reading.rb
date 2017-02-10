@@ -57,11 +57,26 @@ module Flutterby
 
     def split_filename(name)
       parts   = name.split(".")
-      name    = parts.shift
-      ext     = parts.shift
-      filters = parts.reverse
+      name    = []
+      filters = []
 
-      [name, ext, filters]
+      # The first part is always part of the name
+      name << parts.shift
+
+      # Extract filters
+      while parts.any? && Filters.supported?(parts.last)
+        filters << parts.pop
+      end
+
+      # Assign extension, if available
+      if parts.any?
+        ext = parts.pop
+      end
+
+      # Make the remainder part of the name
+      name += parts
+
+      [name.join("."), ext, filters]
     end
 
     def load_from_filesystem!
