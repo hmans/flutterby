@@ -1,16 +1,12 @@
 describe "names, extensions and filters" do
-  subject { Flutterby::Node.new(name) }
-  let(:name) { "index.html.md.erb" }
+  subject { node name }
 
-  it "uses the first part as its name" do
-    expect(subject.name).to eq("index")
-  end
+  context "with a name like index.html.md.erb" do
+    let(:name) { "index.html.md.erb" }
 
-  it "uses the second part as its target extension" do
-    expect(subject.ext).to eq("html")
-  end
-
-  it "uses the remaining extensions as filters" do
-    expect(subject.filters).to eq(["erb", "md"])
+    its(:name) { is_expected.to eq("index") }
+    its(:ext) { is_expected.to eq("html") }
+    its(:filters) { is_expected.to eq(["erb", "md"]) }
+    its(:full_name) { is_expected.to eq("index.html") }
   end
 end
