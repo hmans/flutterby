@@ -9,4 +9,13 @@ describe "names, extensions and filters" do
     its(:filters) { is_expected.to eq(["erb", "md"]) }
     its(:full_name) { is_expected.to eq("index.html") }
   end
+
+  context "with a name like jquery.min.js" do
+    let(:name) { "jquery.min.js" }
+
+    its(:name) { is_expected.to eq("jquery.min") }
+    its(:ext) { is_expected.to eq("js") }
+    its(:filters) { is_expected.to eq([]) }
+    its(:full_name) { is_expected.to eq("jquery.min.js") }
+  end
 end
