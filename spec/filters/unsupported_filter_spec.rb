@@ -3,13 +3,12 @@ describe "Unsupported filters" do
 
   let(:source) { "poop!" }
 
-  its(:full_name) { is_expected.to eq("index.html") }
+  its(:full_name) { is_expected.to eq("index.html.poop") }
   its(:render) { is_expected.to eq(source) }
 
-  specify "logs a warning" do
+  specify "does not log a warning, because filter is never executed" do
     expect(Flutterby.logger)
-      .to receive(:warn)
-      .with("Unsupported filter 'poop'")
+      .to_not receive(:warn)
 
     subject.render
   end
